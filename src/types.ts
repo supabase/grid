@@ -1,3 +1,7 @@
+export interface Dictionary<T> {
+  [Key: string]: T;
+}
+
 export type SupaPrimaryKey = {
   readonly name: string;
   readonly tableId: number;

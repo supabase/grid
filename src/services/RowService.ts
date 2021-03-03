@@ -12,3 +12,4 @@ class RowService {
   update() {}
   delete() {}
 }
+export default RowService;

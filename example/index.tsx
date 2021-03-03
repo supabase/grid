@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import SupabaseGrid, { SupaColumn, SupaTable } from '../.';
+import SupabaseGrid, { SupaColumn, SupaTable } from '../dist';
 
 const colId: SupaColumn = {
   tableId: 16523,
@@ -113,7 +113,7 @@ const tableSwagger: SupaTable = {
   comment: 'Full list of countries.',
   schema: 'public',
   totalRows: 249,
-  columns: [colId, colName, colIso2, colIso3, colLocalName, colName],
+  columns: [colId, colName, colIso2, colIso3, colLocalName, colContinent],
   primaryKeys: [
     {
       name: 'id',
