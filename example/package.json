@@ -13,8 +13,7 @@
   "alias": {
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom/profiling",
-    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling",
-    "@glideapps/glide-data-grid": "../node_modules/@glideapps/glide-data-grid"
+    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling"
   },
   "devDependencies": {
     "@parcel/optimizer-htmlnano": "^2.0.0-nightly.612",

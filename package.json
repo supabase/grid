@@ -62,5 +62,8 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^3.9.9"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^1.4.2"
   }
 }
