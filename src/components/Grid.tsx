@@ -25,7 +25,6 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
     async function fetch() {
       const service = new RowService(ctx!.client);
       const res = await service.fetchAll(ctx!.table!.name);
-      console.log('res.data', res.data);
       setRows(res.data || []);
       setReady(true);
     }
@@ -58,7 +57,21 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
     }
   }
 
-  if (!ctx) return null;
+  if (!ctx)
+    return (
+      <DataEditorContainer width={width || 500} height={height || 300}>
+        <div
+          style={{
+            left: '50%',
+            top: '50%',
+            width: 'auto',
+            height: 'auto',
+          }}
+        >
+          Loading ...
+        </div>
+      </DataEditorContainer>
+    );
 
   return (
     <>
