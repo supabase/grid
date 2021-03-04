@@ -5,6 +5,7 @@ import { SupabaseGridCtx } from '../context';
 import DataGrid, { FillEvent, RowsChangeData } from 'react-data-grid';
 import { Dictionary } from '../types';
 import { updateCell } from '../utils/cell';
+import { Typography, Loading } from '@supabase/ui';
 
 export type GridProps = {
   width?: number;
@@ -63,15 +64,10 @@ const Grid: React.FunctionComponent<GridProps> = () => {
 
   if (!ctx || !ready)
     return (
-      <div
-        style={{
-          left: '50%',
-          top: '50%',
-          width: 'auto',
-          height: 'auto',
-        }}
-      >
-        Loading ...
+      <div>
+        <Loading active>
+          <Typography.Text strong={true}>Loading ...</Typography.Text>
+        </Loading>
       </div>
     );
 
