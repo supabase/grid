@@ -114,12 +114,6 @@ const tableSwagger: SupaTable = {
   schema: 'public',
   totalRows: 249,
   columns: [colId, colName, colIso2, colIso3, colLocalName, colContinent],
-  primaryKeys: [
-    {
-      name: 'id',
-      tableId: 16523,
-    },
-  ],
   relationships: [],
 };
 
@@ -127,11 +121,11 @@ const App = () => {
   return (
     <div>
       <SupabaseGrid
-        table={tableSwagger}
+        table="countries"
         clientProps={{
-          supabaseUrl: 'https://xadwtmaifuxweskcopwk.supabase.net',
+          supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',
           supabaseKey:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjE0NDg4Mzc4LCJleHAiOjE5MzAwNjQzNzh9.TEhDqNZs2WQ-4CmPM12FyplK4RaMTXiX27qxGVNccPQ',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjE0ODE0ODc4LCJleHAiOjE5MzAzOTA4Nzh9.CjLbUVvuw0YrFcjpqDMUMZmef2_v3MFjCo4-Z4C9_0Q',
         }}
         gridProps={{ width: 1000 }}
       />

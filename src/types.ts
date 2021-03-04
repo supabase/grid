@@ -2,11 +2,6 @@ export interface Dictionary<T> {
   [Key: string]: T;
 }
 
-export type SupaPrimaryKey = {
-  readonly name: string;
-  readonly tableId: number;
-};
-
 export type SupaRelationship = {
   readonly id: number;
   readonly name: string;
@@ -40,7 +35,6 @@ export interface SupaColumn extends SupaBase {
 
 export interface SupaTable extends SupaBase {
   readonly columns: SupaColumn[];
-  readonly primaryKeys: SupaPrimaryKey[];
   readonly relationships: SupaRelationship[];
   totalRows: number;
 }

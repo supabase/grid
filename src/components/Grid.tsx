@@ -20,26 +20,25 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
   const [columns, setColumns] = React.useState<GridColumn[]>([]);
   const [ready, setReady] = React.useState(false);
   const ctx = React.useContext(SupabaseGridCtx);
-  if (!ctx) throw new Error('SupabaseGrid context is undefined');
 
   React.useEffect(() => {
     async function fetch() {
       const service = new RowService(ctx!.client);
-      const res = await service.fetchAll(ctx!.table.name);
+      const res = await service.fetchAll(ctx!.table!.name);
       console.log('res.data', res.data);
       setRows(res.data || []);
       setReady(true);
     }
 
     if (ctx && !ready) {
-      setColumns(getGridColumns(ctx.table, { defaultWidth: 150 }));
+      setColumns(getGridColumns(ctx.table!, { defaultWidth: 150 }));
       fetch();
     }
   }, [ctx]);
 
   function cellContentHandle([col, row]: readonly [number, number]): GridCell {
     const rowData = rows[row];
-    return getCellContent(ctx!.table, col, rowData);
+    return getCellContent(ctx!.table!, col, rowData);
   }
 
   function cellEditedHandle(
@@ -58,6 +57,8 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
       setColumns(cloneColumns);
     }
   }
+
+  if (!ctx) return null;
 
   return (
     <>
