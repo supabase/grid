@@ -4,7 +4,7 @@
   "main": "index.html",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel index.html --no-cache",
     "build": "parcel build index.html"
   },
   "dependencies": {
