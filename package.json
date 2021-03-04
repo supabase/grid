@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.4.2",
+    "@supabase/ui": "^0.15.0",
     "react-data-grid": "^7.0.0-canary.36"
   }
 }
