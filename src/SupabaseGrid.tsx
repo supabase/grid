@@ -62,7 +62,6 @@ const SupabaseGrid: React.FunctionComponent<SupabaseGridProps> = ({
         resColumns.data.length > 0
       ) {
         const supaTable = getSupaTable(resTable.data[0], resColumns.data);
-        console.log('supaTable', supaTable);
         setContext({ client, table: supaTable });
       }
     }
