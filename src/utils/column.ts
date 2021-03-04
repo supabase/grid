@@ -1,9 +1,8 @@
-import { GridColumn } from '@glideapps/glide-data-grid';
-import { HeaderIcon } from '@glideapps/glide-data-grid/dist/ts/data-grid/data-grid-sprites';
+import { SelectColumn, TextEditor } from 'react-data-grid';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
 
-function getColumnIcon(column: SupaColumn): HeaderIcon | null {
-  if (column.isIdentity) return 'headerRowID';
+function getColumnEditor(column: SupaColumn) {
+  if (column.isIdentity || !column.isUpdatable) return null;
   const finalType = column.dataType.toLowerCase();
   switch (finalType) {
     case 'int4':
@@ -11,13 +10,13 @@ function getColumnIcon(column: SupaColumn): HeaderIcon | null {
     case 'float4':
     case 'float8':
     case 'bigint':
-      return 'headerNumber';
+      return null;
     case 'bool':
-      return 'headerBoolean';
+      return null;
     case 'text':
     case 'varchar':
     case 'user-defined':
-      return 'headerString';
+      return TextEditor;
     default:
       return null;
   }
@@ -26,18 +25,18 @@ function getColumnIcon(column: SupaColumn): HeaderIcon | null {
 export function getGridColumns(
   table: SupaTable,
   options?: { defaultWidth?: number }
-): GridColumn[] {
-  const result = table.columns.map(x => {
+): any[] {
+  const columns = table.columns.map(x => {
     let col: Dictionary<any> = {
-      title: x.name,
-      style: (x.isIdentity ? 'highlight' : 'normal') as 'normal' | 'highlight',
+      key: x.name,
+      name: x.name,
+      resizable: true,
+      editor: getColumnEditor(x),
       width: options?.defaultWidth || 100,
     };
 
-    const colIcon = getColumnIcon(x);
-    if (colIcon) col.icon = colIcon;
-
     return col;
   });
-  return result as GridColumn[];
+  console.log('columns', columns);
+  return [SelectColumn, ...columns];
 }

@@ -1,23 +1,22 @@
 import * as React from 'react';
-import DataEditor, {
-  DataEditorContainer,
-  EditableGridCell,
-  GridCell,
-  GridColumn,
-} from '@glideapps/glide-data-grid';
 import { getGridColumns } from '../utils/column';
 import RowService from '../services/RowService';
-import { getCellContent, updateCell } from '../utils/cell';
 import { SupabaseGridCtx } from '../context';
+import DataGrid, { FillEvent, RowsChangeData } from 'react-data-grid';
+import { Dictionary } from '../types';
+import { updateCell } from '../utils/cell';
 
 export type GridProps = {
   width?: number;
   height?: number;
 };
 
-const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
+const Grid: React.FunctionComponent<GridProps> = () => {
   const [rows, setRows] = React.useState<any[]>([]);
-  const [columns, setColumns] = React.useState<GridColumn[]>([]);
+  const [columns, setColumns] = React.useState<any[]>([]);
+  const [selectedRows, setSelectedRows] = React.useState(
+    () => new Set<React.Key>()
+  );
   const [ready, setReady] = React.useState(false);
   const ctx = React.useContext(SupabaseGridCtx);
 
@@ -35,72 +34,58 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
     }
   }, [ctx]);
 
-  function cellContentHandle([col, row]: readonly [number, number]): GridCell {
-    const rowData = rows[row];
-    return getCellContent(ctx!.table!, col, rowData);
+  function rowKeyGetter(row: Dictionary<any>) {
+    return row.id;
   }
 
-  async function cellEditedHandle(
-    cell: readonly [number, number],
-    newValue: EditableGridCell
+  async function onRowsChange(
+    rows: Dictionary<any>[],
+    data: RowsChangeData<Dictionary<any>, unknown>
   ) {
-    const [col, row] = cell;
-    const rowData = rows[row];
+    const rowData = rows[data.indexes[0]];
     const service = new RowService(ctx!.client);
-    const newRow = await updateCell(
-      ctx!.table!,
-      col,
-      newValue,
-      rowData,
-      service
-    );
-    if (newRow) {
-      const cloneRows = rows.slice(0);
-      cloneRows[row] = newRow;
-      setRows(cloneRows);
+    const result = await updateCell(ctx!.table!, rowData, service);
+    if (result) {
+      setRows(rows);
     }
-    // console.log('cell', cell, 'newValue', newValue);
   }
 
-  function columnResizeHandle(column: GridColumn, newSize: number) {
-    const foundIndex = columns.findIndex(x => x.title == column.title);
-    if (foundIndex >= 0) {
-      const cloneColumns = columns.slice(0);
-      let newCol = { ...column, width: newSize };
-      cloneColumns[foundIndex] = newCol;
-      setColumns(cloneColumns);
-    }
+  function handleFill({
+    columnKey,
+    sourceRow,
+    targetRows,
+  }: FillEvent<Dictionary<any>>): Dictionary<any>[] {
+    return targetRows.map(row => ({
+      ...row,
+      [columnKey]: sourceRow[columnKey],
+    }));
   }
 
   if (!ctx || !ready)
     return (
-      <DataEditorContainer width={width || 500} height={height || 300}>
-        <div
-          style={{
-            left: '50%',
-            top: '50%',
-            width: 'auto',
-            height: 'auto',
-          }}
-        >
-          Loading ...
-        </div>
-      </DataEditorContainer>
+      <div
+        style={{
+          left: '50%',
+          top: '50%',
+          width: 'auto',
+          height: 'auto',
+        }}
+      >
+        Loading ...
+      </div>
     );
 
   return (
     <>
-      <DataEditorContainer width={width || 500} height={height || 300}>
-        <DataEditor
-          columns={columns}
-          rows={rows?.length || 0}
-          getCellContent={cellContentHandle}
-          onCellEdited={cellEditedHandle}
-          onColumnResized={columnResizeHandle}
-          allowResize={true}
-        />
-      </DataEditorContainer>
-      <div id="portal" />
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        onFill={handleFill}
+        onRowsChange={onRowsChange}
+        rowKeyGetter={rowKeyGetter}
+        selectedRows={selectedRows}
+        onSelectedRowsChange={setSelectedRows}
+      />
     </>
   );
 };

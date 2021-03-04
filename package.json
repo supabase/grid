@@ -20,7 +20,8 @@
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
-    "react": "^16.12.0"
+    "react": "^16.14 || ^17.0",
+    "react-dom": "^16.14 || ^17.0"
   },
   "husky": {
     "hooks": {
@@ -47,15 +48,14 @@
     }
   ],
   "devDependencies": {
-    "@glideapps/glide-data-grid": "^2.1.0",
     "@size-limit/preset-small-lib": "^4.9.2",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.8.4",
     "direction": "^1.0.4",
     "husky": "^5.1.3",
     "marked": "^0.7.0",
-    "react": "16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "17.0.1",
+    "react-dom": "^17.0.1",
     "react-responsive-carousel": "^3.2.12",
     "size-limit": "^4.9.2",
     "styled-components": "^5.2.1",
@@ -64,6 +64,7 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^1.4.2"
+    "@supabase/supabase-js": "^1.4.2",
+    "react-data-grid": "^7.0.0-canary.36"
   }
 }
