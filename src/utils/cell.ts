@@ -1,4 +1,9 @@
-import { GridCell, GridCellKind } from '@glideapps/glide-data-grid';
+import {
+  EditableGridCell,
+  GridCell,
+  GridCellKind,
+} from '@glideapps/glide-data-grid';
+import RowService from '../services/RowService';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
 
 function getRowIdCell(value: number): GridCell {
@@ -12,7 +17,7 @@ function getRowIdCell(value: number): GridCell {
 function getTextCell(value: string): GridCell {
   return {
     kind: GridCellKind.Text,
-    data: value,
+    data: value || '',
     displayData: value?.toString() || '',
     allowOverlay: true,
   };
@@ -40,7 +45,7 @@ function getBooleanCell(value: boolean, column: SupaColumn): GridCell {
 function getSelectCell(value: string): GridCell {
   return {
     kind: GridCellKind.Text,
-    data: value,
+    data: value || '',
     displayData: value?.toString() || '',
     allowOverlay: true,
   };
@@ -78,4 +83,31 @@ export function getCellContent(
       return getTextCell(value);
       break;
   }
+}
+
+export async function updateCell(
+  table: SupaTable,
+  col: number,
+  newValue: EditableGridCell,
+  rowData: Dictionary<any>,
+  service: RowService
+): Promise<Dictionary<any> | null> {
+  // find primary key
+  const primaryKeys = table.columns.filter(x => x.isIdentity);
+  if (!primaryKeys || primaryKeys.length == 0) return null;
+  // TODO: support multi primary keys
+  if (primaryKeys.length > 1) return null;
+
+  // update rowData with newValue
+  const column = table.columns.find(x => x.position == col + 1);
+  if (!column || !rowData) throw new Error('This should not happen');
+  const newRowData = { ...rowData };
+  newRowData[column.name] = newValue.data;
+
+  // call RowService
+  const res = await service.update(table.name, primaryKeys[0].name, newRowData);
+  if (res.error) return null;
+
+  // return new rowData
+  return newRowData;
 }

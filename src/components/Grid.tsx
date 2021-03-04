@@ -7,7 +7,7 @@ import DataEditor, {
 } from '@glideapps/glide-data-grid';
 import { getGridColumns } from '../utils/column';
 import RowService from '../services/RowService';
-import { getCellContent } from '../utils/cell';
+import { getCellContent, updateCell } from '../utils/cell';
 import { SupabaseGridCtx } from '../context';
 
 export type GridProps = {
@@ -40,11 +40,26 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
     return getCellContent(ctx!.table!, col, rowData);
   }
 
-  function cellEditedHandle(
+  async function cellEditedHandle(
     cell: readonly [number, number],
     newValue: EditableGridCell
   ) {
-    console.log('cell', cell, 'newValue', newValue);
+    const [col, row] = cell;
+    const rowData = rows[row];
+    const service = new RowService(ctx!.client);
+    const newRow = await updateCell(
+      ctx!.table!,
+      col,
+      newValue,
+      rowData,
+      service
+    );
+    if (newRow) {
+      const cloneRows = rows.slice(0);
+      cloneRows[row] = newRow;
+      setRows(cloneRows);
+    }
+    // console.log('cell', cell, 'newValue', newValue);
   }
 
   function columnResizeHandle(column: GridColumn, newSize: number) {
@@ -57,7 +72,7 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
     }
   }
 
-  if (!ctx)
+  if (!ctx || !ready)
     return (
       <DataEditorContainer width={width || 500} height={height || 300}>
         <div
@@ -76,16 +91,14 @@ const Grid: React.FunctionComponent<GridProps> = ({ width, height }) => {
   return (
     <>
       <DataEditorContainer width={width || 500} height={height || 300}>
-        {ready && (
-          <DataEditor
-            columns={columns}
-            rows={rows?.length || 0}
-            getCellContent={cellContentHandle}
-            onCellEdited={cellEditedHandle}
-            onColumnResized={columnResizeHandle}
-            allowResize={true}
-          />
-        )}
+        <DataEditor
+          columns={columns}
+          rows={rows?.length || 0}
+          getCellContent={cellContentHandle}
+          onCellEdited={cellEditedHandle}
+          onColumnResized={columnResizeHandle}
+          allowResize={true}
+        />
       </DataEditorContainer>
       <div id="portal" />
     </>
