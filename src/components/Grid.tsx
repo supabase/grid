@@ -8,7 +8,7 @@ import DataEditor, {
 import { getGridColumns } from '../utils/column';
 import RowService from '../services/RowService';
 import { getCellContent } from '../utils/cell';
-import { SupabaseGridCtx } from '../SupabaseGrid';
+import { SupabaseGridCtx } from '../context';
 
 export type GridProps = {
   width?: number;

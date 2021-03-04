@@ -4,15 +4,7 @@ import { SupaTable } from './types';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
 import { getSupaTable } from './utils/table';
-
-export type SupabaseGridContextType = {
-  client: SupabaseClient;
-  table: SupaTable | undefined;
-};
-
-export const SupabaseGridCtx = React.createContext<SupabaseGridContextType | null>(
-  null
-);
+import { SupabaseGridContextType, SupabaseGridCtx } from './context';
 
 export type SupabaseGridProps = {
   /**
