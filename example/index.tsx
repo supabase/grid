@@ -15,7 +15,7 @@ const App = () => {
           supabaseKey:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjE0ODE0ODc4LCJleHAiOjE5MzAzOTA4Nzh9.CjLbUVvuw0YrFcjpqDMUMZmef2_v3MFjCo4-Z4C9_0Q',
         }}
-        gridProps={{ width: 1000 }}
+        gridProps={{ width: 1200, height: 600 }}
       />
     </div>
   );
