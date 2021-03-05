@@ -64,8 +64,11 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
+    "@popperjs/core": "^2.9.0",
     "@supabase/supabase-js": "^1.4.2",
     "@supabase/ui": "^0.15.0",
-    "react-data-grid": "^7.0.0-canary.36"
+    "react-data-grid": "^7.0.0-canary.36",
+    "react-popper": "^2.2.4",
+    "react-tiny-popover": "^6.0.4"
   }
 }

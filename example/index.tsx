@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div>
       <SupabaseGrid
-        table="employees"
+        table="countries"
         // table={countries}
         clientProps={{
           supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',

@@ -34,7 +34,7 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
     case 'varchar': {
       column.editor = TextEditor;
       column.editorOptions = {
-        createPortal: true,
+        editOnClick: true,
       };
       break;
     }
