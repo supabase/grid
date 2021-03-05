@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Column, SelectColumn, TextEditor } from 'react-data-grid';
+import { Column, SelectColumn } from 'react-data-grid';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
-import SelectEditor from '../components/editor/SelectEditor';
 import CheckboxEditor from '../components/editor/CheckboxEditor';
+import NumberEditor from '../components/editor/NumberEditor';
+import SelectEditor from '../components/editor/SelectEditor';
+import TextEditor from '../components/editor/TextEditor';
 
 function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
   if (col.isIdentity || !col.isUpdatable) return;
@@ -14,6 +16,7 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
     case 'float4':
     case 'float8':
     case 'bigint': {
+      column.editor = NumberEditor;
       break;
     }
     case 'boolean': {
@@ -30,6 +33,9 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
     case 'text':
     case 'varchar': {
       column.editor = TextEditor;
+      column.editorOptions = {
+        createPortal: true,
+      };
       break;
     }
     case 'user-defined': {
