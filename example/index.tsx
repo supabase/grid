@@ -1,14 +1,14 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import SupabaseGrid from '../dist';
+import SupabaseGrid from '../.';
 // import countries from './countries'
 
 const App = () => {
   return (
     <div>
       <SupabaseGrid
-        table="countries"
+        table="employees"
         // table={countries}
         clientProps={{
           supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',

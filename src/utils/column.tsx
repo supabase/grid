@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Column, SelectColumn, TextEditor } from 'react-data-grid';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
-import SelectEditor from '../components/SelectEditor';
+import SelectEditor from '../components/editor/SelectEditor';
+import CheckboxEditor from '../components/editor/CheckboxEditor';
 
 function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
   if (col.isIdentity || !col.isUpdatable) return;
   const finalType = col.dataType.toLowerCase();
+  console.log('finalType', finalType);
   switch (finalType) {
     case 'int4':
     case 'int8':
@@ -14,7 +16,15 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
     case 'bigint': {
       break;
     }
-    case 'bool': {
+    case 'boolean': {
+      column.editor = CheckboxEditor;
+      column.formatter = p => {
+        const value = p.row[p.column.key] as boolean;
+        return <>{value ? 'true' : 'false'}</>;
+      };
+      column.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'text':
