@@ -6,7 +6,7 @@ import SupabaseGrid from '../dist';
 
 const App = () => {
   return (
-    <div style={{ height: '20rem' }}>
+    <div style={{ height: '30rem' }}>
       <SupabaseGrid
         table="countries"
         // table={countries}
@@ -15,6 +15,7 @@ const App = () => {
           supabaseKey:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjE0ODE0ODc4LCJleHAiOjE5MzAzOTA4Nzh9.CjLbUVvuw0YrFcjpqDMUMZmef2_v3MFjCo4-Z4C9_0Q',
         }}
+        gridProps={{ height: '100%' }}
       />
     </div>
   );
