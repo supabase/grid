@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Column, SelectColumn, TextEditor } from 'react-data-grid';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
-import { SelectEditor } from '../components/SelectEditor';
+import SelectEditor from '../components/SelectEditor';
 
 function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
   if (col.isIdentity || !col.isUpdatable) return;
@@ -23,19 +23,10 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
       break;
     }
     case 'user-defined': {
-      column.editor = p => {
-        const { row, onRowChange } = p;
-        const readonlyCol = p.column;
-        return (
-          <SelectEditor
-            value={(row[readonlyCol.key] as unknown) as string}
-            onChange={value =>
-              onRowChange({ ...row, [readonlyCol.key]: value })
-            }
-            options={col.enums}
-          />
-        );
-      };
+      const options = col.enums.map(x => {
+        return { label: x, value: x };
+      });
+      column.editor = p => <SelectEditor {...p} options={options} />;
       column.editorOptions = {
         editOnClick: true,
       };

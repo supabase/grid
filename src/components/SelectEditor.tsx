@@ -1,30 +1,35 @@
 import * as React from 'react';
 import { Select } from '@supabase/ui';
+import { EditorProps } from 'react-data-grid';
 
 const { Option } = Select;
 
-interface SelectEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  options: string[];
+interface SelectEditorProps<TRow, TSummaryRow = unknown>
+  extends EditorProps<TRow, TSummaryRow> {
+  options: { label: string; value: string }[];
 }
 
-export function SelectEditor({ value, onChange, options }: SelectEditorProps) {
-  function onChangeHandle(event: React.ChangeEvent<HTMLSelectElement>) {
-    onChange(event.target.value);
+export default function SelectEditor<TRow, TSummaryRow = unknown>({
+  row,
+  column,
+  onRowChange,
+  options,
+}: SelectEditorProps<TRow, TSummaryRow>) {
+  function onChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    onRowChange({ ...row, [column.key]: event.target.value });
   }
 
   return (
     <Select
-      value={value}
+      value={(row[column.key as keyof TRow] as unknown) as string}
       layout="vertical"
-      onChange={onChangeHandle}
+      onChange={onChange}
       size="tiny"
     >
-      {options.map(x => {
+      {options.map(({ label, value }) => {
         return (
-          <Option key={x} value={x}>
-            {x}
+          <Option key={value} value={value}>
+            {label}
           </Option>
         );
       })}
