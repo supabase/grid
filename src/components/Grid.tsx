@@ -3,16 +3,17 @@ import { getGridColumns } from '../utils/column';
 import RowService from '../services/RowService';
 import { SupabaseGridCtx } from '../context';
 import DataGrid, { FillEvent, RowsChangeData } from 'react-data-grid';
-import { Dictionary } from '../types';
+import { Dictionary, GridProps } from '../types';
 import { updateCell } from '../utils/cell';
 import { Typography, Loading } from '@supabase/ui';
 
-export type GridProps = {
-  width?: number;
-  height?: number;
-};
-
-const Grid: React.FunctionComponent<GridProps> = () => {
+const Grid: React.FunctionComponent<GridProps> = ({
+  width,
+  height,
+  containerClass,
+  gridClass,
+  rowClass,
+}) => {
   const [rows, setRows] = React.useState<any[]>([]);
   const [columns, setColumns] = React.useState<any[]>([]);
   const [selectedRows, setSelectedRows] = React.useState(
@@ -72,7 +73,10 @@ const Grid: React.FunctionComponent<GridProps> = () => {
     );
 
   return (
-    <>
+    <div
+      className={containerClass}
+      style={{ width: width || '100%', height: height || '50vh' }}
+    >
       <DataGrid
         columns={columns}
         rows={rows}
@@ -81,8 +85,11 @@ const Grid: React.FunctionComponent<GridProps> = () => {
         rowKeyGetter={rowKeyGetter}
         selectedRows={selectedRows}
         onSelectedRowsChange={setSelectedRows}
+        className={gridClass}
+        rowClass={rowClass}
+        style={{ height: '100%' }}
       />
-    </>
+    </div>
   );
 };
 export default Grid;

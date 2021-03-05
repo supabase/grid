@@ -2,6 +2,14 @@ export interface Dictionary<T> {
   [Key: string]: T;
 }
 
+export type GridProps = {
+  width?: number | string;
+  height?: number | string;
+  containerClass?: string;
+  gridClass?: string;
+  rowClass?: ((row: Dictionary<any>) => string | undefined) | undefined;
+};
+
 export type SupaRelationship = {
   readonly id: number;
   readonly name: string;

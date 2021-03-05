@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { SupaTable } from './types';
+import { GridProps, SupaTable } from './types';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
 import { getSupaTable } from './utils/table';
@@ -23,10 +23,7 @@ export type SupabaseGridProps = {
   /**
    * props to config grid view
    */
-  gridProps: {
-    width?: number;
-    height?: number;
-  };
+  gridProps?: GridProps;
 };
 
 /**
