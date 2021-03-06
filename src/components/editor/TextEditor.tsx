@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
-import { Input } from '@supabase/ui';
 import { EditorProps } from 'react-data-grid';
+
+function autoFocusAndSelect(input: HTMLTextAreaElement | null) {
+  // nee a timeout to wait for popover appear
+  setTimeout(() => {
+    input?.focus();
+    input?.select();
+  }, 0);
+}
 
 export default function TextEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -19,12 +26,14 @@ export default function TextEditor<TRow, TSummaryRow = unknown>({
   return (
     <Popover
       isOpen={isPopoverOpen}
-      positions={['bottom', 'top']}
+      positions={['bottom', 'top', 'left']}
+      align="start"
       content={
-        <Input.TextArea
-          autofocus
-          style={{ width: `${column.width}px`, marginLeft: '12px' }}
+        <textarea
+          ref={autoFocusAndSelect}
+          style={{ width: '15rem' }}
           value={value}
+          rows={5}
           onChange={onChange}
           onBlur={() => onClose(true)}
         />
