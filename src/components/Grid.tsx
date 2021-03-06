@@ -6,25 +6,14 @@ import DataGrid, {
   RowRendererProps,
   RowsChangeData,
 } from 'react-data-grid';
-import { useContextMenu } from 'react-contexify';
+import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
 import { updateCell } from '../utils/cell';
 import { Typography, Loading } from '@supabase/ui';
 import { SupabaseGridCtx } from '../context';
 import { getGridColumns } from '../utils/column';
-import RowContextMenu, { ROW_CONTEXT_MENU_ID } from './RowContextMenu';
-
-function RowRenderer(props: RowRendererProps<Dictionary<any>>) {
-  const { show } = useContextMenu({
-    id: ROW_CONTEXT_MENU_ID,
-  });
-  return (
-    <GridRow
-      {...props}
-      onContextMenu={e => show(e, { props: { rowIdx: props.rowIdx } })}
-    />
-  );
-}
+import RowMenu, { ROW_MENU_ID } from './menu/RowMenu';
+import MultiRowsMenu, { MULTI_ROWS_MENU_ID } from './menu/MultiRowsMenu';
 
 const Grid: React.FunctionComponent<GridProps> = ({
   width,
@@ -71,16 +60,21 @@ const Grid: React.FunctionComponent<GridProps> = ({
     }
   }
 
-  // function handleFill({
-  //   columnKey,
-  //   sourceRow,
-  //   targetRows,
-  // }: FillEvent<Dictionary<any>>): Dictionary<any>[] {
-  //   return targetRows.map(row => ({
-  //     ...row,
-  //     [columnKey]: sourceRow[columnKey],
-  //   }));
-  // }
+  function RowRenderer(props: RowRendererProps<Dictionary<any>>) {
+    const isSelected = selectedRows.has(props.row.id);
+    const menuId =
+      isSelected && selectedRows.size > 1 ? MULTI_ROWS_MENU_ID : ROW_MENU_ID;
+    const { show } = useContextMenu({
+      id: menuId,
+    });
+
+    function displayMenu(e: TriggerEvent) {
+      if (!isSelected) setSelectedRows(new Set<React.Key>());
+      show(e, { props: { rowIdx: props.rowIdx, selectedRows } });
+    }
+
+    return <GridRow {...props} onContextMenu={displayMenu} />;
+  }
 
   if (!ctx || !ready)
     return (
@@ -100,7 +94,6 @@ const Grid: React.FunctionComponent<GridProps> = ({
         columns={columns}
         rows={rows}
         rowRenderer={RowRenderer}
-        // onFill={handleFill}
         onRowsChange={onRowsChange}
         rowKeyGetter={rowKeyGetter}
         selectedRows={selectedRows}
@@ -109,8 +102,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
         rowClass={rowClass}
         style={{ height: '100%' }}
       />
+      {createPortal(<RowMenu rows={rows} setRows={setRows} />, document.body)}
       {createPortal(
-        <RowContextMenu rows={rows} setRows={setRows} />,
+        <MultiRowsMenu rows={rows} setRows={setRows} />,
         document.body
       )}
     </div>
