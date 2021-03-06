@@ -1,13 +1,7 @@
-//@ts-nocheck
 import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
 import { Input } from '@supabase/ui';
 import { EditorProps } from 'react-data-grid';
-
-function autoFocusAndSelect(input: HTMLInputElement | null) {
-  input?.focus();
-  input?.select();
-}
 
 export default function TextEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -28,9 +22,8 @@ export default function TextEditor<TRow, TSummaryRow = unknown>({
       positions={['bottom', 'top']}
       content={
         <Input.TextArea
-          ref={autoFocusAndSelect}
+          autofocus
           style={{ width: `${column.width}px`, marginLeft: '12px' }}
-          autofocus={true}
           value={value}
           onChange={onChange}
           onBlur={() => onClose(true)}
