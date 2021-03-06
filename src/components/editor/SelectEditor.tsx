@@ -13,17 +13,23 @@ export default function SelectEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
+  onClose,
   options,
 }: SelectEditorProps<TRow, TSummaryRow>) {
   function onChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    onRowChange({ ...row, [column.key]: event.target.value });
+    onRowChange({ ...row, [column.key]: event.target.value }, true);
+  }
+  function onBlur() {
+    onClose(false);
   }
 
   return (
     <Select
       value={(row[column.key as keyof TRow] as unknown) as string}
-      layout="vertical"
       onChange={onChange}
+      // onFocus={onFocus}
+      onBlur={onBlur}
+      layout="vertical"
       size="tiny"
     >
       {options.map(({ label, value }) => {

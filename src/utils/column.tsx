@@ -33,9 +33,6 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
     case 'text':
     case 'varchar': {
       column.editor = TextEditor;
-      column.editorOptions = {
-        editOnClick: true,
-      };
       break;
     }
     case 'user-defined': {
@@ -43,9 +40,6 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
         return { label: x, value: x };
       });
       column.editor = p => <SelectEditor {...p} options={options} />;
-      column.editorOptions = {
-        editOnClick: true,
-      };
       break;
     }
     default: {
