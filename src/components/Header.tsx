@@ -5,8 +5,14 @@ import styles from '../style.module.css';
 type HeaderProps = {};
 
 const Header: React.FunctionComponent<HeaderProps> = ({}) => {
-  const [msg, setMsg] = React.useState('Saving ...');
+  const [msg, setMsg] = React.useState('idel');
   let timer = React.useRef<NodeJS.Timeout | null>(null);
+
+  SupabaseGridQueue.on('add', () => {
+    console.log(
+      `Task is added.  Size: ${SupabaseGridQueue.size}  Pending: ${SupabaseGridQueue.pending}`
+    );
+  });
 
   SupabaseGridQueue.on('active', () => {
     if (timer && timer.current) clearTimeout(timer.current!);
@@ -17,7 +23,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({}) => {
   });
   SupabaseGridQueue.on('idle', () => {
     setMsg('All changes saved');
-    timer.current = setTimeout(() => setMsg(''), 3000);
+    timer.current = setTimeout(() => setMsg('idel'), 3000);
     console.log(
       `Queue is idle.  Size: ${SupabaseGridQueue.size}  Pending: ${SupabaseGridQueue.pending}`
     );

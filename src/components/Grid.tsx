@@ -8,7 +8,6 @@ import DataGrid, {
 } from 'react-data-grid';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
-import { updateCell } from '../utils/cell';
 import { Typography, Loading } from '@supabase/ui';
 import { SupabaseGridCtx } from '../constants';
 import { getGridColumns } from '../utils/column';
@@ -32,8 +31,11 @@ const Grid: React.FunctionComponent<GridProps> = ({
 
   React.useEffect(() => {
     async function fetch() {
-      const service = new RowService(ctx!.client);
-      const res = await service.fetchAll(ctx!.table!.name);
+      const service = new RowService(ctx!.table!, ctx!.client);
+      const res = await service.fetchAll();
+      if (res.error) {
+        // TODO: handle fetch rows data error
+      }
       setRows(res.data || []);
       setReady(true);
     }
@@ -48,14 +50,16 @@ const Grid: React.FunctionComponent<GridProps> = ({
     return row.id;
   }
 
-  async function onRowsChange(
+  function onRowsChange(
     rows: Dictionary<any>[],
     data: RowsChangeData<Dictionary<any>, unknown>
   ) {
     const rowData = rows[data.indexes[0]];
-    const service = new RowService(ctx!.client);
-    const result = await updateCell(ctx!.table!, rowData, service);
-    if (result) {
+    const service = new RowService(ctx!.table!, ctx!.client);
+    const { error } = service.update(rowData);
+    if (error) {
+      // TODO: show a toast
+    } else {
       setRows(rows);
     }
   }
@@ -70,7 +74,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
 
     function displayMenu(e: TriggerEvent) {
       if (!isSelected) setSelectedRows(new Set<React.Key>());
-      show(e, { props: { rowIdx: props.rowIdx, selectedRows } });
+      show(e, {
+        props: { rowId: props.row.id, rowIdx: props.rowIdx, selectedRows },
+      });
     }
 
     return <GridRow {...props} onContextMenu={displayMenu} />;

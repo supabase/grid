@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Menu, Item, ItemParams } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';
+import { Menu, Item, ItemParams } from 'react-contexify';
 import { Dictionary } from '../../types';
+import { SupabaseGridCtx } from '../../constants';
+import RowService from '../../services/RowService';
 
 export const ROW_MENU_ID = 'row-menu-id';
 
@@ -11,6 +13,8 @@ type RowMenuProps = {
 };
 
 const RowMenu: React.FunctionComponent<RowMenuProps> = ({ rows, setRows }) => {
+  const ctx = React.useContext(SupabaseGridCtx);
+
   function onRowDuplicate(p: ItemParams) {
     const { event, props, triggerEvent, data } = p;
     console.log(event, props, triggerEvent, data);
@@ -18,7 +22,10 @@ const RowMenu: React.FunctionComponent<RowMenuProps> = ({ rows, setRows }) => {
 
   function onRowDelete(p: ItemParams) {
     const { props } = p;
-    setRows([...rows.slice(0, props.rowIdx), ...rows.slice(props.rowIdx + 1)]);
+    const { rowIdx, rowId } = props;
+    const service = new RowService(ctx!.table!, ctx!.client);
+    service.delete([rowId]);
+    setRows([...rows.slice(0, rowIdx), ...rows.slice(rowIdx + 1)]);
   }
 
   return (

@@ -11,3 +11,4 @@ class ColumnService {
   update() {}
   delete() {}
 }
+export default ColumnService;
