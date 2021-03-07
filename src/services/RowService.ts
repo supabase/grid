@@ -16,6 +16,11 @@ class RowService {
       .update(value)
       .match({ [primaryKey]: value[primaryKey] });
   }
-  delete() {}
+  delete(table: string, primaryKey: string, rowIds: number[] | string[]) {
+    return this.client
+      .from(table)
+      .delete()
+      .in(primaryKey, rowIds);
+  }
 }
 export default RowService;
