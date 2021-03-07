@@ -15,11 +15,6 @@ type RowMenuProps = {
 const RowMenu: React.FunctionComponent<RowMenuProps> = ({ rows, setRows }) => {
   const ctx = React.useContext(SupabaseGridCtx);
 
-  function onRowDuplicate(p: ItemParams) {
-    const { event, props, triggerEvent, data } = p;
-    console.log(event, props, triggerEvent, data);
-  }
-
   function onRowDelete(p: ItemParams) {
     const { props } = p;
     const { rowIdx, rowId } = props;
@@ -30,7 +25,6 @@ const RowMenu: React.FunctionComponent<RowMenuProps> = ({ rows, setRows }) => {
 
   return (
     <Menu id={ROW_MENU_ID}>
-      <Item onClick={onRowDuplicate}>Duplicate row</Item>
       <Item onClick={onRowDelete}>Delete row</Item>
     </Menu>
   );

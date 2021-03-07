@@ -58,7 +58,7 @@ const Grid: React.FunctionComponent<GridProps> = ({
     const service = new RowService(ctx!.table!, ctx!.client);
     const { error } = service.update(rowData);
     if (error) {
-      // TODO: show a toast
+      // TODO: show a toast error message
     } else {
       setRows(rows);
     }

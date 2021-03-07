@@ -11,7 +11,16 @@ class RowService {
   fetchAll() {
     return this.client.from(this.table.name).select();
   }
-  create() {}
+
+  create(value: Dictionary<any>) {
+    SupabaseGridQueue.add(async () => {
+      const res = await this.client.from(this.table.name).insert(value);
+      console.log('insert row', res);
+      // TODO: how to handle error
+      // if (res.error)
+    });
+  }
+
   update(value: Dictionary<any>): { error?: string } {
     const { primaryKey, error } = this._getPrimaryKey();
     if (error) return { error };
