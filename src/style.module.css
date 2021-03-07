@@ -1,0 +1,22 @@
+.gridContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gridHeader {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+  background-color: hsl(0deg 0% 13%);
+}
+
+.gridHeaderState {
+  align-self: flex-end;
+  margin: auto 0;
+  padding: 0 10px;
+}
+
+.gridHeaderState label {
+  color: white;
+}

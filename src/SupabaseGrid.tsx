@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from './types';
+import { getSupaTable } from './utils/table';
+import { SupabaseGridContextType, SupabaseGridCtx } from './constants';
+import Header from './components/Header';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
-import { getSupaTable } from './utils/table';
-import { SupabaseGridContextType, SupabaseGridCtx } from './context';
+import styles from './style.module.css';
 
 export type SupabaseGridProps = {
   /**
@@ -73,7 +75,10 @@ const SupabaseGrid: React.FunctionComponent<SupabaseGridProps> = ({
 
   return (
     <SupabaseGridCtx.Provider value={contextValue}>
-      <Grid {...gridProps} />
+      <div className={styles.gridContainer}>
+        <Header />
+        <Grid {...gridProps} />
+      </div>
     </SupabaseGridCtx.Provider>
   );
 };

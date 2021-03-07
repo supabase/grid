@@ -10,7 +10,7 @@ import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
 import { updateCell } from '../utils/cell';
 import { Typography, Loading } from '@supabase/ui';
-import { SupabaseGridCtx } from '../context';
+import { SupabaseGridCtx } from '../constants';
 import { getGridColumns } from '../utils/column';
 import RowMenu, { ROW_MENU_ID } from './menu/RowMenu';
 import MultiRowsMenu, { MULTI_ROWS_MENU_ID } from './menu/MultiRowsMenu';
