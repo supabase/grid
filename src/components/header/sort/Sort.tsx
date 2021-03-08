@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Dropdown,
-  Typography,
-  Divider,
-  Menu,
-  Button,
-  IconSettings,
-} from '@supabase/ui';
+import SortRow from './SortRow';
 
 type SortProps = {};
 
@@ -19,21 +12,9 @@ const Sort: React.FunctionComponent<SortProps> = ({}) => {
 
   return (
     <>
-      <Dropdown.Item>
-        <Typography.Text>Signed in as </Typography.Text>
-        <Typography.Text strong>tom@example.com . </Typography.Text>
-      </Dropdown.Item>
-      <Divider light />
-      <Menu>
-        <Menu.Item icon={<IconSettings size="tiny" />}>Settings</Menu.Item>
-        <Divider light />
-        <Menu.Item>Something</Menu.Item>
-        <Menu.Item>Something</Menu.Item>
-      </Menu>
-      <Divider light />,
-      <Dropdown.Item>
-        <Button type="default">Log out</Button>
-      </Dropdown.Item>
+      <SortRow columnId="16525.1" order="desc" />
+      <SortRow columnId="16525.3" order="desc" />
+      <SortRow columnId="16525.4" order="asc" />
     </>
   );
 };

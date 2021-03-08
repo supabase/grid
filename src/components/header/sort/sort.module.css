@@ -1,0 +1,14 @@
+.sortRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 8px;
+}
+
+.sortRowLeft {
+  display: flex;
+  align-items: center;
+}
+
+.sortRowRight {
+  width: 8rem;
+}

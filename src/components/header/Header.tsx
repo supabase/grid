@@ -16,7 +16,11 @@ const Header: React.FunctionComponent<HeaderProps> = ({}) => {
             Filter 1
           </Button>
         </Dropdown>
-        <Dropdown placement="bottomLeft" overlay={<Sort />}>
+        <Dropdown
+          placement="bottomLeft"
+          overlay={<Sort />}
+          style={{ width: '20rem' }}
+        >
           <Button type="outline">Sort 1</Button>
         </Dropdown>
       </div>
