@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from 'react-data-grid';
+import styles from './editor.module.css';
 
 function autoFocusAndSelect(input: HTMLTextAreaElement | null) {
   // nee a timeout to wait for popover appear
@@ -39,7 +40,12 @@ export default function TextEditor<TRow, TSummaryRow = unknown>({
         />
       }
     >
-      <div onClick={() => setIsPopoverOpen(!isPopoverOpen)}>{value}</div>
+      <div
+        className={styles.textEditor}
+        onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+      >
+        {value}
+      </div>
     </Popover>
   );
 }

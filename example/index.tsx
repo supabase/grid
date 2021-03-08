@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div style={{ height: '30rem' }}>
       <SupabaseGrid
-        table="countries"
+        table="employees"
         // table={countries}
         clientProps={{
           supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',

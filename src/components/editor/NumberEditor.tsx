@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { EditorProps } from 'react-data-grid';
+import styles from './editor.module.css';
 
 function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.focus();
@@ -14,6 +15,7 @@ export default function NumberEditor<TRow, TSummaryRow = unknown>({
 }: EditorProps<TRow, TSummaryRow>) {
   return (
     <input
+      className={styles.textEditor}
       ref={autoFocusAndSelect}
       value={(row[column.key as keyof TRow] as unknown) as string}
       onChange={event =>

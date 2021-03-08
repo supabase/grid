@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { Select } from '@supabase/ui';
 import { EditorProps } from 'react-data-grid';
-
-const { Option } = Select;
+import styles from './editor.module.css';
 
 interface SelectEditorProps<TRow, TSummaryRow = unknown>
   extends EditorProps<TRow, TSummaryRow> {
@@ -19,26 +17,24 @@ export default function SelectEditor<TRow, TSummaryRow = unknown>({
   function onChange(event: React.ChangeEvent<HTMLSelectElement>) {
     onRowChange({ ...row, [column.key]: event.target.value }, true);
   }
+
   function onBlur() {
     onClose(false);
   }
 
   return (
-    <Select
+    <select
+      className={styles.textEditor}
       value={(row[column.key as keyof TRow] as unknown) as string}
       onChange={onChange}
-      // onFocus={onFocus}
       onBlur={onBlur}
-      layout="vertical"
-      size="tiny"
+      autoFocus
     >
-      {options.map(({ label, value }) => {
-        return (
-          <Option key={value} value={value}>
-            {label}
-          </Option>
-        );
-      })}
-    </Select>
+      {options.map(({ label, value }) => (
+        <option key={value} value={value}>
+          {label}
+        </option>
+      ))}
+    </select>
   );
 }

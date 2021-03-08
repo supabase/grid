@@ -39,7 +39,13 @@ function setupColumnEditor(col: SupaColumn, column: Column<Dictionary<any>>) {
       const options = col.enums.map(x => {
         return { label: x, value: x };
       });
+      column.formatter = p => {
+        return <>{p.row[p.column.key]}</>;
+      };
       column.editor = p => <SelectEditor {...p} options={options} />;
+      column.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     default: {
