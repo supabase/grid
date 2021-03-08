@@ -11,8 +11,7 @@ import { Dictionary, GridProps } from '../types';
 import { Typography, Loading } from '@supabase/ui';
 import { SupabaseGridCtx } from '../constants';
 import { getGridColumns } from '../utils/column';
-import RowMenu, { ROW_MENU_ID } from './menu/RowMenu';
-import MultiRowsMenu, { MULTI_ROWS_MENU_ID } from './menu/MultiRowsMenu';
+import { RowMenu, MultiRowsMenu, MENU_IDS } from './menu';
 
 const Grid: React.FunctionComponent<GridProps> = ({
   width,
@@ -70,7 +69,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
   function RowRenderer(props: RowRendererProps<Dictionary<any>>) {
     const isSelected = selectedRows.has(props.row.id);
     const menuId =
-      isSelected && selectedRows.size > 1 ? MULTI_ROWS_MENU_ID : ROW_MENU_ID;
+      isSelected && selectedRows.size > 1
+        ? MENU_IDS.MULTI_ROWS_MENU_ID
+        : MENU_IDS.ROW_MENU_ID;
     const { show } = useContextMenu({
       id: menuId,
     });
