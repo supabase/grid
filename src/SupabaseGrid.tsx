@@ -3,7 +3,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from './types';
 import { getSupaTable } from './utils/table';
 import { SupabaseGridContextType, SupabaseGridCtx } from './constants';
-import Header from './components/Header';
+import Header from './components/header/Header';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
 import styles from './style.module.css';

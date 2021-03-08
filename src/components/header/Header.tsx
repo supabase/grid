@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { SupabaseGridQueue } from '../constants';
-import styles from '../style.module.css';
+import { SupabaseGridQueue } from '../../constants';
+import FilterDropdown from './FilterDropdown';
+import styles from './header.module.css';
 
 type HeaderProps = {};
 
@@ -31,8 +32,13 @@ const Header: React.FunctionComponent<HeaderProps> = ({}) => {
 
   return (
     <div className={styles.gridHeader}>
-      <div className={styles.gridHeaderState}>
-        <label>{msg}</label>
+      <div className={styles.gridHeaderLeft}>
+        <FilterDropdown />
+      </div>
+      <div className={styles.gridHeaderRight}>
+        <div className={styles.gridHeaderState}>
+          <label>{msg}</label>
+        </div>
       </div>
     </div>
   );
