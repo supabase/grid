@@ -3,8 +3,9 @@ export interface Dictionary<T> {
 }
 
 export type GridProps = {
-  width?: number | string;
-  height?: number | string;
+  width?: string | number;
+  height?: string | number;
+  defaultColumnWidth?: string | number;
   containerClass?: string;
   gridClass?: string;
   rowClass?: ((row: Dictionary<any>) => string | undefined) | undefined;

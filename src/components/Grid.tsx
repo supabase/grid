@@ -17,6 +17,7 @@ import MultiRowsMenu, { MULTI_ROWS_MENU_ID } from './menu/MultiRowsMenu';
 const Grid: React.FunctionComponent<GridProps> = ({
   width,
   height,
+  defaultColumnWidth,
   containerClass,
   gridClass,
   rowClass,
@@ -41,7 +42,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
     }
 
     if (ctx && !ready) {
-      setColumns(getGridColumns(ctx.table!, { defaultWidth: 150 }));
+      setColumns(
+        getGridColumns(ctx.table!, { defaultWidth: defaultColumnWidth })
+      );
       fetch();
     }
   }, [ctx]);
