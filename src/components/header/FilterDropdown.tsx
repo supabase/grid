@@ -19,6 +19,7 @@ const FilterDropdown: React.FunctionComponent<FilterDropdownProps> = ({}) => {
 
   return (
     <Dropdown
+      placement="bottomLeft"
       overlay={[
         <Dropdown.Item>
           <Typography.Text>Signed in as </Typography.Text>
