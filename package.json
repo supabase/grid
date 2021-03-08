@@ -63,6 +63,7 @@
     "rollup-plugin-postcss": "^4.0.0",
     "size-limit": "^4.9.2",
     "styled-components": "^5.2.1",
+    "tailwindcss": "^2.0.3",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^3.9.9"

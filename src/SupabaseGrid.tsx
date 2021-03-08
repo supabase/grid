@@ -1,3 +1,4 @@
+import './style.css';
 import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from './types';
@@ -6,7 +7,6 @@ import { SupabaseGridContextType, SupabaseGridCtx } from './constants';
 import Header from './components/header';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
-import styles from './style.module.css';
 
 export type SupabaseGridProps = {
   /**
@@ -75,7 +75,7 @@ const SupabaseGrid: React.FunctionComponent<SupabaseGridProps> = ({
 
   return (
     <SupabaseGridCtx.Provider value={contextValue}>
-      <div className={styles.gridContainer}>
+      <div className="flex flex-col h-full">
         <Header />
         <Grid {...gridProps} />
       </div>
