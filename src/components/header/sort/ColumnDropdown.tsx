@@ -1,0 +1,40 @@
+import * as React from 'react';
+import { Dropdown, Menu, Button } from '@supabase/ui';
+import { SupabaseGridCtx } from '../../../constants';
+
+type ColumnDropdownProps = {};
+
+const ColumnDropdown: React.FunctionComponent<ColumnDropdownProps> = p => {
+  return (
+    <Dropdown
+      className="w-40"
+      placement="bottomLeft"
+      overlay={<Columns {...p} />}
+    >
+      <Button type="primary">Pick another column to sort by</Button>
+    </Dropdown>
+  );
+};
+export default ColumnDropdown;
+
+const Columns: React.FunctionComponent<ColumnDropdownProps> = ({}) => {
+  const ctx = React.useContext(SupabaseGridCtx);
+  // TODO: filter base on existed sorting columns
+  const columns = ctx?.table?.columns!;
+
+  function onClick(columnId: string | number) {
+    console.log('select columnId', columnId);
+  }
+
+  return (
+    <Menu>
+      {columns.map(x => {
+        return (
+          <Menu.Item onClick={() => onClick(x.id)} key={x.id}>
+            {x.name}
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+};

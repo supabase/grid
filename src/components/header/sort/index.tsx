@@ -1,3 +1,3 @@
-import Sort from './Sort';
+import SortDropdown from './SortDropdown';
 
-export default Sort;
+export default SortDropdown;

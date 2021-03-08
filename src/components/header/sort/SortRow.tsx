@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Typography, Button, IconX } from '@supabase/ui';
 import SegmentedControl from './SegmentedControl';
-import styles from './sort.module.css';
 import { SupabaseGridCtx } from '../../../constants';
 
 type SortRowProps = {
@@ -22,18 +21,18 @@ const SortRow: React.FunctionComponent<SortRowProps> = ({
   }
 
   return (
-    <div className={styles.sortRow}>
-      <div className={styles.sortRowLeft}>
+    <div className="flex justify-between px-2 py-1">
+      <div className="flex items-center">
         <Button
+          className="mr-4 p-2"
           icon={<IconX />}
           shadow={false}
           size="tiny"
           type="text"
-          style={{ padding: '4px', marginRight: '1rem' }}
         />
         <Typography.Text>{column.name}</Typography.Text>
       </div>
-      <div className={styles.sortRowRight}>
+      <div className="w-32">
         <SegmentedControl
           options={['ASC', 'DESC']}
           defaultValue={order}

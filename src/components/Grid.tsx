@@ -88,10 +88,16 @@ const Grid: React.FunctionComponent<GridProps> = ({
 
   if (!ctx || !ready)
     return (
-      <div>
-        <Loading active>
-          <Typography.Text strong={true}>Loading ...</Typography.Text>
-        </Loading>
+      <div
+        className="flex justify-center bg-gray-900"
+        style={{ width: width || '100%', height: height || '50vh' }}
+      >
+        <div className="flex items-center">
+          <Loading active>
+            <div />
+          </Loading>
+          <Typography.Text className="m-8">loading ...</Typography.Text>
+        </div>
       </div>
     );
 

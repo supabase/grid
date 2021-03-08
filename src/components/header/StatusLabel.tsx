@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { SupabaseGridQueue } from '../../constants';
-import styles from './header.module.css';
 
 type StatusLabelProps = {};
 
@@ -30,7 +29,7 @@ const StatusLabel: React.FunctionComponent<StatusLabelProps> = ({}) => {
   });
 
   return (
-    <div className={styles.gridHeaderState}>
+    <div className="text-white">
       <label>{msg}</label>
     </div>
   );
