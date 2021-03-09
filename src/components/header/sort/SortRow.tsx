@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography, Button, IconX } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
-import SegmentedControl from './SegmentedControl';
+import { SegmentedControl } from '../../common';
 
 type SortRowProps = {
   columnId: string | number;

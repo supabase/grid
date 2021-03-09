@@ -2,12 +2,12 @@ import * as React from 'react';
 import styles from './segmentedControl.module.css';
 
 type SegmentedControlProps = {
-  options: string[];
+  options: [string, string];
   value: string;
   onToggle: (value: string) => void;
 };
 
-const SegmentedControl: React.FC<SegmentedControlProps> = ({
+export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   options,
   value,
   onToggle,
@@ -39,4 +39,3 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
     </div>
   );
 };
-export default SegmentedControl;
