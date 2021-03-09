@@ -3,7 +3,7 @@ import { SupabaseGridQueue } from '../../constants';
 
 type StatusLabelProps = {};
 
-const StatusLabel: React.FunctionComponent<StatusLabelProps> = ({}) => {
+const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   const [msg, setMsg] = React.useState('idel');
   let timer = React.useRef<NodeJS.Timeout | null>(null);
 

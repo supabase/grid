@@ -75,6 +75,8 @@
     "p-queue": "^6.6.2",
     "react-contexify": "^5.0.0",
     "react-data-grid": "^7.0.0-canary.36",
-    "react-tiny-popover": "^6.0.4"
+    "react-tiny-popover": "^6.0.4",
+    "react-tracked": "^1.6.5",
+    "scheduler": "^0.19.1"
   }
 }

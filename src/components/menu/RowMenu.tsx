@@ -1,26 +1,23 @@
 import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams } from 'react-contexify';
-import { Dictionary } from '../../types';
-import { SupabaseGridCtx } from '../../constants';
 import RowService from '../../services/RowService';
+import { useDispatch, useTrackedState } from '../../store';
 
 export const ROW_MENU_ID = 'row-menu-id';
 
-type RowMenuProps = {
-  rows: Dictionary<any>[];
-  setRows: (rows: Dictionary<any>[]) => void;
-};
+type RowMenuProps = {};
 
-const RowMenu: React.FunctionComponent<RowMenuProps> = ({ rows, setRows }) => {
-  const ctx = React.useContext(SupabaseGridCtx);
+const RowMenu: React.FC<RowMenuProps> = () => {
+  const dispatch = useDispatch();
+  const state = useTrackedState();
 
   function onRowDelete(p: ItemParams) {
     const { props } = p;
-    const { rowIdx, rowId } = props;
-    const service = new RowService(ctx!.table!, ctx!.client);
+    const { rowId } = props;
+    const service = new RowService(state!.table!, state!.client!);
     service.delete([rowId]);
-    setRows([...rows.slice(0, rowIdx), ...rows.slice(rowIdx + 1)]);
+    dispatch({ type: 'REMOVE_ROWS', payload: [rowId] });
   }
 
   return (

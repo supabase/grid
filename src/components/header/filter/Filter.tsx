@@ -10,7 +10,7 @@ import {
 
 type FilterProps = {};
 
-const Filter: React.FunctionComponent<FilterProps> = ({}) => {
+const Filter: React.FC<FilterProps> = ({}) => {
   // const [visible, setVisible] = React.useState(false);
 
   // function onVisibleChange(value: boolean) {

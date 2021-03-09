@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { Typography, Button, IconX } from '@supabase/ui';
 import SegmentedControl from './SegmentedControl';
-import { SupabaseGridCtx } from '../../../constants';
+import { useTrackedState } from '../../../store';
 
 type SortRowProps = {
   columnId: string | number;
   order: string;
 };
 
-const SortRow: React.FunctionComponent<SortRowProps> = ({
-  columnId,
-  order,
-}) => {
-  const ctx = React.useContext(SupabaseGridCtx);
-  const column = ctx?.table?.columns.find(x => x.id === columnId);
+const SortRow: React.FC<SortRowProps> = ({ columnId, order }) => {
+  const state = useTrackedState();
+  const column = state?.table?.columns.find(x => x.id === columnId);
   if (!column) return null;
 
   function onToogle(value: string) {

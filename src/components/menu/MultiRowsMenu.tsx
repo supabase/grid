@@ -1,32 +1,25 @@
 import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams } from 'react-contexify';
-import { SupabaseGridCtx } from '../../constants';
-import { Dictionary } from '../../types';
+import { useDispatch, useTrackedState } from '../../store';
 import RowService from '../../services/RowService';
 
 export const MULTI_ROWS_MENU_ID = 'multi-rows-menu-id';
 
-type MultiRowsMenuProps = {
-  rows: Dictionary<any>[];
-  setRows: (rows: Dictionary<any>[]) => void;
-};
+type MultiRowsMenuProps = {};
 
-const MultiRowsMenu: React.FunctionComponent<MultiRowsMenuProps> = ({
-  rows,
-  setRows,
-}) => {
-  const ctx = React.useContext(SupabaseGridCtx);
+const MultiRowsMenu: React.FC<MultiRowsMenuProps> = () => {
+  const dispatch = useDispatch();
+  const state = useTrackedState();
 
   function onRowsDelete(p: ItemParams) {
     const { props } = p;
     const { selectedRows } = props;
-    const service = new RowService(ctx!.table!, ctx!.client);
+    const service = new RowService(state!.table!, state!.client!);
     const removeIds = Array.from(selectedRows) as number[] | string[];
     service.delete(removeIds);
 
-    const _rows = rows.filter(x => !props.selectedRows.has(x.id));
-    setRows(_rows);
+    dispatch({ type: 'REMOVE_ROWS', payload: removeIds });
   }
 
   return (

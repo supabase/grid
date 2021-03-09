@@ -5,7 +5,7 @@ import ColumnDropdown from './ColumnDropdown';
 
 type SortDropdownProps = {};
 
-const SortDropdown: React.FunctionComponent<SortDropdownProps> = p => {
+const SortDropdown: React.FC<SortDropdownProps> = p => {
   return (
     <Dropdown
       className="w-80 overflow-visible"
@@ -18,7 +18,7 @@ const SortDropdown: React.FunctionComponent<SortDropdownProps> = p => {
 };
 export default SortDropdown;
 
-const Sort: React.FunctionComponent<SortDropdownProps> = ({}) => {
+const Sort: React.FC<SortDropdownProps> = ({}) => {
   return (
     <>
       <div>

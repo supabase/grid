@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Dropdown, Menu, Button } from '@supabase/ui';
-import { SupabaseGridCtx } from '../../../constants';
+import { useTrackedState } from '../../../store';
 
 type ColumnDropdownProps = {};
 
-const ColumnDropdown: React.FunctionComponent<ColumnDropdownProps> = p => {
+const ColumnDropdown: React.FC<ColumnDropdownProps> = p => {
   return (
     <Dropdown
       className="w-40"
@@ -17,10 +17,10 @@ const ColumnDropdown: React.FunctionComponent<ColumnDropdownProps> = p => {
 };
 export default ColumnDropdown;
 
-const Columns: React.FunctionComponent<ColumnDropdownProps> = ({}) => {
-  const ctx = React.useContext(SupabaseGridCtx);
+const Columns: React.FC<ColumnDropdownProps> = ({}) => {
+  const state = useTrackedState();
   // TODO: filter base on existed sorting columns
-  const columns = ctx?.table?.columns!;
+  const columns = state?.table?.columns!;
 
   function onClick(columnId: string | number) {
     console.log('select columnId', columnId);

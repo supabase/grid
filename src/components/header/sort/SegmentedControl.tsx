@@ -7,7 +7,7 @@ type SegmentedControlProps = {
   onToggle: (value: string) => void;
 };
 
-const SegmentedControl: React.FunctionComponent<SegmentedControlProps> = ({
+const SegmentedControl: React.FC<SegmentedControlProps> = ({
   options,
   defaultValue,
   onToggle,

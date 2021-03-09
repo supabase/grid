@@ -6,14 +6,14 @@ import DataGrid, {
   RowRendererProps,
   RowsChangeData,
 } from 'react-data-grid';
+import { Typography, Loading } from '@supabase/ui';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
-import { Typography, Loading } from '@supabase/ui';
-import { SupabaseGridCtx } from '../constants';
 import { getGridColumns } from '../utils/column';
 import { RowMenu, MultiRowsMenu, MENU_IDS } from './menu';
+import { useDispatch, useTrackedState } from '../store';
 
-const Grid: React.FunctionComponent<GridProps> = ({
+const Grid: React.FC<GridProps> = ({
   width,
   height,
   defaultColumnWidth,
@@ -21,32 +21,35 @@ const Grid: React.FunctionComponent<GridProps> = ({
   gridClass,
   rowClass,
 }) => {
-  const [rows, setRows] = React.useState<any[]>([]);
-  const [columns, setColumns] = React.useState<any[]>([]);
+  const dispatch = useDispatch();
+  const state = useTrackedState();
   const [selectedRows, setSelectedRows] = React.useState(
     () => new Set<React.Key>()
   );
   const [ready, setReady] = React.useState(false);
-  const ctx = React.useContext(SupabaseGridCtx);
 
   React.useEffect(() => {
     async function fetch() {
-      const service = new RowService(ctx!.table!, ctx!.client);
+      const service = new RowService(state.table!, state.client!);
       const res = await service.fetchAll();
       if (res.error) {
         // TODO: handle fetch rows data error
       }
-      setRows(res.data || []);
+      dispatch({ type: 'SET_ROWS', payload: res.data || [] });
       setReady(true);
     }
 
-    if (ctx && !ready) {
-      setColumns(
-        getGridColumns(ctx.table!, { defaultWidth: defaultColumnWidth })
-      );
+    if (state.table && !ready) {
+      dispatch({
+        type: 'SET_GRID_COLUMNS',
+        payload: getGridColumns(state.table!, {
+          defaultWidth: defaultColumnWidth,
+        }),
+      });
+
       fetch();
     }
-  }, [ctx]);
+  }, [state, dispatch]);
 
   function rowKeyGetter(row: Dictionary<any>) {
     return row.id;
@@ -57,12 +60,12 @@ const Grid: React.FunctionComponent<GridProps> = ({
     data: RowsChangeData<Dictionary<any>, unknown>
   ) {
     const rowData = rows[data.indexes[0]];
-    const service = new RowService(ctx!.table!, ctx!.client);
+    const service = new RowService(state!.table!, state!.client!);
     const { error } = service.update(rowData);
     if (error) {
       // TODO: show a toast error message
     } else {
-      setRows(rows);
+      dispatch({ type: 'SET_ROWS', payload: rows });
     }
   }
 
@@ -86,7 +89,7 @@ const Grid: React.FunctionComponent<GridProps> = ({
     return <GridRow {...props} onContextMenu={displayMenu} />;
   }
 
-  if (!ctx || !ready)
+  if (!ready)
     return (
       <div
         className="flex justify-center bg-gray-900"
@@ -107,8 +110,8 @@ const Grid: React.FunctionComponent<GridProps> = ({
       style={{ width: width || '100%', height: height || '50vh' }}
     >
       <DataGrid
-        columns={columns}
-        rows={rows}
+        columns={state.gridColumns}
+        rows={state.rows}
         rowRenderer={RowRenderer}
         onRowsChange={onRowsChange}
         rowKeyGetter={rowKeyGetter}
@@ -118,11 +121,8 @@ const Grid: React.FunctionComponent<GridProps> = ({
         rowClass={rowClass}
         style={{ height: '100%' }}
       />
-      {createPortal(<RowMenu rows={rows} setRows={setRows} />, document.body)}
-      {createPortal(
-        <MultiRowsMenu rows={rows} setRows={setRows} />,
-        document.body
-      )}
+      {createPortal(<RowMenu />, document.body)}
+      {createPortal(<MultiRowsMenu />, document.body)}
     </div>
   );
 };

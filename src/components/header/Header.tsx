@@ -6,7 +6,7 @@ import StatusLabel from './StatusLabel';
 
 type HeaderProps = {};
 
-const Header: React.FunctionComponent<HeaderProps> = ({}) => {
+const Header: React.FC<HeaderProps> = ({}) => {
   return (
     <div className="flex justify-between h-10 z-10 px-2 bg-gray-800">
       <div className="flex items-center">

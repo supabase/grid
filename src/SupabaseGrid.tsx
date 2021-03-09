@@ -3,7 +3,7 @@ import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from './types';
 import { getSupaTable } from './utils/table';
-import { SupabaseGridContextType, SupabaseGridCtx } from './constants';
+import { StoreProvider, useDispatch, useTrackedState } from './store';
 import Header from './components/header';
 import Grid from './components/Grid';
 import TableService from './services/TableService';
@@ -33,21 +33,28 @@ export type SupabaseGridProps = {
  *
  * React component to render database table.
  */
-const SupabaseGrid: React.FunctionComponent<SupabaseGridProps> = ({
+const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
+  return (
+    <StoreProvider>
+      <SupabaseGridLayout {...props} />
+    </StoreProvider>
+  );
+};
+export default SupabaseGrid;
+
+const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
   table,
   schema,
   clientProps,
   gridProps,
 }) => {
+  const dispatch = useDispatch();
+  const state = useTrackedState();
   const { supabaseUrl, supabaseKey, headers } = clientProps;
   const client = new SupabaseClient(supabaseUrl, supabaseKey, {
     schema: schema,
     headers: headers,
   });
-  const [
-    contextValue,
-    setContext,
-  ] = React.useState<SupabaseGridContextType | null>(null);
 
   React.useEffect(() => {
     async function fetch() {
@@ -61,25 +68,26 @@ const SupabaseGrid: React.FunctionComponent<SupabaseGridProps> = ({
         resColumns.data.length > 0
       ) {
         const supaTable = getSupaTable(resTable.data[0], resColumns.data);
-        setContext({ client, table: supaTable });
+
+        dispatch({
+          type: 'INIT_BASE',
+          payload: { client, table: supaTable },
+        });
       }
     }
 
-    if (contextValue) return;
+    if (state.client && state.table) return;
     if (typeof table === 'string') {
       fetch();
     } else {
-      setContext({ client, table });
+      dispatch({ type: 'INIT_BASE', payload: { client, table } });
     }
-  }, [contextValue]);
+  }, [state, dispatch]);
 
   return (
-    <SupabaseGridCtx.Provider value={contextValue}>
-      <div className="flex flex-col h-full">
-        <Header />
-        <Grid {...gridProps} />
-      </div>
-    </SupabaseGridCtx.Provider>
+    <div className="flex flex-col h-full">
+      <Header />
+      <Grid {...gridProps} />
+    </div>
   );
 };
-export default SupabaseGrid;
