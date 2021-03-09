@@ -50,6 +50,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.2",
     "@types/react": "^16.9.11",
+    "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "^16.8.4",
     "autoprefixer": "^10.2.5",
     "cssnano": "^4.1.10",
@@ -73,6 +74,7 @@
     "@supabase/supabase-js": "^1.4.2",
     "@supabase/ui": "^0.18.0",
     "p-queue": "^6.6.2",
+    "react-beautiful-dnd": "^13.0.0",
     "react-contexify": "^5.0.0",
     "react-data-grid": "^7.0.0-canary.36",
     "react-tiny-popover": "^6.0.4",

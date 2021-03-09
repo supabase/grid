@@ -1,13 +1,20 @@
 import * as React from 'react';
-import { Typography, Button, IconX } from '@supabase/ui';
+import {
+  Typography,
+  Button,
+  IconXSquare,
+  IconAlignJustify,
+} from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
 import { SegmentedControl } from '../../common';
+import { constrainDragAxis } from '../../../utils';
 
 type SortRowProps = {
   columnId: string | number;
+  provided: any;
 };
 
-const SortRow: React.FC<SortRowProps> = ({ columnId }) => {
+const SortRow: React.FC<SortRowProps> = ({ columnId, provided }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const column = state?.table?.columns.find(x => x.id === columnId);
@@ -29,11 +36,16 @@ const SortRow: React.FC<SortRowProps> = ({ columnId }) => {
   }
 
   return (
-    <div className="flex justify-between px-2 py-1">
+    <div
+      className="flex justify-between px-2 py-1"
+      {...provided.draggableProps}
+      ref={provided.innerRef}
+      style={constrainDragAxis(provided.draggableProps.style, 'y')}
+    >
       <div className="flex items-center">
         <Button
           className="mr-4 p-2"
-          icon={<IconX />}
+          icon={<IconXSquare />}
           shadow={false}
           size="tiny"
           type="text"
@@ -41,14 +53,17 @@ const SortRow: React.FC<SortRowProps> = ({ columnId }) => {
         />
         <Typography.Text>{column.name}</Typography.Text>
       </div>
-      <div className="w-32">
+      <div className="flex items-center w-32">
         <SegmentedControl
           options={['ASC', 'DESC']}
           value={sort.order}
           onToggle={onToogle}
         />
+        <div className="ml-5" {...provided.dragHandleProps}>
+          <IconAlignJustify />
+        </div>
       </div>
     </div>
   );
 };
-export default React.memo(SortRow);
+export default SortRow;

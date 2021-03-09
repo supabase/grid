@@ -25,7 +25,7 @@ const Columns: React.FC<ColumnDropdownProps> = ({ columns, onClick }) => {
   return (
     <Menu>
       {columns.length == 0 && (
-        <Typography.Text className="p-2">No more items</Typography.Text>
+        <Typography.Text className="px-2 py-4">No more items</Typography.Text>
       )}
       {columns.map(x => {
         return (

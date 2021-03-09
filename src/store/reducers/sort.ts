@@ -14,6 +14,10 @@ type SORT_ACTIONTYPE =
   | {
       type: 'UPDATE_SORT';
       payload: { columnId: string | number; order: string };
+    }
+  | {
+      type: 'MOVE_SORT';
+      payload: { fromIndex: number; toIndex: number };
     };
 
 const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
@@ -41,6 +45,19 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
           return x;
         }),
       };
+    case 'MOVE_SORT': {
+      const newSorts = [...state.sorts];
+      newSorts.splice(action.payload.fromIndex, 1);
+      newSorts.splice(
+        action.payload.toIndex,
+        0,
+        state.sorts[action.payload.fromIndex]
+      );
+      return {
+        ...state,
+        sorts: newSorts,
+      };
+    }
     default:
       return state;
   }
