@@ -3,21 +3,18 @@ import styles from './segmentedControl.module.css';
 
 type SegmentedControlProps = {
   options: string[];
-  defaultValue: string;
+  value: string;
   onToggle: (value: string) => void;
 };
 
 const SegmentedControl: React.FC<SegmentedControlProps> = ({
   options,
-  defaultValue,
+  value,
   onToggle,
 }) => {
-  const [value, setValue] = React.useState(defaultValue);
   const uniqueId = `${Math.floor(Math.random() * 100000)}`;
-
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newValue = event.target.value;
-    setValue(newValue);
     onToggle(newValue);
   }
 
@@ -32,7 +29,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
               name={`segmented-control-${uniqueId}`}
               id={valueId}
               value={x}
-              checked={value.toLowerCase() == x.toLowerCase()}
+              checked={value?.toLowerCase() == x?.toLowerCase()}
               onChange={onChange}
             />
             <label htmlFor={valueId}>{x}</label>

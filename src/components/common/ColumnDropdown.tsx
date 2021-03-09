@@ -1,35 +1,35 @@
 import * as React from 'react';
-import { Dropdown, Menu, Button } from '@supabase/ui';
-import { useTrackedState } from '../../store';
+import { Dropdown, Menu, Button, Typography } from '@supabase/ui';
+import { SupaColumn } from '../../types';
 
-type ColumnDropdownProps = {};
+type ColumnDropdownProps = {
+  btnText: string;
+  columns: SupaColumn[];
+  onClick: (columnId: string | number) => void;
+};
 
 export const ColumnDropdown: React.FC<ColumnDropdownProps> = p => {
+  const { btnText } = p;
   return (
     <Dropdown
       className="w-40"
       placement="bottomLeft"
       overlay={<Columns {...p} />}
     >
-      <Button type="primary">Pick another column to sort by</Button>
+      <Button type="primary">{btnText}</Button>
     </Dropdown>
   );
 };
 
-const Columns: React.FC<ColumnDropdownProps> = ({}) => {
-  const state = useTrackedState();
-  // TODO: filter base on existed sorting columns
-  const columns = state?.table?.columns!;
-
-  function onClick(columnId: string | number) {
-    console.log('select columnId', columnId);
-  }
-
+const Columns: React.FC<ColumnDropdownProps> = ({ columns, onClick }) => {
   return (
     <Menu>
+      {columns.length == 0 && (
+        <Typography.Text className="p-2">No more items</Typography.Text>
+      )}
       {columns.map(x => {
         return (
-          <Menu.Item onClick={() => onClick(x.id)} key={x.id}>
+          <Menu.Item key={x.id} onClick={() => onClick(x.id)}>
             {x.name}
           </Menu.Item>
         );

@@ -1,20 +1,31 @@
 import * as React from 'react';
 import { Typography, Button, IconX } from '@supabase/ui';
+import { useDispatch, useTrackedState } from '../../../store';
 import SegmentedControl from './SegmentedControl';
-import { useTrackedState } from '../../../store';
 
 type SortRowProps = {
   columnId: string | number;
-  order: string;
 };
 
-const SortRow: React.FC<SortRowProps> = ({ columnId, order }) => {
+const SortRow: React.FC<SortRowProps> = ({ columnId }) => {
   const state = useTrackedState();
+  const dispatch = useDispatch();
   const column = state?.table?.columns.find(x => x.id === columnId);
-  if (!column) return null;
+  const sort = state?.sorts.find(x => x.columnId === columnId);
+  if (!column || !sort) return null;
 
   function onToogle(value: string) {
-    console.log('select', value);
+    dispatch({
+      type: 'UPDATE_SORT',
+      payload: { columnId, order: value },
+    });
+  }
+
+  function onDeleteClick() {
+    dispatch({
+      type: 'REMOVE_SORT',
+      payload: columnId,
+    });
   }
 
   return (
@@ -26,17 +37,18 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, order }) => {
           shadow={false}
           size="tiny"
           type="text"
+          onClick={onDeleteClick}
         />
         <Typography.Text>{column.name}</Typography.Text>
       </div>
       <div className="w-32">
         <SegmentedControl
           options={['ASC', 'DESC']}
-          defaultValue={order}
+          value={sort.order}
           onToggle={onToogle}
         />
       </div>
     </div>
   );
 };
-export default SortRow;
+export default React.memo(SortRow);
