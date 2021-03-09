@@ -8,13 +8,17 @@ import SortRow from './SortRow';
 type SortDropdownProps = {};
 
 const SortDropdown: React.FC<SortDropdownProps> = p => {
+  const state = useTrackedState();
+  const btnText =
+    state.sorts.length > 0 ? `Sort ${state.sorts.length}` : 'Sort';
+
   return (
     <Dropdown
       className="w-80 overflow-visible"
       placement="bottomLeft"
       overlay={<Sort {...p} />}
     >
-      <Button type="secondary">Sort 1</Button>
+      <Button type="secondary">{btnText}</Button>
     </Dropdown>
   );
 };
