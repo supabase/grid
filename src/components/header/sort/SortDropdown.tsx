@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dropdown, Button } from '@supabase/ui';
 import SortRow from './SortRow';
-import ColumnDropdown from './ColumnDropdown';
+import { ColumnDropdown } from '../../common';
 
 type SortDropdownProps = {};
 

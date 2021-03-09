@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Dropdown, Menu, Button } from '@supabase/ui';
-import { useTrackedState } from '../../../store';
+import { useTrackedState } from '../../store';
 
 type ColumnDropdownProps = {};
 
-const ColumnDropdown: React.FC<ColumnDropdownProps> = p => {
+export const ColumnDropdown: React.FC<ColumnDropdownProps> = p => {
   return (
     <Dropdown
       className="w-40"
@@ -15,7 +15,6 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = p => {
     </Dropdown>
   );
 };
-export default ColumnDropdown;
 
 const Columns: React.FC<ColumnDropdownProps> = ({}) => {
   const state = useTrackedState();

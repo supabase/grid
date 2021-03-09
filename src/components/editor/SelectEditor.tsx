@@ -7,7 +7,7 @@ interface SelectEditorProps<TRow, TSummaryRow = unknown>
   options: { label: string; value: string }[];
 }
 
-export default function SelectEditor<TRow, TSummaryRow = unknown>({
+export function SelectEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,

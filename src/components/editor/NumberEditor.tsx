@@ -7,7 +7,7 @@ function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.select();
 }
 
-export default function NumberEditor<TRow, TSummaryRow = unknown>({
+export function NumberEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,

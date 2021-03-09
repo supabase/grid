@@ -2,7 +2,7 @@ import * as React from 'react';
 import { EditorProps } from 'react-data-grid';
 import styles from './editor.module.css';
 
-export default function CheckboxEditor<TRow, TSummaryRow = unknown>({
+export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,

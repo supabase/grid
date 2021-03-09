@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Column, SelectColumn } from 'react-data-grid';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
-import CheckboxEditor from '../components/editor/CheckboxEditor';
-import NumberEditor from '../components/editor/NumberEditor';
-import SelectEditor from '../components/editor/SelectEditor';
-import TextEditor from '../components/editor/TextEditor';
+import {
+  CheckboxEditor,
+  NumberEditor,
+  SelectEditor,
+  TextEditor,
+} from '../components/editor';
 
 export function getGridColumns(
   table: SupaTable,

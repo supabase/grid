@@ -11,7 +11,7 @@ function autoFocusAndSelect(input: HTMLTextAreaElement | null) {
   }, 0);
 }
 
-export default function TextEditor<TRow, TSummaryRow = unknown>({
+export function TextEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
