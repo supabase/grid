@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Dropdown, Button, Typography } from '@supabase/ui';
-import { ColumnDropdown } from '../../common';
+import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
 
@@ -31,6 +31,10 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
     const found = state.sorts.find(y => y.columnId == x.id);
     return !found;
   });
+  const dropdownOptions =
+    columns?.map(x => {
+      return { value: x.id, label: x.name };
+    }) || [];
 
   function onAddSort(columnId: string | number) {
     dispatch({
@@ -81,10 +85,10 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
         </div>
       )}
       <div className="mt-2">
-        <ColumnDropdown
+        <DropdownControl
           btnText="Pick another column to sort by"
-          columns={columns || []}
-          onClick={onAddSort}
+          options={dropdownOptions}
+          onSelect={onAddSort}
         />
       </div>
     </div>
