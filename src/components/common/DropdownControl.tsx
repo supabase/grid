@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { Dropdown, Menu, Button, Typography } from '@supabase/ui';
+import { Dropdown, Menu, Typography } from '@supabase/ui';
 
 type DropdownControlProps = {
-  btnText: string;
   options: { value: string | number; label: string }[];
   onSelect: (value: string | number) => void;
+  className?: string;
 };
 
 export const DropdownControl: React.FC<DropdownControlProps> = p => {
-  const { btnText } = p;
+  const { className, children } = p;
   return (
     <Dropdown
-      className="w-40"
+      className={className}
       placement="bottomLeft"
       overlay={<DropdownItem {...p} />}
     >
-      <Button type="primary">{btnText}</Button>
+      {children}
     </Dropdown>
   );
 };

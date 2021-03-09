@@ -37,7 +37,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, provided }) => {
 
   return (
     <div
-      className="flex justify-between px-2 py-1"
+      className="flex justify-between py-1"
       {...provided.draggableProps}
       ref={provided.innerRef}
       style={constrainDragAxis(provided.draggableProps.style, 'y')}

@@ -1,3 +1,3 @@
-import Filter from './Filter';
+import FilterDropdownProps from './FilterDropdown';
 
-export default Filter;
+export default FilterDropdownProps;
