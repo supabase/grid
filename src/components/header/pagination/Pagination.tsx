@@ -61,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }
 
   return (
-    <div className="flex items-center ml-8">
+    <div className="flex items-center mx-4">
       <Button
         icon={<IconArrowLeft />}
         type="secondary"
@@ -69,13 +69,13 @@ const Pagination: React.FC<PaginationProps> = () => {
         onClick={onPreviousPage}
       />
       <Typography.Text className="mx-2">Page</Typography.Text>
-      <div className="w-16">
+      <div className="w-12">
         <Input
           value={page}
           onChange={onPageChange}
           className="block"
           size="tiny"
-          style={{ width: '4rem' }}
+          style={{ width: '3rem' }}
           type="number"
         />
       </div>
@@ -85,14 +85,15 @@ const Pagination: React.FC<PaginationProps> = () => {
         type="secondary"
         disabled={state.page >= maxPages}
         onClick={onNextPage}
-        style={{ marginRight: '8px' }}
       />
-      <DropdownControl
-        options={rowsPerPageOptions}
-        onSelect={onRowsPerPageChange}
-      >
-        <Button type="secondary">{`${state.rowsPerPage} rows`}</Button>
-      </DropdownControl>
+      <div className="ml-2">
+        <DropdownControl
+          options={rowsPerPageOptions}
+          onSelect={onRowsPerPageChange}
+        >
+          <Button type="secondary">{`${state.rowsPerPage} rows`}</Button>
+        </DropdownControl>
+      </div>
     </div>
   );
 };
