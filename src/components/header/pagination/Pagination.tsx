@@ -7,16 +7,22 @@ import {
   IconArrowRight,
   IconArrowLeft,
 } from '@supabase/ui';
+import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 
 const updatePage = (payload: number, dispatch: (value: unknown) => void) => {
-  console.log('updatePage updatePage updatePage');
   dispatch({
-    type: 'UPDATE_PAGE',
+    type: 'SET_PAGE',
     payload: payload,
   });
 };
 const updatePageDebounced = AwesomeDebouncePromise(updatePage, 550);
+
+const rowsPerPageOptions = [
+  { value: 100, label: '100 rows' },
+  { value: 500, label: '500 rows' },
+  { value: 1000, label: '1000 rows' },
+];
 
 type PaginationProps = {};
 
@@ -31,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = () => {
     if (state.page > 1) {
       const previousPage = state.page - 1;
       setPage(previousPage);
-      dispatch({ type: 'UPDATE_PAGE', payload: previousPage });
+      dispatch({ type: 'SET_PAGE', payload: previousPage });
     }
   }
 
@@ -39,7 +45,7 @@ const Pagination: React.FC<PaginationProps> = () => {
     if (state.page < maxPages) {
       const nextPage = state.page + 1;
       setPage(nextPage);
-      dispatch({ type: 'UPDATE_PAGE', payload: nextPage });
+      dispatch({ type: 'SET_PAGE', payload: nextPage });
     }
   }
 
@@ -48,6 +54,10 @@ const Pagination: React.FC<PaginationProps> = () => {
     const pageNum = Number(value);
     setPage(pageNum);
     updatePageDebounced(pageNum, dispatch);
+  }
+
+  function onRowsPerPageChange(value: string | number) {
+    dispatch({ type: 'SET_ROWS_PER_PAGE', payload: value });
   }
 
   return (
@@ -76,6 +86,14 @@ const Pagination: React.FC<PaginationProps> = () => {
         disabled={state.page >= maxPages}
         onClick={onNextPage}
       />
+      <DropdownControl
+        options={rowsPerPageOptions}
+        onSelect={onRowsPerPageChange}
+      >
+        <Button className="ml-2" type="secondary">
+          {`${state.rowsPerPage} rows`}
+        </Button>
+      </DropdownControl>
     </div>
   );
 };

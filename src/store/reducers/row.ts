@@ -18,14 +18,15 @@ export const rowInitialState: RowInitialState = {
 
 type ROW_ACTIONTYPE =
   | INIT_ACTIONTYPE
+  | { type: 'SET_PAGE'; payload: number }
+  | { type: 'SET_ROWS_PER_PAGE'; payload: number }
   | {
       type: 'SET_ROWS';
       payload: { rows: Dictionary<any>[]; totalRows: number };
     }
   | { type: 'ADD_ROWS'; payload: Dictionary<any>[] }
   | { type: 'ADD_NEW_ROW'; payload: Dictionary<any> }
-  | { type: 'REMOVE_ROWS'; payload: string[] | number[] }
-  | { type: 'UPDATE_PAGE'; payload: number };
+  | { type: 'REMOVE_ROWS'; payload: string[] | number[] };
 
 const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
   switch (action.type) {
@@ -33,6 +34,20 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       return {
         ...state,
         sorts: getDefaultSorts(action.payload.table),
+      };
+    }
+    case 'SET_PAGE': {
+      return {
+        ...state,
+        page: action.payload,
+        refreshPageFlag: -1,
+      };
+    }
+    case 'SET_ROWS_PER_PAGE': {
+      return {
+        ...state,
+        rowsPerPage: action.payload,
+        refreshPageFlag: -1,
       };
     }
     case 'SET_ROWS':
@@ -64,13 +79,6 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         ...state,
         rows: state.rows.filter(x => !action.payload.includes(x.id as never)),
         totalRows: totalRows,
-      };
-    }
-    case 'UPDATE_PAGE': {
-      return {
-        ...state,
-        page: action.payload,
-        refreshPageFlag: -1,
       };
     }
     default:

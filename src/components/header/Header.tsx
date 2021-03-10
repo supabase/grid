@@ -12,6 +12,8 @@ const Header: React.FC<HeaderProps> = ({}) => {
       <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />
+      </div>
+      <div className="flex items-center">
         <Pagination />
       </div>
       <div className="flex items-center">
