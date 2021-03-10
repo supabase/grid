@@ -1,4 +1,24 @@
-import { Dictionary, SupaColumn } from '../types';
+import TableService from '../services/TableService';
+import { Dictionary, SupaColumn, SupaTable } from '../types';
+
+export async function fetchTable(
+  service: TableService,
+  table: string,
+  schema?: string
+): Promise<SupaTable | null> {
+  const resTable = await service.fetch(table as string, schema);
+  const resColumns = await service.fetchColumns(table as string, schema);
+  if (
+    resTable.data &&
+    resColumns.data &&
+    resTable.data.length > 0 &&
+    resColumns.data.length > 0
+  ) {
+    const supaTable = getSupaTable(resTable.data[0], resColumns.data);
+    return supaTable;
+  }
+  return null;
+}
 
 export function getSupaTable(
   table: Dictionary<any>,

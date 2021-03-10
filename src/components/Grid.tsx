@@ -10,6 +10,7 @@ import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
 import { RowMenu, MultiRowsMenu, MENU_IDS } from './menu';
 import { useDispatch, useTrackedState } from '../store';
+import { fetchPage, refreshPageDebounced } from '../utils';
 
 const Grid: React.FC<GridProps> = ({
   width,
@@ -26,22 +27,14 @@ const Grid: React.FC<GridProps> = ({
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    async function fetch() {
-      const res = await state.rowService!.fetchPage(
-        state.page,
-        state.rowsPerPage,
-        state.filters,
-        state.sorts
-      );
-      if (res.error) {
-        // TODO: handle fetch rows data error
-      }
-      dispatch({ type: 'ADD_ROWS', payload: res.data || [] });
-      setReady(true);
+    if (state.shouldRefreshPage) {
+      refreshPageDebounced(state, dispatch);
     }
+  }, [state, dispatch]);
 
+  React.useEffect(() => {
     if (state.table && !ready) {
-      fetch();
+      fetchPage(state, dispatch).then(() => setReady(true));
     }
   }, [state, dispatch]);
 

@@ -2,7 +2,7 @@ import './style.css';
 import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from './types';
-import { getSupaTable } from './utils/table';
+import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import Header from './components/header';
 import Grid from './components/Grid';
@@ -60,31 +60,12 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
   }, [state]);
 
   React.useEffect(() => {
-    async function fetch() {
-      const resTable = await state.tableService!.fetch(table as string, schema);
-      const resColumns = await state.tableService!.fetchColumns(
-        table as string,
-        schema
-      );
-      if (
-        resTable.data &&
-        resColumns.data &&
-        resTable.data.length > 0 &&
-        resColumns.data.length > 0
-      ) {
-        const supaTable = getSupaTable(resTable.data[0], resColumns.data);
-
-        dispatch({
-          type: 'INIT_TABLE',
-          payload: { table: supaTable, gridProps },
-        });
-      }
-    }
-
     if (!state.client || state.table) return;
 
     if (typeof table === 'string') {
-      if (state.client) fetch();
+      fetchTable(state.tableService!, table, schema).then(res => {
+        dispatch({ type: 'INIT_TABLE', payload: { table: res, gridProps } });
+      });
     } else {
       dispatch({ type: 'INIT_TABLE', payload: { table, gridProps } });
     }

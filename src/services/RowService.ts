@@ -61,7 +61,7 @@ class RowService {
       }
     }
     // Then sort
-    for (let idx in sorts) {
+    for (let idx = 0; idx < sorts.length; idx++) {
       const sort = sorts[idx];
       const column = this.table.columns.find(x => x.id === sort.columnId);
       if (!column) continue;

@@ -36,6 +36,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       return {
         ...state,
         rows: action.payload,
+        shouldRefreshPage: false,
       };
     case 'ADD_ROWS':
       return {
