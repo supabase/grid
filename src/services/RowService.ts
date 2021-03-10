@@ -12,6 +12,68 @@ class RowService {
     return this.client.from(this.table.name).select();
   }
 
+  fetchPage(
+    page: number,
+    rowsPerPage: number,
+    filters: {
+      clause: string;
+      columnId: string | number;
+      condition: string;
+      filterText: string;
+    }[],
+    sorts: { columnId: string | number; order: string }[]
+  ) {
+    const pageFromZero = page > 0 ? page - 1 : page;
+    const from = pageFromZero * rowsPerPage;
+    const to = (pageFromZero + 1) * rowsPerPage - 1;
+    let request = this.client
+      .from(this.table.name)
+      .select('*', { count: 'exact' })
+      .range(from, to);
+    // Filter first
+    for (let idx in filters) {
+      const filter = filters[idx];
+      if (filter.filterText == '') continue;
+      const column = this.table.columns.find(x => x.id === filter.columnId);
+      if (!column) continue;
+
+      const columnName = column.name;
+      switch (filter.condition) {
+        case 'is':
+          const filterText = filter.filterText.toLowerCase();
+          if (filterText == 'null') request = request.is(columnName, null);
+          else if (filterText == 'true') request = request.is(columnName, true);
+          else if (filterText == 'false')
+            request = request.is(columnName, false);
+          break;
+        case 'in':
+          const filterValues = filter.filterText.split(',').map(x => x.trim());
+          request = request.in(columnName, filterValues);
+          break;
+        default:
+          request = request.filter(
+            columnName,
+            // @ts-ignore
+            filter.condition.toLowerCase(),
+            filter.filterText
+          );
+          break;
+      }
+    }
+    // Then sort
+    for (let idx in sorts) {
+      const sort = sorts[idx];
+      const column = this.table.columns.find(x => x.id === sort.columnId);
+      if (!column) continue;
+
+      const columnName = column.name;
+      const sortAsc = sort.order.toLowerCase() === 'asc';
+      request = request.order(columnName, { ascending: sortAsc });
+    }
+
+    return request;
+  }
+
   create(value: Dictionary<any>) {
     SupabaseGridQueue.add(async () => {
       const res = await this.client.from(this.table.name).insert(value);

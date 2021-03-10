@@ -1,5 +1,9 @@
 import BaseReducer, { BaseInitialState, baseInitialState } from './base';
-import RowReducer, { RowInitialState, rowInitialState } from './rows';
+import ColumnReducer, {
+  ColumnInitialState,
+  columnInitialState,
+} from './column';
+import RowReducer, { RowInitialState, rowInitialState } from './row';
 import SortReducer, { SortInitialState, sortInitialState } from './sort';
 import FilterReducer, {
   FilterInitialState,
@@ -8,15 +12,17 @@ import FilterReducer, {
 
 export interface InitialStateType
   extends BaseInitialState,
+    ColumnInitialState,
     FilterInitialState,
     RowInitialState,
     SortInitialState {}
 
 export const initialState = {
   ...baseInitialState,
+  ...columnInitialState,
   ...filterInitialState,
   ...rowInitialState,
   ...sortInitialState,
 };
 
-export { BaseReducer, FilterReducer, RowReducer, SortReducer };
+export { BaseReducer, ColumnReducer, FilterReducer, RowReducer, SortReducer };

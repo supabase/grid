@@ -30,6 +30,12 @@ export function getGridColumns(
   return [SelectColumn, ...columns];
 }
 
+export function getDefaultSorts(table: SupaTable) {
+  if (!table?.columns || table?.columns?.length <= 0) return [];
+  const firstColumn = table?.columns[0];
+  return [{ columnId: firstColumn.id, order: 'ASC' }];
+}
+
 function _setupColumnEditor(
   columnDef: SupaColumn,
   config: Column<Dictionary<any>>

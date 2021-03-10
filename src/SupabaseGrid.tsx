@@ -70,8 +70,8 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
         const supaTable = getSupaTable(resTable.data[0], resColumns.data);
 
         dispatch({
-          type: 'INIT_BASE',
-          payload: { client, table: supaTable },
+          type: 'INIT_STATE',
+          payload: { client, table: supaTable, gridProps },
         });
       }
     }
@@ -80,7 +80,7 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
     if (typeof table === 'string') {
       fetch();
     } else {
-      dispatch({ type: 'INIT_BASE', payload: { client, table } });
+      dispatch({ type: 'INIT_STATE', payload: { client, table, gridProps } });
     }
   }, [state, dispatch]);
 

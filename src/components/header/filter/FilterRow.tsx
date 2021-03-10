@@ -60,7 +60,10 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   function onFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: 'UPDATE_FILTER',
-      payload: { filterIdx, value: { ...filter, filter: event.target.value } },
+      payload: {
+        filterIdx,
+        value: { ...filter, filterText: event.target.value },
+      },
     });
   }
 
@@ -110,7 +113,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
       </DropdownControl>
       <Input
         size="tiny"
-        value={filter.filter}
+        value={filter.filterText}
         style={{ width: '7rem' }}
         onChange={onFilterChange}
       />

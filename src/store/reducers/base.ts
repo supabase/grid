@@ -1,40 +1,32 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Column } from 'react-data-grid';
-import { SupaTable } from '../../types';
+import { GridProps, SupaTable } from '../../types';
 
 export interface BaseInitialState {
   client: SupabaseClient | null;
   table: SupaTable | null;
-  gridColumns: Column<any, any>[];
 }
 
 export const baseInitialState: BaseInitialState = {
   client: null,
   table: null,
-  gridColumns: [],
 };
 
-type BASE_ACTIONTYPE =
-  | {
-      type: 'INIT_BASE';
-      payload: { client: SupabaseClient; table: SupaTable };
-    }
-  | { type: 'SET_GRID_COLUMNS'; payload: Column<any, any>[] };
+export type INIT_ACTIONTYPE = {
+  type: 'INIT_STATE';
+  payload: { client: SupabaseClient; table: SupaTable; gridProps?: GridProps };
+};
+
+type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 
 const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
   switch (action.type) {
-    case 'INIT_BASE': {
+    case 'INIT_STATE': {
       return {
         ...state,
         client: action.payload.client,
         table: action.payload.table,
       };
     }
-    case 'SET_GRID_COLUMNS':
-      return {
-        ...state,
-        gridColumns: action.payload,
-      };
     default:
       return state;
   }

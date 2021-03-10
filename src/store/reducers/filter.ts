@@ -3,7 +3,7 @@ export interface FilterInitialState {
     clause: string;
     columnId: string | number;
     condition: string;
-    filter: string;
+    filterText: string;
   }[];
 }
 
@@ -16,7 +16,7 @@ type FILTER_ACTIONTYPE =
         clause: string;
         columnId: string | number;
         condition: string;
-        filter: string;
+        filterText: string;
       }[];
     }
   | {
@@ -25,7 +25,7 @@ type FILTER_ACTIONTYPE =
         clause: string;
         columnId: string | number;
         condition: string;
-        filter: string;
+        filterText: string;
       };
     }
   | {
@@ -40,7 +40,7 @@ type FILTER_ACTIONTYPE =
           clause: string;
           columnId: string | number;
           condition: string;
-          filter: string;
+          filterText: string;
         };
       };
     };

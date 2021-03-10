@@ -9,14 +9,12 @@ import DataGrid, {
 import { Typography, Loading } from '@supabase/ui';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Dictionary, GridProps } from '../types';
-import { getGridColumns } from '../utils/column';
 import { RowMenu, MultiRowsMenu, MENU_IDS } from './menu';
 import { useDispatch, useTrackedState } from '../store';
 
 const Grid: React.FC<GridProps> = ({
   width,
   height,
-  defaultColumnWidth,
   containerClass,
   gridClass,
   rowClass,
@@ -31,22 +29,20 @@ const Grid: React.FC<GridProps> = ({
   React.useEffect(() => {
     async function fetch() {
       const service = new RowService(state.table!, state.client!);
-      const res = await service.fetchAll();
+      const res = await service.fetchPage(
+        state.page,
+        state.rowsPerPage,
+        state.filters,
+        state.sorts
+      );
       if (res.error) {
         // TODO: handle fetch rows data error
       }
-      dispatch({ type: 'SET_ROWS', payload: res.data || [] });
+      dispatch({ type: 'ADD_ROWS', payload: res.data || [] });
       setReady(true);
     }
 
     if (state.table && !ready) {
-      dispatch({
-        type: 'SET_GRID_COLUMNS',
-        payload: getGridColumns(state.table!, {
-          defaultWidth: defaultColumnWidth,
-        }),
-      });
-
       fetch();
     }
   }, [state, dispatch]);
