@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import RowService from '../services/RowService';
 import DataGrid, {
   Row as GridRow,
   RowRendererProps,
@@ -28,8 +27,7 @@ const Grid: React.FC<GridProps> = ({
 
   React.useEffect(() => {
     async function fetch() {
-      const service = new RowService(state.table!, state.client!);
-      const res = await service.fetchPage(
+      const res = await state.rowService!.fetchPage(
         state.page,
         state.rowsPerPage,
         state.filters,
@@ -56,8 +54,7 @@ const Grid: React.FC<GridProps> = ({
     data: RowsChangeData<Dictionary<any>, unknown>
   ) {
     const rowData = rows[data.indexes[0]];
-    const service = new RowService(state!.table!, state!.client!);
-    const { error } = service.update(rowData);
+    const { error } = state.rowService!.update(rowData);
     if (error) {
       // TODO: show a toast error message
     } else {

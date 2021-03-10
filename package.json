@@ -73,6 +73,7 @@
     "@popperjs/core": "^2.9.0",
     "@supabase/supabase-js": "^1.4.2",
     "@supabase/ui": "^0.18.0",
+    "awesome-debounce-promise": "^2.1.0",
     "p-queue": "^6.6.2",
     "react-beautiful-dnd": "^13.0.0",
     "react-contexify": "^5.0.0",

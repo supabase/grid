@@ -6,7 +6,6 @@ import { getSupaTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import Header from './components/header';
 import Grid from './components/Grid';
-import TableService from './services/TableService';
 
 export type SupabaseGridProps = {
   /**
@@ -57,10 +56,16 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
   });
 
   React.useEffect(() => {
+    if (!state.client) dispatch({ type: 'INIT_CLIENT', payload: { client } });
+  }, [state]);
+
+  React.useEffect(() => {
     async function fetch() {
-      const service = new TableService(client);
-      const resTable = await service.fetch(table as string, schema);
-      const resColumns = await service.fetchColumns(table as string, schema);
+      const resTable = await state.tableService!.fetch(table as string, schema);
+      const resColumns = await state.tableService!.fetchColumns(
+        table as string,
+        schema
+      );
       if (
         resTable.data &&
         resColumns.data &&
@@ -70,17 +75,18 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
         const supaTable = getSupaTable(resTable.data[0], resColumns.data);
 
         dispatch({
-          type: 'INIT_STATE',
-          payload: { client, table: supaTable, gridProps },
+          type: 'INIT_TABLE',
+          payload: { table: supaTable, gridProps },
         });
       }
     }
 
-    if (state.client && state.table) return;
+    if (!state.client || state.table) return;
+
     if (typeof table === 'string') {
-      fetch();
+      if (state.client) fetch();
     } else {
-      dispatch({ type: 'INIT_STATE', payload: { client, table, gridProps } });
+      dispatch({ type: 'INIT_TABLE', payload: { table, gridProps } });
     }
   }, [state, dispatch]);
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
-import RowService from '../../services/RowService';
 
 export const MULTI_ROWS_MENU_ID = 'multi-rows-menu-id';
 
@@ -15,9 +14,8 @@ const MultiRowsMenu: React.FC<MultiRowsMenuProps> = () => {
   function onRowsDelete(p: ItemParams) {
     const { props } = p;
     const { selectedRows } = props;
-    const service = new RowService(state!.table!, state!.client!);
     const removeIds = Array.from(selectedRows) as number[] | string[];
-    service.delete(removeIds);
+    state.rowService!.delete(removeIds);
 
     dispatch({ type: 'REMOVE_ROWS', payload: removeIds });
   }

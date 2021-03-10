@@ -17,7 +17,7 @@ const ColumnReducer = (
   action: COLUMN_ACTIONTYPE
 ) => {
   switch (action.type) {
-    case 'INIT_STATE': {
+    case 'INIT_TABLE': {
       return {
         ...state,
         gridColumns: getGridColumns(action.payload.table, {

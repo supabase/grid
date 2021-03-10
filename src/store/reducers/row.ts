@@ -26,7 +26,7 @@ type ROW_ACTIONTYPE =
 
 const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
   switch (action.type) {
-    case 'INIT_STATE': {
+    case 'INIT_TABLE': {
       return {
         ...state,
         sorts: getDefaultSorts(action.payload.table),

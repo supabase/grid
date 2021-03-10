@@ -1,7 +1,6 @@
 import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams } from 'react-contexify';
-import RowService from '../../services/RowService';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const ROW_MENU_ID = 'row-menu-id';
@@ -15,8 +14,7 @@ const RowMenu: React.FC<RowMenuProps> = () => {
   function onRowDelete(p: ItemParams) {
     const { props } = p;
     const { rowId } = props;
-    const service = new RowService(state!.table!, state!.client!);
-    service.delete([rowId]);
+    state.rowService!.delete([rowId]);
     dispatch({ type: 'REMOVE_ROWS', payload: [rowId] });
   }
 
