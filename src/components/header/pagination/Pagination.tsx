@@ -85,14 +85,13 @@ const Pagination: React.FC<PaginationProps> = () => {
         type="secondary"
         disabled={state.page >= maxPages}
         onClick={onNextPage}
+        style={{ marginRight: '8px' }}
       />
       <DropdownControl
         options={rowsPerPageOptions}
         onSelect={onRowsPerPageChange}
       >
-        <Button className="ml-2" type="secondary">
-          {`${state.rowsPerPage} rows`}
-        </Button>
+        <Button type="secondary">{`${state.rowsPerPage} rows`}</Button>
       </DropdownControl>
     </div>
   );
