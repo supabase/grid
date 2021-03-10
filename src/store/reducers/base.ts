@@ -8,7 +8,7 @@ export interface BaseInitialState {
   table: SupaTable | null;
   tableService: TableService | null;
   rowService: RowService | null;
-  shouldRefreshPage: boolean;
+  refreshPageFlag: number;
 }
 
 export const baseInitialState: BaseInitialState = {
@@ -16,7 +16,7 @@ export const baseInitialState: BaseInitialState = {
   table: null,
   tableService: null,
   rowService: null,
-  shouldRefreshPage: false,
+  refreshPageFlag: 0,
 };
 
 export type INIT_ACTIONTYPE =

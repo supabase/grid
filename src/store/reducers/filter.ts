@@ -60,7 +60,7 @@ const FilterReducer = (
       return {
         ...state,
         filters: state.filters.concat(action.payload),
-        shouldRefreshPage: isValid,
+        refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
     case 'REMOVE_FILTER': {
@@ -72,7 +72,7 @@ const FilterReducer = (
           ...state.filters.slice(0, action.payload),
           ...state.filters.slice(action.payload + 1),
         ],
-        shouldRefreshPage: isValid,
+        refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
     case 'UPDATE_FILTER': {
@@ -85,7 +85,7 @@ const FilterReducer = (
           if (idx == action.payload.filterIdx) return action.payload.value;
           return x;
         }),
-        shouldRefreshPage: previousIsValid || afterIsValid,
+        refreshPageFlag: previousIsValid || afterIsValid ? Date.now() : 0,
       };
     }
     default:

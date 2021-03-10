@@ -19,4 +19,4 @@ export async function fetchPage(
     payload: { rows: res.data || [], totalRows: res.count },
   });
 }
-export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 250);
+export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 500);

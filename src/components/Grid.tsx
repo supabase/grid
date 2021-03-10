@@ -27,7 +27,9 @@ const Grid: React.FC<GridProps> = ({
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    if (state.shouldRefreshPage) {
+    if (state.refreshPageFlag == -1) {
+      fetchPage(state, dispatch);
+    } else if (state.refreshPageFlag != 0) {
       refreshPageDebounced(state, dispatch);
     }
   }, [state, dispatch]);

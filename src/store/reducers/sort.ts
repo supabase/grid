@@ -31,13 +31,13 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
       return {
         ...state,
         sorts: state.sorts.concat(action.payload),
-        shouldRefreshPage: true,
+        refreshPageFlag: Date.now(),
       };
     case 'REMOVE_SORT':
       return {
         ...state,
         sorts: state.sorts.filter(x => x.columnId !== action.payload),
-        shouldRefreshPage: true,
+        refreshPageFlag: Date.now(),
       };
     case 'UPDATE_SORT':
       return {
@@ -46,7 +46,7 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
           if (x.columnId == action.payload.columnId) return action.payload;
           return x;
         }),
-        shouldRefreshPage: true,
+        refreshPageFlag: Date.now(),
       };
     case 'MOVE_SORT': {
       const newSorts = [...state.sorts];
@@ -59,7 +59,7 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
       return {
         ...state,
         sorts: newSorts,
-        shouldRefreshPage: true,
+        refreshPageFlag: Date.now(),
       };
     }
     default:

@@ -40,7 +40,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         ...state,
         rows: action.payload.rows,
         totalRows: action.payload.totalRows,
-        shouldRefreshPage: false,
+        refreshPageFlag: 0,
       };
     case 'ADD_ROWS': {
       const totalRows = state.totalRows + action.payload.length;
@@ -70,7 +70,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       return {
         ...state,
         page: action.payload,
-        shouldRefreshPage: true,
+        refreshPageFlag: -1,
       };
     }
     default:
