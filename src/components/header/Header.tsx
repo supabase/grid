@@ -2,6 +2,7 @@ import * as React from 'react';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
+import Pagination from './pagination';
 
 type HeaderProps = {};
 
@@ -11,6 +12,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
       <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />
+        <Pagination />
       </div>
       <div className="flex items-center">
         <StatusLabel />

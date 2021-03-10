@@ -14,6 +14,9 @@ export async function fetchPage(
   if (res.error) {
     // TODO: handle fetch rows data error
   }
-  dispatch({ type: 'SET_ROWS', payload: res.data || [] });
+  dispatch({
+    type: 'SET_ROWS',
+    payload: { rows: res.data || [], totalRows: res.count },
+  });
 }
-export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 500);
+export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 250);
