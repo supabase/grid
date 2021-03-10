@@ -16,4 +16,4 @@ export async function fetchPage(
   }
   dispatch({ type: 'SET_ROWS', payload: res.data || [] });
 }
-export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 1000);
+export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 500);

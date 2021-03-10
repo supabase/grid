@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { Button, Input, IconXSquare } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
@@ -22,6 +23,25 @@ const filterConditionOptions = [
   { value: 'in', label: '[in] one of a list of values' },
 ];
 
+const updateFilterText = (
+  payload: {
+    filterIdx: number;
+    value: {
+      clause: string;
+      columnId: string | number;
+      condition: string;
+      filterText: string;
+    };
+  },
+  dispatch: (value: unknown) => void
+) => {
+  dispatch({
+    type: 'UPDATE_FILTER',
+    payload: payload,
+  });
+};
+const updateFilterTextDebounced = AwesomeDebouncePromise(updateFilterText, 550);
+
 type FilterRowProps = {
   filterIdx: number;
 };
@@ -35,6 +55,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
     state.table?.columns?.map(x => {
       return { value: x.id, label: x.name };
     }) || [];
+  const [filterText, setFilterText] = React.useState(filter.filterText);
 
   function onClauseChange(clause: string | number) {
     dispatch({
@@ -58,13 +79,15 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   }
 
   function onFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
-    dispatch({
-      type: 'UPDATE_FILTER',
-      payload: {
+    const value = event.target.value;
+    setFilterText(value);
+    updateFilterTextDebounced(
+      {
         filterIdx,
-        value: { ...filter, filterText: event.target.value },
+        value: { ...filter, filterText: value },
       },
-    });
+      dispatch
+    );
   }
 
   function onRemoveFilter() {
@@ -113,7 +136,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
       </DropdownControl>
       <Input
         size="tiny"
-        value={filter.filterText}
+        value={filterText}
         style={{ width: '7rem' }}
         onChange={onFilterChange}
       />

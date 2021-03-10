@@ -35,7 +35,7 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
         clause: 'where',
         columnId: state.table?.columns[0].id,
         condition: 'eq',
-        filter: '',
+        filterText: '',
       },
     });
   }
@@ -44,7 +44,7 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
     <div className="p-2">
       <div>
         {state.filters.map((_, index) => (
-          <FilterRow filterIdx={index} />
+          <FilterRow key={`filter-${index}`} filterIdx={index} />
         ))}
         {state.filters.length == 0 && (
           <Typography.Text>No filters applied</Typography.Text>

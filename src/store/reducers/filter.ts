@@ -55,30 +55,57 @@ const FilterReducer = (
         ...state,
         filters: action.payload,
       };
-    case 'ADD_FILTER':
+    case 'ADD_FILTER': {
+      const isValid = isValidFilter(action.payload);
       return {
         ...state,
         filters: state.filters.concat(action.payload),
+        shouldRefreshPage: isValid,
       };
-    case 'REMOVE_FILTER':
+    }
+    case 'REMOVE_FILTER': {
+      const removeFilter = state.filters[action.payload];
+      const isValid = isValidFilter(removeFilter);
       return {
         ...state,
         filters: [
           ...state.filters.slice(0, action.payload),
           ...state.filters.slice(action.payload + 1),
         ],
+        shouldRefreshPage: isValid,
       };
-    case 'UPDATE_FILTER':
+    }
+    case 'UPDATE_FILTER': {
+      const updatedFilter = state.filters[action.payload.filterIdx];
+      const previousIsValid = isValidFilter(updatedFilter);
+      const afterIsValid = isValidFilter(action.payload.value);
       return {
         ...state,
         filters: state.filters.map((x, idx) => {
           if (idx == action.payload.filterIdx) return action.payload.value;
           return x;
         }),
+        shouldRefreshPage: previousIsValid || afterIsValid,
       };
+    }
     default:
       return state;
   }
 };
 
 export default FilterReducer;
+
+function isValidFilter(value: {
+  clause: string;
+  columnId: string | number;
+  condition: string;
+  filterText: string;
+}) {
+  return (
+    value &&
+    value.columnId &&
+    value.columnId != '' &&
+    value.filterText &&
+    value.filterText != ''
+  );
+}
