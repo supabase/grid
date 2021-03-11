@@ -30,7 +30,9 @@ class RowService {
       .from(this.table.name)
       .select('*', { count: 'exact' })
       .range(from, to);
+
     // Filter first
+    // TODO: need to support filter.clause
     for (let idx in filters) {
       const filter = filters[idx];
       if (filter.filterText == '') continue;
@@ -61,7 +63,7 @@ class RowService {
       }
     }
     // Then sort
-    for (let idx = 0; idx < sorts.length; idx++) {
+    for (let idx in sorts) {
       const sort = sorts[idx];
       const column = this.table.columns.find(x => x.id === sort.columnId);
       if (!column) continue;

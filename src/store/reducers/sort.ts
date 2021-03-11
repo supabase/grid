@@ -1,3 +1,5 @@
+import update from 'immutability-helper';
+
 export interface SortInitialState {
   sorts: { columnId: string | number; order: string }[];
 }
@@ -30,7 +32,7 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
     case 'ADD_SORT':
       return {
         ...state,
-        sorts: state.sorts.concat(action.payload),
+        sorts: update(state.sorts, { $push: [action.payload] }),
         refreshPageFlag: Date.now(),
       };
     case 'REMOVE_SORT':
@@ -49,16 +51,15 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
         refreshPageFlag: Date.now(),
       };
     case 'MOVE_SORT': {
-      const newSorts = [...state.sorts];
-      newSorts.splice(action.payload.fromIndex, 1);
-      newSorts.splice(
-        action.payload.toIndex,
-        0,
-        state.sorts[action.payload.fromIndex]
-      );
+      const moveItem = state.sorts[action.payload.fromIndex];
       return {
         ...state,
-        sorts: newSorts,
+        sorts: update(state.sorts, {
+          $splice: [
+            [action.payload.fromIndex, 1],
+            [action.payload.toIndex, 0, moveItem],
+          ],
+        }),
         refreshPageFlag: Date.now(),
       };
     }

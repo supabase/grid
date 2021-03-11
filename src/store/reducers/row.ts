@@ -1,3 +1,4 @@
+import update from 'immutability-helper';
 import { Dictionary } from '../../types';
 import { getDefaultSorts } from '../../utils';
 import { INIT_ACTIONTYPE } from './base';
@@ -61,7 +62,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       const totalRows = state.totalRows + action.payload.length;
       return {
         ...state,
-        rows: state.rows.concat(action.payload),
+        rows: update(state.rows, { $push: action.payload }),
         totalRows: totalRows,
       };
     }
@@ -69,7 +70,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       const totalRows = state.totalRows + 1;
       return {
         ...state,
-        rows: state.rows.concat(action.payload),
+        rows: update(state.rows, { $push: action.payload }),
         totalRows: totalRows,
       };
     }

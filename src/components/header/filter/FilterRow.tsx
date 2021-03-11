@@ -93,7 +93,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   function onRemoveFilter() {
     dispatch({
       type: 'REMOVE_FILTER',
-      payload: filterIdx,
+      payload: { index: filterIdx },
     });
   }
 

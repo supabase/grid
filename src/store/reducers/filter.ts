@@ -1,3 +1,5 @@
+import update from 'immutability-helper';
+
 export interface FilterInitialState {
   filters: {
     clause: string;
@@ -30,7 +32,7 @@ type FILTER_ACTIONTYPE =
     }
   | {
       type: 'REMOVE_FILTER';
-      payload: number;
+      payload: { index: number };
     }
   | {
       type: 'UPDATE_FILTER';
@@ -59,19 +61,19 @@ const FilterReducer = (
       const isValid = isValidFilter(action.payload);
       return {
         ...state,
-        filters: state.filters.concat(action.payload),
+        filters: update(state.filters, { $push: [action.payload] }),
         refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
     case 'REMOVE_FILTER': {
-      const removeFilter = state.filters[action.payload];
+      const removeIdx = action.payload.index;
+      const removeFilter = state.filters[removeIdx];
       const isValid = isValidFilter(removeFilter);
       return {
         ...state,
-        filters: [
-          ...state.filters.slice(0, action.payload),
-          ...state.filters.slice(action.payload + 1),
-        ],
+        filters: update(state.filters, {
+          $splice: [[removeIdx, 1]],
+        }),
         refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
@@ -81,9 +83,8 @@ const FilterReducer = (
       const afterIsValid = isValidFilter(action.payload.value);
       return {
         ...state,
-        filters: state.filters.map((x, idx) => {
-          if (idx == action.payload.filterIdx) return action.payload.value;
-          return x;
+        filters: update(state.filters, {
+          [action.payload.filterIdx]: { $set: action.payload.value },
         }),
         refreshPageFlag: previousIsValid || afterIsValid ? Date.now() : 0,
       };
