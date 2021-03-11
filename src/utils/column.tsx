@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Column, SelectColumn } from 'react-data-grid';
-import { Dictionary, SupaColumn, SupaTable } from '../types';
+import { ColumnHeaderProps, Dictionary, SupaColumn, SupaTable } from '../types';
 import {
   CheckboxEditor,
   NumberEditor,
@@ -10,7 +10,8 @@ import {
 
 export function getGridColumns(
   table: SupaTable,
-  options?: { defaultWidth?: string | number }
+  options?: { defaultWidth?: string | number },
+  headerRenderer?: React.ComponentType<ColumnHeaderProps<any>>
 ): any[] {
   const columns = table.columns.map(x => {
     let columnDef: Column<Dictionary<any>> = {
@@ -19,6 +20,7 @@ export function getGridColumns(
       resizable: true,
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: 50,
+      headerRenderer: headerRenderer,
     };
 
     if (x.isIdentity) columnDef.frozen = true;

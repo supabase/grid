@@ -1,3 +1,5 @@
+import { HeaderRendererProps } from 'react-data-grid';
+
 export interface Dictionary<T> {
   [Key: string]: T;
 }
@@ -47,3 +49,11 @@ export interface SupaTable extends SupaBase {
   readonly relationships: SupaRelationship[];
   totalRows: number;
 }
+
+export interface DragItem {
+  index: number;
+  id: string;
+  type: string;
+}
+
+export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {}

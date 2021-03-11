@@ -9,17 +9,12 @@ import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { useDispatch, useTrackedState } from '../../../store';
 import { SegmentedControl } from '../../common';
+import { DragItem } from '../../../types';
 
 type SortRowProps = {
   columnId: string | number;
   index: number;
 };
-
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
 
 const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   const state = useTrackedState();
@@ -76,7 +71,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
       }
 
       // Time to actually perform the action
-      moveCard(dragIndex, hoverIndex);
+      moveSort(dragIndex, hoverIndex);
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
@@ -110,7 +105,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
     });
   }
 
-  const moveCard = (dragIndex: number, hoverIndex: number) => {
+  const moveSort = (dragIndex: number, hoverIndex: number) => {
     if (dragIndex == hoverIndex) return;
     dispatch({
       type: 'MOVE_SORT',

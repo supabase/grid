@@ -6,8 +6,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
+import Grid, { ColumnHeader } from './components/grid';
 import Header from './components/header';
-import Grid from './components/Grid';
+import { getGridColumns } from './utils';
 
 export type SupabaseGridProps = {
   /**
@@ -64,14 +65,28 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
   }, [state]);
 
   React.useEffect(() => {
+    function initTable(tableDef: SupaTable, gridProps?: GridProps) {
+      const gridColumns = getGridColumns(
+        tableDef,
+        {
+          defaultWidth: gridProps?.defaultColumnWidth,
+        },
+        ColumnHeader
+      );
+      dispatch({
+        type: 'INIT_TABLE',
+        payload: { table: tableDef, gridProps, gridColumns },
+      });
+    }
+
     if (!state.client || state.table) return;
 
     if (typeof table === 'string') {
       fetchTable(state.tableService!, table, schema).then(res => {
-        dispatch({ type: 'INIT_TABLE', payload: { table: res, gridProps } });
+        if (res) initTable(res, gridProps);
       });
     } else {
-      dispatch({ type: 'INIT_TABLE', payload: { table, gridProps } });
+      initTable(table, gridProps);
     }
   }, [state, dispatch]);
 

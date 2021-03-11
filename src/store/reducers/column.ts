@@ -1,5 +1,5 @@
+import update from 'immutability-helper';
 import { Column } from 'react-data-grid';
-import { getGridColumns } from '../../utils';
 import { INIT_ACTIONTYPE } from './base';
 
 export interface ColumnInitialState {
@@ -10,7 +10,12 @@ export const columnInitialState: ColumnInitialState = {
   gridColumns: [],
 };
 
-type COLUMN_ACTIONTYPE = INIT_ACTIONTYPE;
+type COLUMN_ACTIONTYPE =
+  | INIT_ACTIONTYPE
+  | {
+      type: 'MOVE_COLUMN';
+      payload: { fromIndex: number; toIndex: number };
+    };
 
 const ColumnReducer = (
   state: ColumnInitialState,
@@ -20,8 +25,18 @@ const ColumnReducer = (
     case 'INIT_TABLE': {
       return {
         ...state,
-        gridColumns: getGridColumns(action.payload.table, {
-          defaultWidth: action.payload.gridProps?.defaultColumnWidth,
+        gridColumns: action.payload.gridColumns,
+      };
+    }
+    case 'MOVE_COLUMN': {
+      const moveItem = state.gridColumns[action.payload.fromIndex];
+      return {
+        ...state,
+        gridColumns: update(state.gridColumns, {
+          $splice: [
+            [action.payload.fromIndex, 1],
+            [action.payload.toIndex, 0, moveItem],
+          ],
         }),
       };
     }

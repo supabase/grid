@@ -1,3 +1,4 @@
+import { Column } from 'react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SupaTable } from '../../types';
 import RowService from '../../services/RowService';
@@ -31,6 +32,7 @@ export type INIT_ACTIONTYPE =
       payload: {
         table: SupaTable;
         gridProps?: GridProps;
+        gridColumns: Column<any, any>[];
       };
     };
 

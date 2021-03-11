@@ -7,10 +7,10 @@ import DataGrid, {
 } from 'react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
-import { Dictionary, GridProps } from '../types';
-import { RowMenu, MultiRowsMenu, MENU_IDS } from './menu';
-import { useDispatch, useTrackedState } from '../store';
-import { fetchPage, refreshPageDebounced } from '../utils';
+import { Dictionary, GridProps } from '../../types';
+import { RowMenu, MultiRowsMenu, MENU_IDS } from '../menu';
+import { useDispatch, useTrackedState } from '../../store';
+import { fetchPage, refreshPageDebounced } from '../../utils';
 
 const Grid: React.FC<GridProps> = ({
   width,
