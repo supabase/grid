@@ -53,7 +53,10 @@ const Grid: React.FC<GridProps> = ({
     if (error) {
       // TODO: show a toast error message
     } else {
-      dispatch({ type: 'SET_ROWS', payload: rows });
+      dispatch({
+        type: 'SET_ROWS',
+        payload: { rows, totalRows: state.totalRows },
+      });
     }
   }
 
