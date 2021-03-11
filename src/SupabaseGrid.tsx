@@ -1,6 +1,8 @@
 import './style.css';
 import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
@@ -35,7 +37,9 @@ export type SupabaseGridProps = {
 const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
   return (
     <StoreProvider>
-      <SupabaseGridLayout {...props} />
+      <DndProvider backend={HTML5Backend}>
+        <SupabaseGridLayout {...props} />
+      </DndProvider>
     </StoreProvider>
   );
 };

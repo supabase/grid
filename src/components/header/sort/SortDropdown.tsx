@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Dropdown, Button, Typography } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
@@ -43,42 +42,11 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
     });
   }
 
-  function onDragEnd(result: any) {
-    const { source: from, destination: to } = result;
-    if (!to) return;
-    if (to.droppableId === from.droppablesId && to.index === from.index) return;
-    dispatch({
-      type: 'MOVE_SORT',
-      payload: { fromIndex: from.index, toIndex: to.index },
-    });
-  }
-
   return (
     <div className="p-2">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="sort_rows">
-          {provided => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {state.sorts.map((x, index) => (
-                <Draggable
-                  key={`drop_${x.columnId}`}
-                  draggableId={`sort_row_${x.columnId}`}
-                  index={index}
-                >
-                  {provided => (
-                    <SortRow
-                      key={x.columnId}
-                      provided={provided}
-                      columnId={x.columnId}
-                    />
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {state.sorts.map((x, index) => (
+        <SortRow key={x.columnId} columnId={x.columnId} index={index} />
+      ))}
       {state.sorts.length == 0 && (
         <div>
           <Typography.Text>No sorts applied</Typography.Text>

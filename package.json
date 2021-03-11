@@ -74,10 +74,12 @@
     "@supabase/supabase-js": "^1.4.2",
     "@supabase/ui": "^0.18.0",
     "awesome-debounce-promise": "^2.1.0",
+    "immutability-helper": "^3.1.1",
     "p-queue": "^6.6.2",
-    "react-beautiful-dnd": "^13.0.0",
     "react-contexify": "^5.0.0",
     "react-data-grid": "^7.0.0-canary.36",
+    "react-dnd": "^14.0.1",
+    "react-dnd-html5-backend": "^14.0.0",
     "react-tiny-popover": "^6.0.4",
     "react-tracked": "^1.6.5",
     "scheduler": "^0.19.1"
