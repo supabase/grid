@@ -2,7 +2,7 @@ import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import {
   Button,
-  Input,
+  InputNumber,
   Typography,
   IconArrowRight,
   IconArrowLeft,
@@ -70,13 +70,14 @@ const Pagination: React.FC<PaginationProps> = () => {
       />
       <Typography.Text className="mx-2">Page</Typography.Text>
       <div className="w-12">
-        <Input
+        <InputNumber
           value={page}
           onChange={onPageChange}
           className="block"
           size="tiny"
           style={{ width: '3rem' }}
-          type="number"
+          max={maxPages}
+          min={1}
         />
       </div>
       <Typography.Text className="mx-2">{`of ${totalPages}`}</Typography.Text>
