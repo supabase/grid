@@ -129,7 +129,7 @@ function initTable(
 
     let savedState;
     if (props.storageRef) savedState = onLoadStorage(props.storageRef);
-    savedState = savedState[tableDef.id];
+    if (savedState) savedState = savedState[tableDef.id];
     console.log('savedState', savedState);
 
     dispatch({
