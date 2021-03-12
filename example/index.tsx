@@ -10,6 +10,7 @@ const App = () => {
       <SupabaseGrid
         table="countries"
         // table={countries}
+        storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{
           supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',
           supabaseKey:
