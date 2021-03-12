@@ -16,6 +16,8 @@ const Grid: React.FC<GridProps> = memo(
   ({ width, height, containerClass, gridClass, rowClass }) => {
     const dispatch = useDispatch();
     const state = useTrackedState();
+    // workaround to force state tracking on state.gridColumns
+    const columnHeaders = state.gridColumns.map(x => x.key);
     const [selectedRows, setSelectedRows] = React.useState(
       () => new Set<React.Key>()
     );
@@ -60,7 +62,7 @@ const Grid: React.FC<GridProps> = memo(
       return <GridRow {...props} onContextMenu={displayMenu} />;
     }
 
-    if (!state.gridColumns || state.gridColumns.length == 0)
+    if (!columnHeaders || columnHeaders.length == 0)
       return (
         <div
           className="flex justify-center bg-gray-900"
