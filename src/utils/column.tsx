@@ -50,7 +50,7 @@ export function getGridColumns(
       resizable: true,
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: 50,
-      headerRenderer: headerRenderer,
+      headerRenderer: x.isIdentity ? undefined : headerRenderer,
     };
 
     if (x.isIdentity) columnDef.frozen = true;
