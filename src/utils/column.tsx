@@ -20,19 +20,20 @@ export function getInitialGridColumns(
 ) {
   let result = gridColumns;
   if (savedState?.gridColumns) {
-    console.log('gridColumns', gridColumns);
-    console.log('savedState?.gridColumns', savedState?.gridColumns);
-    // verify column still exists
-    // result = savedState.gridColumns.filter(x => {
-    //   const found = gridColumns.find(y => y.key === x.key);
-    //   return found ? true : false;
-    // });
+    result = [];
+    for (let i = 0; i < savedState.gridColumns.length; i++) {
+      const x = savedState.gridColumns[i];
+      const found = gridColumns.find(y => y.key === x.key);
+      if (found) result.push(found);
+    }
+    // console.log('exist grid columns', result);
     // check for newly created columns
-    // const newGridColumns = gridColumns.filter(x => {
-    //   const found = savedState.gridColumns.find(y => y.key === x.key);
-    //   return found ? false : true;
-    // });
-    // result.concat(newGridColumns);
+    const newGridColumns = gridColumns.filter(x => {
+      const found = savedState.gridColumns.find(y => y.key === x.key);
+      return found ? false : true;
+    });
+    // console.log('newGridColumns', newGridColumns);
+    result.concat(newGridColumns);
   }
   return result;
 }
