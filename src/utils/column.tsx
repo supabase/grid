@@ -1,12 +1,41 @@
 import * as React from 'react';
 import { Column, SelectColumn } from 'react-data-grid';
-import { ColumnHeaderProps, Dictionary, SupaColumn, SupaTable } from '../types';
+import {
+  ColumnHeaderProps,
+  Dictionary,
+  SavedState,
+  SupaColumn,
+  SupaTable,
+} from '../types';
 import {
   CheckboxEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
 } from '../components/editor';
+
+export function getInitialGridColumns(
+  gridColumns: Column<any, any>[],
+  savedState?: SavedState
+) {
+  let result = gridColumns;
+  if (savedState?.gridColumns) {
+    console.log('gridColumns', gridColumns);
+    console.log('savedState?.gridColumns', savedState?.gridColumns);
+    // verify column still exists
+    // result = savedState.gridColumns.filter(x => {
+    //   const found = gridColumns.find(y => y.key === x.key);
+    //   return found ? true : false;
+    // });
+    // check for newly created columns
+    // const newGridColumns = gridColumns.filter(x => {
+    //   const found = savedState.gridColumns.find(y => y.key === x.key);
+    //   return found ? false : true;
+    // });
+    // result.concat(newGridColumns);
+  }
+  return result;
+}
 
 export function getGridColumns(
   table: SupaTable,
@@ -30,12 +59,6 @@ export function getGridColumns(
   });
   console.log('columns', columns);
   return [SelectColumn, ...columns];
-}
-
-export function getDefaultSorts(table: SupaTable) {
-  if (!table?.columns || table?.columns?.length <= 0) return [];
-  const firstColumn = table?.columns[0];
-  return [{ columnId: firstColumn.id, order: 'ASC' }];
 }
 
 function _setupColumnEditor(

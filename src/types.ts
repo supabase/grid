@@ -1,4 +1,4 @@
-import { HeaderRendererProps } from 'react-data-grid';
+import { Column, HeaderRendererProps } from 'react-data-grid';
 
 export interface Dictionary<T> {
   [Key: string]: T;
@@ -48,6 +48,24 @@ export interface SupaTable extends SupaBase {
   readonly columns: SupaColumn[];
   readonly relationships: SupaRelationship[];
   totalRows: number;
+}
+
+export interface Sort {
+  columnId: string | number;
+  order: string;
+}
+
+export interface Filter {
+  clause: string;
+  columnId: string | number;
+  condition: string;
+  filterText: string;
+}
+
+export interface SavedState {
+  filters: Filter[];
+  gridColumns: Column<any, any>[];
+  sorts: Sort[];
 }
 
 export interface DragItem {

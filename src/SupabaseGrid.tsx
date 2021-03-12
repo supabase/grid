@@ -6,9 +6,11 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
+import { fetchPage, getGridColumns, refreshPageDebounced } from './utils';
+import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY } from './constants';
+import { InitialStateType } from './store/reducers';
 import Grid, { ColumnHeader } from './components/grid';
 import Header from './components/header';
-import { getGridColumns } from './utils';
 
 export type SupabaseGridProps = {
   /**
@@ -16,6 +18,10 @@ export type SupabaseGridProps = {
    */
   table: SupaTable | string;
   schema?: string;
+  /**
+   * storageRef is used to save state on localstorage
+   */
+  storageRef?: string;
   /**
    * props to create client
    */
@@ -46,12 +52,8 @@ const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
 };
 export default SupabaseGrid;
 
-const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
-  table,
-  schema,
-  clientProps,
-  gridProps,
-}) => {
+const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
+  const { schema, storageRef, clientProps, gridProps } = props;
   const dispatch = useDispatch();
   const state = useTrackedState();
   const { supabaseUrl, supabaseKey, headers } = clientProps;
@@ -61,34 +63,38 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
   });
 
   React.useEffect(() => {
-    if (!state.client) dispatch({ type: 'INIT_CLIENT', payload: { client } });
-  }, [state]);
+    if (storageRef && state.isInitialComplete) {
+      const config = {
+        gridColumns: state.gridColumns,
+        sorts: state.sorts,
+        filters: state.filters,
+      };
+      const json = { [storageRef]: config };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(json));
+    }
+  }, [
+    state.isInitialComplete,
+    state.gridColumns,
+    state.sorts,
+    state.filters,
+    storageRef,
+  ]);
 
   React.useEffect(() => {
-    function initTable(tableDef: SupaTable, gridProps?: GridProps) {
-      const gridColumns = getGridColumns(
-        tableDef,
-        {
-          defaultWidth: gridProps?.defaultColumnWidth,
-        },
-        ColumnHeader
-      );
-      dispatch({
-        type: 'INIT_TABLE',
-        payload: { table: tableDef, gridProps, gridColumns },
-      });
+    if (state.refreshPageFlag == REFRESH_PAGE_IMMEDIATELY) {
+      fetchPage(state, dispatch);
+    } else if (state.refreshPageFlag != 0) {
+      refreshPageDebounced(state, dispatch);
     }
+  }, [state.refreshPageFlag]);
 
-    if (!state.client || state.table) return;
+  React.useEffect(() => {
+    if (!state.client) dispatch({ type: 'INIT_CLIENT', payload: { client } });
+  }, [state.client]);
 
-    if (typeof table === 'string') {
-      fetchTable(state.tableService!, table, schema).then(res => {
-        if (res) initTable(res, gridProps);
-      });
-    } else {
-      initTable(table, gridProps);
-    }
-  }, [state, dispatch]);
+  React.useEffect(() => {
+    if (state.client && !state.table) initTable(props, state, dispatch);
+  }, [state.client, state.table]);
 
   return (
     <div className="flex flex-col h-full">
@@ -97,3 +103,43 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = ({
     </div>
   );
 };
+
+function initTable(
+  props: SupabaseGridProps,
+  state: InitialStateType,
+  dispatch: (value: any) => void
+) {
+  function onLoadStorage(storageRef: string) {
+    const jsonStr = localStorage.getItem(STORAGE_KEY);
+    if (!jsonStr) return;
+    const json = JSON.parse(jsonStr);
+    return json[storageRef];
+  }
+
+  function onInitTable(tableDef: SupaTable, gridProps?: GridProps) {
+    const gridColumns = getGridColumns(
+      tableDef,
+      {
+        defaultWidth: gridProps?.defaultColumnWidth,
+      },
+      ColumnHeader
+    );
+
+    let savedState;
+    if (props.storageRef) savedState = onLoadStorage(props.storageRef);
+    console.log('savedState', savedState);
+
+    dispatch({
+      type: 'INIT_TABLE',
+      payload: { table: tableDef, gridProps, gridColumns, savedState },
+    });
+  }
+
+  if (typeof props.table === 'string') {
+    fetchTable(state.tableService!, props.table, props.schema).then(res => {
+      if (res) onInitTable(res, props.gridProps);
+    });
+  } else {
+    onInitTable(props.table, props.gridProps);
+  }
+}

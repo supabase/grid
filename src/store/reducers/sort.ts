@@ -1,21 +1,25 @@
 import update from 'immutability-helper';
+import { Sort } from '../../types';
+import { getInitialSorts } from '../../utils';
+import { INIT_ACTIONTYPE } from './base';
 
 export interface SortInitialState {
-  sorts: { columnId: string | number; order: string }[];
+  sorts: Sort[];
 }
 
 export const sortInitialState: SortInitialState = { sorts: [] };
 
 type SORT_ACTIONTYPE =
+  | INIT_ACTIONTYPE
   | {
       type: 'SET_SORTS';
-      payload: { columnId: string | number; order: string }[];
+      payload: Sort[];
     }
-  | { type: 'ADD_SORT'; payload: { columnId: string | number; order: string } }
-  | { type: 'REMOVE_SORT'; payload: string | number }
+  | { type: 'ADD_SORT'; payload: Sort }
+  | { type: 'REMOVE_SORT'; payload: { columnId: string | number } }
   | {
       type: 'UPDATE_SORT';
-      payload: { columnId: string | number; order: string };
+      payload: Sort;
     }
   | {
       type: 'MOVE_SORT';
@@ -24,6 +28,12 @@ type SORT_ACTIONTYPE =
 
 const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
   switch (action.type) {
+    case 'INIT_TABLE': {
+      return {
+        ...state,
+        sorts: getInitialSorts(action.payload.table, action.payload.savedState),
+      };
+    }
     case 'SET_SORTS':
       return {
         ...state,
@@ -38,7 +48,7 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
     case 'REMOVE_SORT':
       return {
         ...state,
-        sorts: state.sorts.filter(x => x.columnId !== action.payload),
+        sorts: state.sorts.filter(x => x.columnId !== action.payload.columnId),
         refreshPageFlag: Date.now(),
       };
     case 'UPDATE_SORT':

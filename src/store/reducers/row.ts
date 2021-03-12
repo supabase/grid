@@ -1,7 +1,6 @@
 import update from 'immutability-helper';
+import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import { Dictionary } from '../../types';
-import { getDefaultSorts } from '../../utils';
-import { INIT_ACTIONTYPE } from './base';
 
 export interface RowInitialState {
   rows: Dictionary<any>[];
@@ -18,7 +17,6 @@ export const rowInitialState: RowInitialState = {
 };
 
 type ROW_ACTIONTYPE =
-  | INIT_ACTIONTYPE
   | { type: 'SET_PAGE'; payload: number }
   | { type: 'SET_ROWS_PER_PAGE'; payload: number }
   | {
@@ -31,24 +29,18 @@ type ROW_ACTIONTYPE =
 
 const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
   switch (action.type) {
-    case 'INIT_TABLE': {
-      return {
-        ...state,
-        sorts: getDefaultSorts(action.payload.table),
-      };
-    }
     case 'SET_PAGE': {
       return {
         ...state,
         page: action.payload,
-        refreshPageFlag: -1,
+        refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
       };
     }
     case 'SET_ROWS_PER_PAGE': {
       return {
         ...state,
         rowsPerPage: action.payload,
-        refreshPageFlag: -1,
+        refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
       };
     }
     case 'SET_ROWS':

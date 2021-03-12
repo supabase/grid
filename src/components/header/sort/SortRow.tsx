@@ -101,7 +101,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   function onDeleteClick() {
     dispatch({
       type: 'REMOVE_SORT',
-      payload: columnId,
+      payload: { columnId },
     });
   }
 

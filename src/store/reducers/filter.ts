@@ -1,34 +1,23 @@
 import update from 'immutability-helper';
+import { Filter } from '../../types';
+import { getInitialFilters } from '../../utils';
+import { INIT_ACTIONTYPE } from './base';
 
 export interface FilterInitialState {
-  filters: {
-    clause: string;
-    columnId: string | number;
-    condition: string;
-    filterText: string;
-  }[];
+  filters: Filter[];
 }
 
 export const filterInitialState: FilterInitialState = { filters: [] };
 
 type FILTER_ACTIONTYPE =
+  | INIT_ACTIONTYPE
   | {
       type: 'SET_FILTERS';
-      payload: {
-        clause: string;
-        columnId: string | number;
-        condition: string;
-        filterText: string;
-      }[];
+      payload: Filter[];
     }
   | {
       type: 'ADD_FILTER';
-      payload: {
-        clause: string;
-        columnId: string | number;
-        condition: string;
-        filterText: string;
-      };
+      payload: Filter;
     }
   | {
       type: 'REMOVE_FILTER';
@@ -38,12 +27,7 @@ type FILTER_ACTIONTYPE =
       type: 'UPDATE_FILTER';
       payload: {
         filterIdx: number;
-        value: {
-          clause: string;
-          columnId: string | number;
-          condition: string;
-          filterText: string;
-        };
+        value: Filter;
       };
     };
 
@@ -52,6 +36,15 @@ const FilterReducer = (
   action: FILTER_ACTIONTYPE
 ) => {
   switch (action.type) {
+    case 'INIT_TABLE': {
+      return {
+        ...state,
+        filters: getInitialFilters(
+          action.payload.table,
+          action.payload.savedState
+        ),
+      };
+    }
     case 'SET_FILTERS':
       return {
         ...state,
