@@ -63,16 +63,18 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   });
 
   React.useEffect(() => {
-    if (storageRef && state.isInitialComplete) {
+    if (state.isInitialComplete && storageRef && state.table) {
       const config = {
         gridColumns: state.gridColumns,
         sorts: state.sorts,
         filters: state.filters,
       };
-      const json = { [storageRef]: config };
+      const tableConfig = { [state.table.id]: config };
+      const json = { [storageRef]: tableConfig };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(json));
     }
   }, [
+    state.table,
     state.isInitialComplete,
     state.gridColumns,
     state.sorts,
@@ -127,6 +129,7 @@ function initTable(
 
     let savedState;
     if (props.storageRef) savedState = onLoadStorage(props.storageRef);
+    savedState = savedState[tableDef.id];
     console.log('savedState', savedState);
 
     dispatch({
