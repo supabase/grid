@@ -26,6 +26,13 @@ const Grid: React.FC<GridProps> = memo(
       return row.id;
     }
 
+    function onColumnResized(index: number, width: number) {
+      dispatch({
+        type: 'UPDATE_COLUMN_SIZE',
+        payload: { index, width: Math.round(width) },
+      });
+    }
+
     function onRowsChange(
       rows: Dictionary<any>[],
       data: RowsChangeData<Dictionary<any>, unknown>
@@ -86,9 +93,10 @@ const Grid: React.FC<GridProps> = memo(
           columns={state.gridColumns}
           rows={state.rows}
           rowRenderer={RowRenderer}
-          onRowsChange={onRowsChange}
           rowKeyGetter={rowKeyGetter}
           selectedRows={selectedRows}
+          onColumnResized={onColumnResized}
+          onRowsChange={onRowsChange}
           onSelectedRowsChange={setSelectedRows}
           className={gridClass}
           rowClass={rowClass}

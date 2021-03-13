@@ -13,6 +13,15 @@ import {
   SelectEditor,
   TextEditor,
 } from '../components/editor';
+import { deepClone } from './common';
+
+export function cloneColumn(column: Column<any, any>) {
+  const cloned = deepClone(column);
+  // these properties can't be cloned. Need to manual re-set again
+  cloned.editor = column.editor;
+  cloned.headerRenderer = column.headerRenderer;
+  return cloned;
+}
 
 export function getInitialGridColumns(
   gridColumns: Column<any, any>[],
@@ -24,7 +33,8 @@ export function getInitialGridColumns(
     for (let i = 0; i < savedState.gridColumns.length; i++) {
       const x = savedState.gridColumns[i];
       const found = gridColumns.find(y => y.key === x.key);
-      if (found) result.push(found);
+      // merge with savedState item props: width
+      if (found) result.push({ ...found, width: x.width });
     }
     // console.log('exist grid columns', result);
     // check for newly created columns

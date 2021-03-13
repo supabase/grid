@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { Column } from '@phamhieu1998/react-data-grid';
-import { getInitialGridColumns } from '../../utils';
+import { cloneColumn, getInitialGridColumns } from '../../utils';
 import { INIT_ACTIONTYPE } from './base';
 
 export interface ColumnInitialState {
@@ -16,6 +16,10 @@ type COLUMN_ACTIONTYPE =
   | {
       type: 'MOVE_COLUMN';
       payload: { fromIndex: number; toIndex: number };
+    }
+  | {
+      type: 'UPDATE_COLUMN_SIZE';
+      payload: { index: number; width: number };
     };
 
 const ColumnReducer = (
@@ -41,6 +45,16 @@ const ColumnReducer = (
             [action.payload.fromIndex, 1],
             [action.payload.toIndex, 0, moveItem],
           ],
+        }),
+      };
+    }
+    case 'UPDATE_COLUMN_SIZE': {
+      const updated = cloneColumn(state.gridColumns[action.payload.index]);
+      updated.width = action.payload.width;
+      return {
+        ...state,
+        gridColumns: update(state.gridColumns, {
+          [action.payload.index]: { $set: updated },
         }),
       };
     }

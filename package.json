@@ -70,7 +70,7 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@phamhieu1998/react-data-grid": "^7.0.0-canary.38",
+    "@phamhieu1998/react-data-grid": "^7.0.0-canary.39",
     "@popperjs/core": "^2.9.0",
     "@supabase/supabase-js": "^1.4.2",
     "@supabase/ui": "^0.20.0",
