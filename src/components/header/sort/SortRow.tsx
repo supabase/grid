@@ -24,6 +24,17 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   if (!column || !sort) return null;
 
   const ref = React.useRef<HTMLDivElement>(null);
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'sort-row',
+    item: () => {
+      return { columnId, index };
+    },
+    collect: (monitor: any) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   const [{ handlerId }, drop] = useDrop({
     accept: 'sort-row',
     collect(monitor) {
@@ -79,16 +90,6 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
       // to avoid expensive index searches.
       item.index = hoverIndex;
     },
-  });
-
-  const [{ isDragging }, drag] = useDrag({
-    type: 'sort-row',
-    item: () => {
-      return { columnId, index };
-    },
-    collect: (monitor: any) => ({
-      isDragging: monitor.isDragging(),
-    }),
   });
 
   function onToogle(value: string) {
@@ -147,4 +148,4 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
     </div>
   );
 };
-export default SortRow;
+export default React.memo(SortRow);
