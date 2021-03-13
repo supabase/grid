@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
-import { SortableHeaderCell } from 'react-data-grid';
+import { SortableHeaderCell } from '@phamhieu1998/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, DragItem } from '../../types';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
-import { EditorProps } from 'react-data-grid';
+import { EditorProps } from '@phamhieu1998/react-data-grid';
 import styles from './editor.module.css';
 
 function autoFocusAndSelect(input: HTMLTextAreaElement | null) {

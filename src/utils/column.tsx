@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column, SelectColumn } from 'react-data-grid';
+import { Column, SelectColumn } from '@phamhieu1998/react-data-grid';
 import {
   ColumnHeaderProps,
   Dictionary,

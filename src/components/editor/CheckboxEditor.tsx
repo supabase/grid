@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditorProps } from 'react-data-grid';
+import { EditorProps } from '@phamhieu1998/react-data-grid';
 import styles from './editor.module.css';
 
 export function CheckboxEditor<TRow, TSummaryRow = unknown>({

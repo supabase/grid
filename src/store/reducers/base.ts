@@ -1,4 +1,4 @@
-import { Column } from 'react-data-grid';
+import { Column } from '@phamhieu1998/react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import RowService from '../../services/RowService';
