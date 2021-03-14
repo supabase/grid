@@ -6,6 +6,7 @@ build
 dist
 
 # misc
+.cache
 .parcel-cache
 .DS_Store
 .env

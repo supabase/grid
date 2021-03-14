@@ -1,7 +1,9 @@
+// https://github.com/parcel-bundler/parcel/issues/1762
 import 'react-app-polyfill/ie11';
+import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import SupabaseGrid from '../.';
+import { SupabaseGrid } from '../.';
 // import countries from './countries'
 
 const App = () => {

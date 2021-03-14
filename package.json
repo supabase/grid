@@ -72,7 +72,7 @@
   "dependencies": {
     "@phamhieu1998/react-data-grid": "^7.0.0-canary.39",
     "@popperjs/core": "^2.9.0",
-    "@supabase/supabase-js": "^1.4.2",
+    "@supabase/supabase-js": "^1.6.0",
     "@supabase/ui": "^0.20.0",
     "awesome-debounce-promise": "^2.1.0",
     "immutability-helper": "^3.1.1",
