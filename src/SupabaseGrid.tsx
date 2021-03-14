@@ -41,7 +41,7 @@ export type SupabaseGridProps = {
  *
  * React component to render database table.
  */
-const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
+export const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
   return (
     <StoreProvider>
       <DndProvider backend={HTML5Backend}>
@@ -50,7 +50,6 @@ const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
     </StoreProvider>
   );
 };
-export default SupabaseGrid;
 
 const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   const { schema, storageRef, clientProps, gridProps } = props;
