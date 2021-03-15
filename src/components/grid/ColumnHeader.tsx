@@ -1,11 +1,21 @@
 import * as React from 'react';
+import {
+  IconBox,
+  IconClock,
+  IconKey,
+  IconType,
+  IconLink,
+  IconHash,
+  IconCheckCircle,
+  IconList,
+} from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { SortableHeaderCell } from '@phamhieu1998/react-data-grid';
 import { useDispatch } from '../../store';
-import { ColumnHeaderProps, DragItem } from '../../types';
+import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 
-export function ColumnHeader<R>({ column }: ColumnHeaderProps<R>) {
+export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const index = column.idx;
@@ -15,6 +25,7 @@ export function ColumnHeader<R>({ column }: ColumnHeaderProps<R>) {
     item: () => {
       return { columnId: column.key, index };
     },
+    canDrag: () => !column.frozen,
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -84,18 +95,40 @@ export function ColumnHeader<R>({ column }: ColumnHeaderProps<R>) {
   };
 
   const opacity = isDragging ? 0 : 1;
+  const cursor = column.frozen ? 'cursor-default' : '';
   drag(drop(ref));
 
   return (
-    <div
-      ref={ref}
-      data-handler-id={handlerId}
-      style={{
-        cursor: 'move',
-        opacity,
-      }}
-    >
-      <SortableHeaderCell column={column}>{column.name}</SortableHeaderCell>
+    <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
+      <SortableHeaderCell column={column}>
+        <div className={`flex items-center ${cursor}`}>
+          {renderColumnIcon(columnType)}
+          <label className="ml-1">{column.name}</label>
+        </div>
+      </SortableHeaderCell>
     </div>
   );
+}
+
+function renderColumnIcon(type: ColumnType) {
+  switch (type) {
+    case 'boolean':
+      return <IconCheckCircle size="tiny" />;
+    case 'date':
+      return <IconClock size="tiny" />;
+    case 'enum':
+      return <IconList size="tiny" />;
+    case 'foreign_key':
+      return <IconLink size="tiny" />;
+    case 'json':
+      return <IconBox size="tiny" />;
+    case 'number':
+      return <IconHash size="tiny" />;
+    case 'primary_key':
+      return <IconKey size="tiny" />;
+    case 'text':
+      return <IconType size="tiny" />;
+    default:
+      return null;
+  }
 }

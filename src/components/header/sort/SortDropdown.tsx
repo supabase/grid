@@ -18,6 +18,7 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       overlay={<Sort {...p} />}
     >
       <Button
+        className="ml-2"
         type="outline"
         style={{ padding: '3px 10px', borderColor: '#333' }}
       >

@@ -32,6 +32,10 @@ export type SupabaseGridProps = {
    */
   onAddRow?: () => void;
   /**
+   * show edit row button if available
+   */
+  onEditRow?: () => void;
+  /**
    * props to create client
    */
   clientProps: {
@@ -106,4 +110,17 @@ export interface DragItem {
   type: string;
 }
 
-export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {}
+export type ColumnType =
+  | 'boolean'
+  | 'date'
+  | 'enum'
+  | 'foreign_key'
+  | 'json'
+  | 'number'
+  | 'primary_key'
+  | 'text'
+  | 'unknown';
+
+export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {
+  columnType: ColumnType;
+}

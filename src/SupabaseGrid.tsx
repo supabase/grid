@@ -10,7 +10,7 @@ import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './GridColumns';
-import { Grid, ColumnHeader } from './components/grid';
+import { Grid } from './components/grid';
 import Header from './components/header';
 
 /**
@@ -75,7 +75,7 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
 
   return (
     <div className="flex flex-col h-full">
-      <Header />
+      <Header onAddRow={props.onAddRow} onNewColumn={props.onNewColumn} />
       <Grid {...gridProps} />
     </div>
   );
@@ -95,13 +95,9 @@ function initTable(
   }
 
   function onInitTable(tableDef: SupaTable, gridProps?: GridProps) {
-    const gridColumns = getGridColumns(
-      tableDef,
-      {
-        defaultWidth: gridProps?.defaultColumnWidth,
-      },
-      ColumnHeader
-    );
+    const gridColumns = getGridColumns(tableDef, {
+      defaultWidth: gridProps?.defaultColumnWidth,
+    });
 
     let savedState;
     if (props.storageRef)
