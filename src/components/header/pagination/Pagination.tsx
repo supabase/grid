@@ -61,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }
 
   return (
-    <div className="flex items-center mx-4">
+    <div className="fixed left-2/4 transform -translate-x-1/2 flex items-center">
       <Button
         icon={<IconArrowLeft />}
         type="secondary"
