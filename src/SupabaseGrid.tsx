@@ -6,11 +6,12 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
-import { fetchPage, getGridColumns, refreshPageDebounced } from './utils';
+import { fetchPage, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY } from './constants';
 import { InitialStateType } from './store/reducers';
 import Grid, { ColumnHeader } from './components/grid';
 import Header from './components/header';
+import { getGridColumns } from './GridColumns';
 
 export type SupabaseGridProps = {
   /**
