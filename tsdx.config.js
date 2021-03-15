@@ -4,6 +4,7 @@ const postcss = require('rollup-plugin-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const tailwindcss = require('tailwindcss');
+const tailwindconfig = require('./tailwind.config');
 
 module.exports = {
   // This function will run for each entry/format/env combination
@@ -11,17 +12,7 @@ module.exports = {
     config.plugins.push(
       postcss({
         plugins: [
-          tailwindcss({
-            purge: ['./src/**/*.tsx'],
-            darkMode: false, // or 'media' or 'class'
-            theme: {
-              extend: {},
-            },
-            variants: {
-              extend: {},
-            },
-            plugins: [],
-          }),
+          tailwindcss(tailwindconfig),
           autoprefixer(),
           cssnano({
             preset: 'default',
