@@ -3,39 +3,15 @@ import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { GridProps, SupaTable } from './types';
+import { GridProps, SupabaseGridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
-import { fetchPage, refreshPageDebounced } from './utils';
-import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY } from './constants';
+import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
+import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
 import { InitialStateType } from './store/reducers';
-import Grid, { ColumnHeader } from './components/grid';
-import Header from './components/header';
 import { getGridColumns } from './GridColumns';
-
-export type SupabaseGridProps = {
-  /**
-   * database table swagger or table name
-   */
-  table: SupaTable | string;
-  schema?: string;
-  /**
-   * storageRef is used to save state on localstorage
-   */
-  storageRef?: string;
-  /**
-   * props to create client
-   */
-  clientProps: {
-    supabaseUrl: string;
-    supabaseKey: string;
-    headers?: { [key: string]: string };
-  };
-  /**
-   * props to config grid view
-   */
-  gridProps?: GridProps;
-};
+import { Grid, ColumnHeader } from './components/grid';
+import Header from './components/header';
 
 /**
  * Supabase Grid.
@@ -69,9 +45,8 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
         sorts: state.sorts,
         filters: state.filters,
       };
-      const tableConfig = { [state.table.id]: config };
-      const json = { [storageRef]: tableConfig };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(json));
+      const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef, state.table.id);
+      localStorage.setItem(key, JSON.stringify(config));
     }
   }, [
     state.table,
@@ -111,8 +86,9 @@ function initTable(
   state: InitialStateType,
   dispatch: (value: any) => void
 ) {
-  function onLoadStorage(storageRef: string) {
-    const jsonStr = localStorage.getItem(STORAGE_KEY);
+  function onLoadStorage(storageRef: string, tableId: string | number) {
+    const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef, tableId);
+    const jsonStr = localStorage.getItem(key);
     if (!jsonStr) return;
     const json = JSON.parse(jsonStr);
     return json[storageRef];
@@ -128,8 +104,8 @@ function initTable(
     );
 
     let savedState;
-    if (props.storageRef) savedState = onLoadStorage(props.storageRef);
-    if (savedState) savedState = savedState[tableDef.id];
+    if (props.storageRef)
+      savedState = onLoadStorage(props.storageRef, tableDef.id);
     console.log('savedState', savedState);
 
     dispatch({

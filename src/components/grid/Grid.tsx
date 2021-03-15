@@ -12,7 +12,7 @@ import { Dictionary, GridProps } from '../../types';
 import { RowMenu, MultiRowsMenu, MENU_IDS } from '../menu';
 import { useDispatch, useTrackedState } from '../../store';
 
-const Grid: React.FC<GridProps> = memo(
+export const Grid: React.FC<GridProps> = memo(
   ({ width, height, containerClass, gridClass, rowClass }) => {
     const dispatch = useDispatch();
     const state = useTrackedState();
@@ -108,4 +108,3 @@ const Grid: React.FC<GridProps> = memo(
     );
   }
 );
-export default Grid;

@@ -13,6 +13,38 @@ export type GridProps = {
   rowClass?: ((row: Dictionary<any>) => string | undefined) | undefined;
 };
 
+export type SupabaseGridProps = {
+  /**
+   * database table swagger or table name
+   */
+  table: SupaTable | string;
+  schema?: string;
+  /**
+   * storageRef is used to save state on localstorage
+   */
+  storageRef?: string;
+  /**
+   * show create new column button if available
+   */
+  onNewColumn?: () => void;
+  /**
+   * show add row button if available
+   */
+  onAddRow?: () => void;
+  /**
+   * props to create client
+   */
+  clientProps: {
+    supabaseUrl: string;
+    supabaseKey: string;
+    headers?: { [key: string]: string };
+  };
+  /**
+   * props to config grid view
+   */
+  gridProps?: GridProps;
+};
+
 export type SupaRelationship = {
   readonly id: number;
   readonly name: string;
