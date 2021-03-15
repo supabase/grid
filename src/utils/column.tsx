@@ -86,6 +86,9 @@ function _setupColumnEditor(
     // TODO
   } else if (_isTextColumn(columnDef.dataType)) {
     config.editor = TextEditor;
+    config.editorOptions = {
+      editOnClick: true,
+    };
   } else if (_isDateTimeColumn(columnDef.dataType)) {
     // TODO
   } else if (_isBoolColumn(columnDef.dataType)) {
