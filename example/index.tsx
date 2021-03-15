@@ -12,6 +12,12 @@ const App = () => {
       <SupabaseGrid
         table="countries"
         // table={countries}
+        onNewColumn={() => {
+          console.log('add new column');
+        }}
+        onAddRow={() => {
+          console.log('add new row');
+        }}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{
           supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',
