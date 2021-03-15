@@ -64,9 +64,10 @@ const Pagination: React.FC<PaginationProps> = () => {
     <div className="fixed left-2/4 transform -translate-x-1/2 flex items-center">
       <Button
         icon={<IconArrowLeft />}
-        type="secondary"
+        type="outline"
         disabled={state.page <= 1}
         onClick={onPreviousPage}
+        style={{ padding: '3px 10px', borderColor: '#333' }}
       />
       <Typography.Text className="mx-2">Page</Typography.Text>
       <div className="w-12">
@@ -83,16 +84,20 @@ const Pagination: React.FC<PaginationProps> = () => {
       <Typography.Text className="mx-2">{`of ${totalPages}`}</Typography.Text>
       <Button
         icon={<IconArrowRight />}
-        type="secondary"
+        type="outline"
         disabled={state.page >= maxPages}
         onClick={onNextPage}
+        style={{ padding: '3px 10px', borderColor: '#333' }}
       />
       <div className="ml-2">
         <DropdownControl
           options={rowsPerPageOptions}
           onSelect={onRowsPerPageChange}
         >
-          <Button type="secondary">{`${state.rowsPerPage} rows`}</Button>
+          <Button
+            type="outline"
+            style={{ padding: '3px 10px', borderColor: '#333' }}
+          >{`${state.rowsPerPage} rows`}</Button>
         </DropdownControl>
       </div>
     </div>

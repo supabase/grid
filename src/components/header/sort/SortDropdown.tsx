@@ -17,7 +17,12 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       placement="bottomLeft"
       overlay={<Sort {...p} />}
     >
-      <Button type="secondary">{btnText}</Button>
+      <Button
+        type="outline"
+        style={{ padding: '3px 10px', borderColor: '#333' }}
+      >
+        {btnText}
+      </Button>
     </Dropdown>
   );
 };

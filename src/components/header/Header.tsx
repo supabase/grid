@@ -8,7 +8,7 @@ type HeaderProps = {};
 
 const Header: React.FC<HeaderProps> = ({}) => {
   return (
-    <div className="flex justify-between h-10 z-10 px-2 bg-gray-800">
+    <div className="flex justify-between h-10 z-10 px-2 bg-gray-700">
       <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />
