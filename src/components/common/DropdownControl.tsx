@@ -5,14 +5,22 @@ type DropdownControlProps = {
   options: { value: string | number; label: string }[];
   onSelect: (value: string | number) => void;
   className?: string;
+  placement?:
+    | 'bottomLeft'
+    | 'bottomRight'
+    | 'bottomCenter'
+    | 'topLeft'
+    | 'topRight'
+    | 'topCentre'
+    | undefined;
 };
 
 export const DropdownControl: React.FC<DropdownControlProps> = p => {
-  const { className, children } = p;
+  const { className, children, placement } = p;
   return (
     <Dropdown
       className={className}
-      placement="bottomLeft"
+      placement={placement || 'bottomLeft'}
       overlay={<DropdownItem {...p} />}
     >
       {children}
