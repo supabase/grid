@@ -16,10 +16,11 @@ export const Grid: React.FC<GridProps> = memo(
     const dispatch = useDispatch();
     const state = useTrackedState();
     // workaround to force state tracking on state.gridColumns
-    const columnHeaders = state.gridColumns.map(x => x.key);
+    const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
     const [selectedRows, setSelectedRows] = React.useState(
       () => new Set<React.Key>()
     );
+    const { show: showContextMenu } = useContextMenu();
 
     function rowKeyGetter(row: SupaRow) {
       return row.idx;
@@ -50,17 +51,15 @@ export const Grid: React.FC<GridProps> = memo(
 
     function RowRenderer(props: RowRendererProps<SupaRow>) {
       const isSelected = selectedRows.has(props.row.idx);
-      const menuId =
-        isSelected && selectedRows.size > 1
-          ? MENU_IDS.MULTI_ROWS_MENU_ID
-          : MENU_IDS.ROW_MENU_ID;
-      const { show } = useContextMenu({
-        id: menuId,
-      });
 
       function displayMenu(e: TriggerEvent) {
         if (!isSelected) setSelectedRows(new Set<React.Key>());
-        show(e, {
+        const menuId =
+          isSelected && selectedRows.size > 1
+            ? MENU_IDS.MULTI_ROWS_MENU_ID
+            : MENU_IDS.ROW_MENU_ID;
+        showContextMenu(e, {
+          id: menuId,
           props: { rowIdx: props.rowIdx, selectedRows },
         });
       }

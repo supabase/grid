@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
-import { Menu, Item, ItemParams } from 'react-contexify';
+import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const ROW_MENU_ID = 'row-menu-id';
@@ -27,9 +27,16 @@ const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
     if (onEditRow) onEditRow(rowIdx);
   }
 
+  function isItemHidden({ data }: PredicateParams) {
+    if (data === 'edit') return onEditRowClick == undefined;
+    return false;
+  }
+
   return (
     <Menu id={ROW_MENU_ID} animation={false}>
-      {onEditRow && <Item onClick={onEditRowClick}>Edit row</Item>}
+      <Item onClick={onEditRowClick} hidden={isItemHidden} data="edit">
+        Edit row
+      </Item>
       <Item onClick={onDeleteRow}>Delete row</Item>
     </Menu>
   );

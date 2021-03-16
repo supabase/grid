@@ -28,9 +28,13 @@ export type SupabaseGridProps = {
    */
   onAddColumn?: () => void;
   /**
-   * show edit column button if available
+   * show edit column menu if available
    */
   onEditColumn?: (columnId: string | number) => void;
+  /**
+   * show delete column menu if available
+   */
+  onDeleteColumn?: (columnId: string | number) => void;
   /**
    * show add row button if available
    */
@@ -130,5 +134,6 @@ export type ColumnType =
   | 'unknown';
 
 export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {
+  columnId: string | number;
   columnType: ColumnType;
 }

@@ -29,7 +29,9 @@ export function getGridColumns(
     const columnType = _getColumnType(x);
 
     columnDef.headerRenderer = props => {
-      return <ColumnHeader {...props} columnType={columnType} />;
+      return (
+        <ColumnHeader {...props} columnId={x.id} columnType={columnType} />
+      );
     };
 
     _setupColumnEditor(x, columnType, columnDef);

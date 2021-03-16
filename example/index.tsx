@@ -18,6 +18,9 @@ const App = () => {
         onEditColumn={columnId => {
           console.log('edit column: ', columnId);
         }}
+        onDeleteColumn={columnId => {
+          console.log('delete column: ', columnId);
+        }}
         onAddRow={() => {
           console.log('add new row');
           return {};

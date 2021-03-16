@@ -9,21 +9,38 @@ import {
   IconCheckCircle,
   IconList,
 } from '@supabase/ui';
+import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { SortableHeaderCell } from '@phamhieu1998/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
+import { MENU_IDS } from '../menu';
 
-export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
+export function ColumnHeader<R>({
+  column,
+  columnId,
+  columnType,
+}: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const index = column.idx;
+  const columnIdx = column.idx;
+  const columnKey = column.key;
+
+  const { show: showContextMenu } = useContextMenu({
+    id: MENU_IDS.COLUMN_MENU_ID,
+  });
+
+  function displayMenu(e: TriggerEvent) {
+    showContextMenu(e, {
+      props: { columnId, columnKey, frozen: column.frozen },
+    });
+  }
 
   const [{ isDragging }, drag] = useDrag({
     type: 'grid-column-header',
     item: () => {
-      return { columnId: column.key, index };
+      return { id: columnKey, index: columnIdx };
     },
     canDrag: () => !column.frozen,
     collect: (monitor: any) => ({
@@ -42,8 +59,11 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
       if (!ref.current) {
         return;
       }
+
       const dragIndex = item.index;
-      const hoverIndex = index;
+      const dragKey = item.id;
+      const hoverIndex = columnIdx;
+      const hoverKey = columnKey;
 
       // Don't replace items with themselves
       if (dragIndex === hoverIndex) {
@@ -76,7 +96,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
       }
 
       // Time to actually perform the action
-      moveColumn(dragIndex, hoverIndex);
+      moveColumn(dragKey, hoverKey);
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
@@ -86,11 +106,11 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
     },
   });
 
-  const moveColumn = (dragIndex: number, hoverIndex: number) => {
-    if (dragIndex == hoverIndex) return;
+  const moveColumn = (fromKey: string, toKey: string) => {
+    if (fromKey == toKey) return;
     dispatch({
       type: 'MOVE_COLUMN',
-      payload: { fromIndex: dragIndex, toIndex: hoverIndex },
+      payload: { fromKey, toKey },
     });
   };
 
@@ -99,7 +119,12 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   drag(drop(ref));
 
   return (
-    <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
+    <div
+      ref={ref}
+      data-handler-id={handlerId}
+      style={{ opacity }}
+      onContextMenu={displayMenu}
+    >
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor}`}>
           {renderColumnIcon(columnType)}

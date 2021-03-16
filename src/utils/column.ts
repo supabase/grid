@@ -21,7 +21,7 @@ export function getInitialGridColumns(
       const x = savedState.gridColumns[i];
       const found = gridColumns.find(y => y.key === x.key);
       // merge with savedState item props: width
-      if (found) result.push({ ...found, width: x.width });
+      if (found) result.push({ ...found, width: x.width, frozen: x.frozen });
     }
     // console.log('exist grid columns', result);
     // check for newly created columns

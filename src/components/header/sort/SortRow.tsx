@@ -28,7 +28,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'sort-row',
     item: () => {
-      return { columnId, index };
+      return { id: columnId, index };
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),

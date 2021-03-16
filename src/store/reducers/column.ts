@@ -15,11 +15,19 @@ type COLUMN_ACTIONTYPE =
   | INIT_ACTIONTYPE
   | {
       type: 'MOVE_COLUMN';
-      payload: { fromIndex: number; toIndex: number };
+      payload: { fromKey: string; toKey: string };
     }
   | {
       type: 'UPDATE_COLUMN_SIZE';
       payload: { index: number; width: number };
+    }
+  | {
+      type: 'FREEZE_COLUMN';
+      payload: { columnKey: string };
+    }
+  | {
+      type: 'UNFREEZE_COLUMN';
+      payload: { columnKey: string };
     };
 
 const ColumnReducer = (
@@ -37,13 +45,19 @@ const ColumnReducer = (
       };
     }
     case 'MOVE_COLUMN': {
-      const moveItem = state.gridColumns[action.payload.fromIndex];
+      const fromIdx = state.gridColumns.findIndex(
+        x => x.key === action.payload.fromKey
+      );
+      const toIdx = state.gridColumns.findIndex(
+        x => x.key === action.payload.toKey
+      );
+      const moveItem = state.gridColumns[fromIdx];
       return {
         ...state,
         gridColumns: update(state.gridColumns, {
           $splice: [
-            [action.payload.fromIndex, 1],
-            [action.payload.toIndex, 0, moveItem],
+            [fromIdx, 1],
+            [toIdx, 0, moveItem],
           ],
         }),
       };
@@ -55,6 +69,32 @@ const ColumnReducer = (
         ...state,
         gridColumns: update(state.gridColumns, {
           [action.payload.index]: { $set: updated },
+        }),
+      };
+    }
+    case 'FREEZE_COLUMN': {
+      const columnIdx = state.gridColumns.findIndex(
+        x => x.key === action.payload.columnKey
+      );
+      const updated = cloneColumn(state.gridColumns[columnIdx]);
+      updated.frozen = true;
+      return {
+        ...state,
+        gridColumns: update(state.gridColumns, {
+          [columnIdx]: { $set: updated },
+        }),
+      };
+    }
+    case 'UNFREEZE_COLUMN': {
+      const columnIdx = state.gridColumns.findIndex(
+        x => x.key === action.payload.columnKey
+      );
+      const updated = cloneColumn(state.gridColumns[columnIdx]);
+      updated.frozen = false;
+      return {
+        ...state,
+        gridColumns: update(state.gridColumns, {
+          [columnIdx]: { $set: updated },
         }),
       };
     }
