@@ -1,9 +1,9 @@
 import update from 'immutability-helper';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import { Dictionary } from '../../types';
+import { SupaRow } from '../../types';
 
 export interface RowInitialState {
-  rows: Dictionary<any>[];
+  rows: SupaRow[];
   page: number;
   rowsPerPage: number;
   totalRows: number;
@@ -21,11 +21,11 @@ type ROW_ACTIONTYPE =
   | { type: 'SET_ROWS_PER_PAGE'; payload: number }
   | {
       type: 'SET_ROWS';
-      payload: { rows: Dictionary<any>[]; totalRows: number };
+      payload: { rows: SupaRow[]; totalRows: number };
     }
-  | { type: 'ADD_ROWS'; payload: Dictionary<any>[] }
-  | { type: 'ADD_NEW_ROW'; payload: Dictionary<any> }
-  | { type: 'REMOVE_ROWS'; payload: string[] | number[] };
+  | { type: 'ADD_ROWS'; payload: SupaRow[] }
+  | { type: 'ADD_NEW_ROW'; payload: SupaRow }
+  | { type: 'REMOVE_ROWS'; payload: { rowIdxs: number[] } };
 
 const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
   switch (action.type) {
@@ -62,15 +62,15 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       const totalRows = state.totalRows + 1;
       return {
         ...state,
-        rows: update(state.rows, { $push: action.payload }),
+        rows: update(state.rows, { $push: [action.payload] }),
         totalRows: totalRows,
       };
     }
     case 'REMOVE_ROWS': {
-      const totalRows = state.totalRows - action.payload.length;
+      const totalRows = state.totalRows - action.payload.rowIdxs.length;
       return {
         ...state,
-        rows: state.rows.filter(x => !action.payload.includes(x.id as never)),
+        rows: state.rows.filter(x => !action.payload.rowIdxs.includes(x.idx)),
         totalRows: totalRows,
       };
     }

@@ -14,9 +14,12 @@ export async function fetchPage(
   if (res.error) {
     // TODO: handle fetch rows data error
   }
+  const rows = res.data?.map((x, index) => {
+    return { idx: index, ...x };
+  });
   dispatch({
     type: 'SET_ROWS',
-    payload: { rows: res.data || [], totalRows: res.count },
+    payload: { rows: rows || [], totalRows: res.count },
   });
 }
 export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 500);

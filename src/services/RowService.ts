@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { SupabaseGridQueue } from '../constants';
-import { Dictionary, SupaTable } from '../types';
+import { SupaRow, SupaTable } from '../types';
 
 class RowService {
   constructor(protected table: SupaTable, protected client: SupabaseClient) {
@@ -76,7 +76,8 @@ class RowService {
     return request;
   }
 
-  create(value: Dictionary<any>) {
+  create(row: SupaRow) {
+    const { idx, ...value } = row;
     SupabaseGridQueue.add(async () => {
       const res = await this.client.from(this.table.name).insert(value);
       console.log('insert row', res);
@@ -85,10 +86,11 @@ class RowService {
     });
   }
 
-  update(value: Dictionary<any>): { error?: string } {
+  update(row: SupaRow): { error?: string } {
     const { primaryKey, error } = this._getPrimaryKey();
     if (error) return { error };
 
+    const { idx, ...value } = row;
     SupabaseGridQueue.add(async () => {
       const res = await this.client
         .from(this.table.name)
@@ -101,15 +103,16 @@ class RowService {
 
     return {};
   }
-  delete(rowIds: number[] | string[]): { error?: string } {
+  delete(rows: SupaRow[]): { error?: string } {
     const { primaryKey, error } = this._getPrimaryKey();
-    if (error) return { error };
+    if (error || !primaryKey) return { error };
 
+    const primaryKeyValues = rows.map(x => x[primaryKey]);
     SupabaseGridQueue.add(async () => {
       const res = await this.client
         .from(this.table.name)
         .delete()
-        .in(primaryKey!, rowIds);
+        .in(primaryKey!, primaryKeyValues);
       console.log('delete row', res);
       // TODO: how to handle error
       // if (res.error)

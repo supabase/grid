@@ -22,8 +22,8 @@ const App = () => {
           console.log('add new row');
           return {};
         }}
-        onEditRow={rowId => {
-          console.log('edit row: ', rowId);
+        onEditRow={rowIdx => {
+          console.log('edit row: ', rowIdx);
         }}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{

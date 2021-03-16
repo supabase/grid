@@ -14,10 +14,10 @@ const MultiRowsMenu: React.FC<MultiRowsMenuProps> = () => {
   function onRowsDelete(p: ItemParams) {
     const { props } = p;
     const { selectedRows } = props;
-    const removeIds = Array.from(selectedRows) as number[] | string[];
-    state.rowService!.delete(removeIds);
-
-    dispatch({ type: 'REMOVE_ROWS', payload: removeIds });
+    const rowIdxs = Array.from(selectedRows) as number[];
+    const rows = state.rows.filter(x => rowIdxs.includes(x.idx));
+    state.rowService!.delete(rows);
+    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
   }
 
   return (

@@ -5,22 +5,32 @@ import { useDispatch, useTrackedState } from '../../store';
 
 export const ROW_MENU_ID = 'row-menu-id';
 
-type RowMenuProps = {};
+type RowMenuProps = {
+  onEditRow?: (rowIdx: number) => void;
+};
 
-const RowMenu: React.FC<RowMenuProps> = () => {
+const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
   const dispatch = useDispatch();
   const state = useTrackedState();
 
-  function onRowDelete(p: ItemParams) {
+  function onDeleteRow(p: ItemParams) {
     const { props } = p;
-    const { rowId } = props;
-    state.rowService!.delete([rowId]);
-    dispatch({ type: 'REMOVE_ROWS', payload: [rowId] });
+    const { rowIdx } = props;
+    const row = state.rows[rowIdx];
+    state.rowService!.delete([row]);
+    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [rowIdx] } });
+  }
+
+  function onEditRowClick(p: ItemParams) {
+    const { props } = p;
+    const { rowIdx } = props;
+    if (onEditRow) onEditRow(rowIdx);
   }
 
   return (
-    <Menu id={ROW_MENU_ID}>
-      <Item onClick={onRowDelete}>Delete row</Item>
+    <Menu id={ROW_MENU_ID} animation={false}>
+      {onEditRow && <Item onClick={onEditRowClick}>Edit row</Item>}
+      <Item onClick={onDeleteRow}>Delete row</Item>
     </Menu>
   );
 };

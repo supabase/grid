@@ -10,7 +10,7 @@ export type GridProps = {
   defaultColumnWidth?: string | number;
   containerClass?: string;
   gridClass?: string;
-  rowClass?: ((row: Dictionary<any>) => string | undefined) | undefined;
+  rowClass?: ((row: SupaRow) => string | undefined) | undefined;
 };
 
 export type SupabaseGridProps = {
@@ -38,7 +38,7 @@ export type SupabaseGridProps = {
   /**
    * show edit row button if available
    */
-  onEditRow?: (rowId: string | number) => void;
+  onEditRow?: (rowIdx: number) => void;
   /**
    * props to create client
    */
@@ -88,6 +88,10 @@ export interface SupaTable extends SupaBase {
   readonly columns: SupaColumn[];
   readonly relationships: SupaRelationship[];
   totalRows: number;
+}
+
+export interface SupaRow extends Dictionary<any> {
+  readonly idx: number;
 }
 
 export interface Sort {

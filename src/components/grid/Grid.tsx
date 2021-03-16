@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { createPortal } from 'react-dom';
 import { memo } from 'react-tracked';
 import DataGrid, {
   Row as GridRow,
@@ -8,8 +7,8 @@ import DataGrid, {
 } from '@phamhieu1998/react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
-import { Dictionary, GridProps } from '../../types';
-import { RowMenu, MultiRowsMenu, MENU_IDS } from '../menu';
+import { GridProps, SupaRow } from '../../types';
+import { MENU_IDS } from '../menu';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const Grid: React.FC<GridProps> = memo(
@@ -22,8 +21,8 @@ export const Grid: React.FC<GridProps> = memo(
       () => new Set<React.Key>()
     );
 
-    function rowKeyGetter(row: Dictionary<any>) {
-      return row.id;
+    function rowKeyGetter(row: SupaRow) {
+      return row.idx;
     }
 
     function onColumnResized(index: number, width: number) {
@@ -34,8 +33,8 @@ export const Grid: React.FC<GridProps> = memo(
     }
 
     function onRowsChange(
-      rows: Dictionary<any>[],
-      data: RowsChangeData<Dictionary<any>, unknown>
+      rows: SupaRow[],
+      data: RowsChangeData<SupaRow, unknown>
     ) {
       const rowData = rows[data.indexes[0]];
       const { error } = state.rowService!.update(rowData);
@@ -49,8 +48,8 @@ export const Grid: React.FC<GridProps> = memo(
       }
     }
 
-    function RowRenderer(props: RowRendererProps<Dictionary<any>>) {
-      const isSelected = selectedRows.has(props.row.id);
+    function RowRenderer(props: RowRendererProps<SupaRow>) {
+      const isSelected = selectedRows.has(props.row.idx);
       const menuId =
         isSelected && selectedRows.size > 1
           ? MENU_IDS.MULTI_ROWS_MENU_ID
@@ -62,7 +61,7 @@ export const Grid: React.FC<GridProps> = memo(
       function displayMenu(e: TriggerEvent) {
         if (!isSelected) setSelectedRows(new Set<React.Key>());
         show(e, {
-          props: { rowId: props.row.id, rowIdx: props.rowIdx, selectedRows },
+          props: { rowIdx: props.rowIdx, selectedRows },
         });
       }
 
@@ -102,8 +101,6 @@ export const Grid: React.FC<GridProps> = memo(
           rowClass={rowClass}
           style={{ height: '100%' }}
         />
-        {createPortal(<RowMenu />, document.body)}
-        {createPortal(<MultiRowsMenu />, document.body)}
       </div>
     );
   }

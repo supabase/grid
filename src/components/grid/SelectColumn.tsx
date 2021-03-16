@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Column } from '@phamhieu1998/react-data-grid';
 import { Button, IconEdit } from '@supabase/ui';
-import { Dictionary } from '../../types';
+import { SupaRow } from '../../types';
 
 export function SelectColumn(
-  onEditRow?: (rowId: string | number) => void
+  onEditRow?: (rowIdx: number) => void
 ): Column<any, any> {
   return {
     key: 'select-row',
@@ -66,9 +66,9 @@ type SharedInputProps = Pick<
 interface SelectCellFormatterProps extends SharedInputProps {
   isCellSelected?: boolean;
   value: boolean;
-  row?: Dictionary<any>;
+  row?: SupaRow;
   onChange: (value: boolean, isShiftClick: boolean) => void;
-  onEditRow?: (rowId: string | number) => void;
+  onEditRow?: (rowIdx: number) => void;
 }
 
 function SelectCellFormatter({
@@ -94,7 +94,7 @@ function SelectCellFormatter({
   }
 
   function onEditClick() {
-    if (onEditRow && row) onEditRow(row.id);
+    if (onEditRow && row) onEditRow(row.idx);
   }
 
   return (

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Column } from '@phamhieu1998/react-data-grid';
-import { ColumnType, Dictionary, SupaColumn, SupaTable } from './types';
+import { ColumnType, SupaColumn, SupaRow, SupaTable } from './types';
 import {
   CheckboxEditor,
   NumberEditor,
@@ -12,13 +12,13 @@ import { ColumnHeader, SelectColumn } from './components/grid';
 export function getGridColumns(
   table: SupaTable,
   options?: {
-    onEditRow?: (rowId: string | number) => void;
+    onEditRow?: (rowIdx: number) => void;
     defaultWidth?: string | number;
   }
 ): any[] {
   const selectColumn = SelectColumn(options?.onEditRow);
   const columns = table.columns.map(x => {
-    let columnDef: Column<Dictionary<any>> = {
+    let columnDef: Column<SupaRow> = {
       key: x.name,
       name: x.name,
       resizable: true,
@@ -42,7 +42,7 @@ export function getGridColumns(
 function _setupColumnEditor(
   columnDef: SupaColumn,
   columnType: ColumnType,
-  config: Column<Dictionary<any>>
+  config: Column<SupaRow>
 ) {
   if (columnDef.isIdentity || !columnDef.isUpdatable) {
     return;

@@ -1,5 +1,6 @@
 import './style.css';
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -8,6 +9,7 @@ import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
+import { RowMenu, MultiRowsMenu } from './components/menu';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './GridColumns';
 import { Grid } from './components/grid';
@@ -29,7 +31,7 @@ export const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
 };
 
 const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
-  const { schema, storageRef, clientProps, gridProps } = props;
+  const { schema, storageRef, clientProps, gridProps, onEditRow } = props;
   const dispatch = useDispatch();
   const state = useTrackedState();
   const { supabaseUrl, supabaseKey, headers } = clientProps;
@@ -77,6 +79,8 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
     <div className="flex flex-col h-full">
       <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
       <Grid {...gridProps} />
+      {createPortal(<RowMenu onEditRow={onEditRow} />, document.body)}
+      {createPortal(<MultiRowsMenu />, document.body)}
     </div>
   );
 };
