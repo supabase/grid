@@ -6,19 +6,19 @@ import StatusLabel from './StatusLabel';
 import Pagination from './pagination';
 
 type HeaderProps = {
-  onNewColumn?: () => void;
+  onAddColumn?: () => void;
   onAddRow?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ onNewColumn, onAddRow }) => {
-  const renderNewColumn = (onNewColumn?: () => void) => {
-    if (!onNewColumn) return null;
+const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
+  const renderNewColumn = (onAddColumn?: () => void) => {
+    if (!onAddColumn) return null;
     return (
       <Button
         className="ml-2"
         type="outline"
         style={{ padding: '3px 10px', borderColor: '#333' }}
-        onClick={onNewColumn}
+        onClick={onAddColumn}
       >
         New Column
       </Button>
@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onNewColumn, onAddRow }) => {
       <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />
-        {renderNewColumn(onNewColumn)}
+        {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
       </div>
       <div className="flex items-center">

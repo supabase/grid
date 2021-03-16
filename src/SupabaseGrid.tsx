@@ -3,7 +3,7 @@ import * as React from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { GridProps, SupabaseGridProps, SupaTable } from './types';
+import { SupabaseGridProps, SupaTable } from './types';
 import { fetchTable } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
@@ -75,7 +75,7 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
 
   return (
     <div className="flex flex-col h-full">
-      <Header onAddRow={props.onAddRow} onNewColumn={props.onNewColumn} />
+      <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
       <Grid {...gridProps} />
     </div>
   );
@@ -94,9 +94,10 @@ function initTable(
     return json[storageRef];
   }
 
-  function onInitTable(tableDef: SupaTable, gridProps?: GridProps) {
+  function onInitTable(tableDef: SupaTable, props: SupabaseGridProps) {
     const gridColumns = getGridColumns(tableDef, {
-      defaultWidth: gridProps?.defaultColumnWidth,
+      defaultWidth: props.gridProps?.defaultColumnWidth,
+      onEditRow: props.onEditRow,
     });
 
     let savedState;
@@ -106,15 +107,20 @@ function initTable(
 
     dispatch({
       type: 'INIT_TABLE',
-      payload: { table: tableDef, gridProps, gridColumns, savedState },
+      payload: {
+        table: tableDef,
+        gridProps: props.gridProps,
+        gridColumns,
+        savedState,
+      },
     });
   }
 
   if (typeof props.table === 'string') {
     fetchTable(state.tableService!, props.table, props.schema).then(res => {
-      if (res) onInitTable(res, props.gridProps);
+      if (res) onInitTable(res, props);
     });
   } else {
-    onInitTable(props.table, props.gridProps);
+    onInitTable(props.table, props);
   }
 }

@@ -26,15 +26,19 @@ export type SupabaseGridProps = {
   /**
    * show create new column button if available
    */
-  onNewColumn?: () => void;
+  onAddColumn?: () => void;
+  /**
+   * show edit column button if available
+   */
+  onEditColumn?: (columnId: string | number) => void;
   /**
    * show add row button if available
    */
-  onAddRow?: () => void;
+  onAddRow?: () => Dictionary<any>;
   /**
    * show edit row button if available
    */
-  onEditRow?: () => void;
+  onEditRow?: (rowId: string | number) => void;
   /**
    * props to create client
    */

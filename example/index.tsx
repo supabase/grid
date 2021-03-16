@@ -12,11 +12,18 @@ const App = () => {
       <SupabaseGrid
         table="countries"
         // table={countries}
-        onNewColumn={() => {
+        onAddColumn={() => {
           console.log('add new column');
+        }}
+        onEditColumn={columnId => {
+          console.log('edit column: ', columnId);
         }}
         onAddRow={() => {
           console.log('add new row');
+          return {};
+        }}
+        onEditRow={rowId => {
+          console.log('edit row: ', rowId);
         }}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column, SelectColumn } from '@phamhieu1998/react-data-grid';
+import { Column } from '@phamhieu1998/react-data-grid';
 import { ColumnType, Dictionary, SupaColumn, SupaTable } from './types';
 import {
   CheckboxEditor,
@@ -7,12 +7,16 @@ import {
   SelectEditor,
   TextEditor,
 } from './components/editor';
-import { ColumnHeader } from './components/grid';
+import { ColumnHeader, SelectColumn } from './components/grid';
 
 export function getGridColumns(
   table: SupaTable,
-  options?: { defaultWidth?: string | number }
+  options?: {
+    onEditRow?: (rowId: string | number) => void;
+    defaultWidth?: string | number;
+  }
 ): any[] {
+  const selectColumn = SelectColumn(options?.onEditRow);
   const columns = table.columns.map(x => {
     let columnDef: Column<Dictionary<any>> = {
       key: x.name,
@@ -32,7 +36,7 @@ export function getGridColumns(
     return columnDef;
   });
   console.log('columns', columns);
-  return [SelectColumn, ...columns];
+  return [selectColumn, ...columns];
 }
 
 function _setupColumnEditor(
