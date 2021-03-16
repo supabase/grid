@@ -1,5 +1,6 @@
 import './style.css';
 import * as React from 'react';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { createPortal } from 'react-dom';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DndProvider } from 'react-dnd';
@@ -42,13 +43,7 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
 
   React.useEffect(() => {
     if (state.isInitialComplete && storageRef && state.table) {
-      const config = {
-        gridColumns: state.gridColumns,
-        sorts: state.sorts,
-        filters: state.filters,
-      };
-      const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef, state.table.id);
-      localStorage.setItem(key, JSON.stringify(config));
+      saveStorageDebounced(state, storageRef);
     }
   }, [
     state.table,
@@ -91,11 +86,11 @@ function initTable(
   dispatch: (value: any) => void
 ) {
   function onLoadStorage(storageRef: string, tableId: string | number) {
-    const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef, tableId);
+    const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef);
     const jsonStr = localStorage.getItem(key);
     if (!jsonStr) return;
     const json = JSON.parse(jsonStr);
-    return json[storageRef];
+    return json[tableId];
   }
 
   function onInitTable(tableDef: SupaTable, props: SupabaseGridProps) {
@@ -128,3 +123,25 @@ function initTable(
     onInitTable(props.table, props);
   }
 }
+
+function saveStorage(state: InitialStateType, storageRef: string) {
+  if (!state.table) return;
+
+  const config = {
+    gridColumns: state.gridColumns,
+    sorts: state.sorts,
+    filters: state.filters,
+  };
+  const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef);
+  const savedStr = localStorage.getItem(key);
+
+  let savedJson;
+  if (savedStr) {
+    savedJson = JSON.parse(savedStr);
+    savedJson = { ...savedJson, [state.table.id]: config };
+  } else {
+    savedJson = { [state.table.id]: config };
+  }
+  localStorage.setItem(key, JSON.stringify(savedJson));
+}
+export const saveStorageDebounced = AwesomeDebouncePromise(saveStorage, 500);

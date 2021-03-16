@@ -1,9 +1,5 @@
-export function getStorageKey(
-  prefix: string,
-  ref: string,
-  tableId: string | number
-) {
-  return `${prefix}_${ref}_${tableId}`;
+export function getStorageKey(prefix: string, ref: string) {
+  return `${prefix}_${ref}`;
 }
 
 export function deepClone(obj: unknown) {
