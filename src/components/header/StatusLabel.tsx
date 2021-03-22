@@ -5,7 +5,7 @@ type StatusLabelProps = {};
 
 const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   const [msg, setMsg] = React.useState<string | undefined>(undefined);
-  let timer = React.useRef<NodeJS.Timeout | null>(null);
+  let timer = React.useRef<number | null>(null);
 
   SupabaseGridQueue.on('add', () => {
     console.log(
@@ -22,7 +22,7 @@ const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   });
   SupabaseGridQueue.on('idle', () => {
     setMsg('All changes saved');
-    timer.current = setTimeout(() => setMsg(undefined), 2000);
+    timer.current = window.setTimeout(() => setMsg(undefined), 2000);
     console.log(
       `Queue is idle.  Size: ${SupabaseGridQueue.size}  Pending: ${SupabaseGridQueue.pending}`
     );
