@@ -1,12 +1,14 @@
 import { Column } from '@phamhieu1998/react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
+import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import RowService from '../../services/RowService';
 import TableService from '../../services/TableService';
-import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
+import OpenApiService from '../../services/OpenApiService';
 
 export interface BaseInitialState {
   client: SupabaseClient | null;
+  openApiService: OpenApiService | null;
   table: SupaTable | null;
   tableService: TableService | null;
   rowService: RowService | null;
@@ -16,6 +18,7 @@ export interface BaseInitialState {
 
 export const baseInitialState: BaseInitialState = {
   client: null,
+  openApiService: null,
   table: null,
   tableService: null,
   rowService: null,
@@ -27,7 +30,10 @@ export type INIT_ACTIONTYPE =
   | {
       type: 'INIT_CLIENT';
       payload: {
-        client: SupabaseClient;
+        supabaseUrl: string;
+        supabaseKey: string;
+        schema?: string;
+        headers?: { [key: string]: string };
       };
     }
   | {
@@ -45,10 +51,17 @@ type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
   switch (action.type) {
     case 'INIT_CLIENT': {
+      const { supabaseUrl, supabaseKey, headers, schema } = action.payload;
+      const client = new SupabaseClient(supabaseUrl, supabaseKey, {
+        schema: schema,
+        headers: headers,
+      });
+      const openApiService = new OpenApiService(supabaseUrl, supabaseKey);
       return {
         ...state,
-        client: action.payload.client,
-        tableService: new TableService(action.payload.client),
+        client,
+        openApiService,
+        tableService: new TableService(client),
       };
     }
     case 'INIT_TABLE': {

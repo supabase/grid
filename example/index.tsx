@@ -7,27 +7,13 @@ import { SupabaseGrid } from '../.';
 // import countries from './countries'
 
 const App = () => {
+  // READONLY
+  // using postgrest OpenApi description to retrieve table, column definition
+  // so it supports both table, view
   return (
     <div style={{ height: '100vh' }}>
       <SupabaseGrid
-        table="countries"
-        // table={countries}
-        onAddColumn={() => {
-          console.log('add new column');
-        }}
-        onEditColumn={columnName => {
-          console.log('edit column: ', columnName);
-        }}
-        onDeleteColumn={columnName => {
-          console.log('delete column: ', columnName);
-        }}
-        onAddRow={() => {
-          console.log('add new row');
-          return {};
-        }}
-        onEditRow={rowIdx => {
-          console.log('edit row: ', rowIdx);
-        }}
+        table="countries_view"
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{
           supabaseUrl: 'https://fryzipnbzhtjjdgwipxv.supabase.net',
@@ -38,6 +24,42 @@ const App = () => {
       />
     </div>
   );
+
+  // EDITABLE
+  // using stored procedure to retrieve table, column definition
+  // so it ONLY support table
+  // return (
+  //   <div style={{ height: '100vh' }}>
+  //     <SupabaseGrid
+  //       table="countries"
+  //       editable={true}
+  //       // table={countries}
+  //       onAddColumn={() => {
+  //         console.log('add new column');
+  //       }}
+  //       onEditColumn={columnName => {
+  //         console.log('edit column: ', columnName);
+  //       }}
+  //       onDeleteColumn={columnName => {
+  //         console.log('delete column: ', columnName);
+  //       }}
+  //       onAddRow={() => {
+  //         console.log('add new row');
+  //         return {};
+  //       }}
+  //       onEditRow={rowIdx => {
+  //         console.log('edit row: ', rowIdx);
+  //       }}
+  //       storageRef="dqofwyqljsmbgrubmnzk"
+  //       clientProps={{
+  //         supabaseUrl: 'https://fryzipnbzhtjjdgwipxv.supabase.net',
+  //         supabaseKey:
+  //           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNjM3MzI5MiwiZXhwIjoxOTMxOTQ5MjkyfQ.YL3ofzqrcrK63GlyuV3NQii6yw5VHoPI6WSs4hirHyU',
+  //       }}
+  //       gridProps={{ height: '100%' }}
+  //     />
+  //   </div>
+  // );
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));

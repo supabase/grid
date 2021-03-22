@@ -2,11 +2,10 @@ import './style.css';
 import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { createPortal } from 'react-dom';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { SupabaseGridProps, SupaTable } from './types';
-import { fetchTable } from './utils/table';
+import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
@@ -43,11 +42,6 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   } = props;
   const dispatch = useDispatch();
   const state = useTrackedState();
-  const { supabaseUrl, supabaseKey, headers } = clientProps;
-  const client = new SupabaseClient(supabaseUrl, supabaseKey, {
-    schema: schema,
-    headers: headers,
-  });
 
   React.useEffect(() => {
     if (state.isInitialComplete && storageRef && state.table) {
@@ -71,7 +65,12 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   }, [state.refreshPageFlag]);
 
   React.useEffect(() => {
-    if (!state.client) dispatch({ type: 'INIT_CLIENT', payload: { client } });
+    if (!state.client) {
+      dispatch({
+        type: 'INIT_CLIENT',
+        payload: { ...clientProps, schema },
+      });
+    }
   }, [state.client]);
 
   React.useEffect(() => {
@@ -131,8 +130,15 @@ function initTable(
   }
 
   if (typeof props.table === 'string') {
-    fetchTable(state.tableService!, props.table, props.schema).then(res => {
+    const fetchMethod = props.editable
+      ? fetchTableInfo(state.tableService!, props.table, props.schema)
+      : fetchReadonlyTableInfo(state.openApiService!, props.table);
+
+    fetchMethod.then(res => {
       if (res) onInitTable(res, props);
+      else {
+        // TODO: handle error
+      }
     });
   } else {
     onInitTable(props.table, props);

@@ -1,17 +1,15 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 class TableService {
-  constructor(protected client: SupabaseClient) {
-    if (!client) throw new Error('Supabase client is required.');
-  }
+  constructor(protected client: SupabaseClient) {}
 
-  fetch(name: string, schema?: string) {
+  fetchInfo(name: string, schema?: string) {
     return this.client.rpc('load_table_info', {
       filter_schema: schema || 'public',
       filter_name: name,
     });
   }
-  fetchColumns(name: string, schema?: string) {
+  fetchColumnsInfo(name: string, schema?: string) {
     return this.client.rpc('load_table_columns', {
       filter_schema: schema || 'public',
       filter_name: name,

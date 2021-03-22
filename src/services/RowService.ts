@@ -3,10 +3,7 @@ import { SupabaseGridQueue } from '../constants';
 import { Filter, Sort, SupaRow, SupaTable } from '../types';
 
 class RowService {
-  constructor(protected table: SupaTable, protected client: SupabaseClient) {
-    if (!table) throw new Error('Table definition is required.');
-    if (!client) throw new Error('Supabase client is required.');
-  }
+  constructor(protected table: SupaTable, protected client: SupabaseClient) {}
 
   fetchAll() {
     return this.client.from(this.table.name).select();

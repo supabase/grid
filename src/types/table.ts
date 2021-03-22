@@ -22,7 +22,6 @@ export interface SupaTable {
   readonly name: string;
   readonly schema?: string | null;
   readonly comment?: string | null;
-  totalRows: number;
 }
 
 export interface SupaRow extends Dictionary<any> {

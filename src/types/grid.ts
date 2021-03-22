@@ -15,11 +15,30 @@ export type SupabaseGridProps = {
    * database table swagger or table name
    */
   table: SupaTable | string;
+  /**
+   * props to create client
+   */
+  clientProps: {
+    supabaseUrl: string;
+    supabaseKey: string;
+    headers?: { [key: string]: string };
+  };
+  /**
+   * props to config grid view
+   */
+  gridProps?: GridProps;
+  /**
+   * table schema. Default set to 'public' if not provided
+   */
   schema?: string;
   /**
    * storageRef is used to save state on localstorage
    */
   storageRef?: string;
+  /**
+   * enable table editor
+   */
+  editable?: boolean;
   /**
    * show create new column button if available
    */
@@ -40,16 +59,4 @@ export type SupabaseGridProps = {
    * show edit row button if available
    */
   onEditRow?: (rowIdx: number) => void;
-  /**
-   * props to create client
-   */
-  clientProps: {
-    supabaseUrl: string;
-    supabaseKey: string;
-    headers?: { [key: string]: string };
-  };
-  /**
-   * props to config grid view
-   */
-  gridProps?: GridProps;
 };
