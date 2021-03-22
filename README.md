@@ -6,19 +6,20 @@ A react component to display your Postgresql table data.
 
 ```js
 <SupabaseGrid
-  table="employees"
+  table="countries"
   clientProps={{
     supabaseUrl: '',
     supabaseKey: '',
   }}
-  gridProps={{ width: 1000, height: 500 }}
 />
 ```
 
 `table` variable can be:
 
-- a SupaTable obj
-- a table name string. Remember to create Postgresql functions below so that `supabase-grid` can pull your table info.
+- SupaTable obj
+- Table or View name
+  - Readonly: support both table and view
+  - Editable: only for table. Required to create Postgresql functions below so that it can pull your table info.
 
 ## Postgresql Functions
 
