@@ -89,16 +89,11 @@ const FilterReducer = (
 
 export default FilterReducer;
 
-function isValidFilter(value: {
-  clause: string;
-  columnId: string | number;
-  condition: string;
-  filterText: string;
-}) {
+function isValidFilter(value: Filter) {
   return (
     value &&
-    value.columnId &&
-    value.columnId != '' &&
+    value.columnName &&
+    value.columnName != '' &&
     value.filterText &&
     value.filterText != ''
   );

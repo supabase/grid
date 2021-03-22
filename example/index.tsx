@@ -15,11 +15,11 @@ const App = () => {
         onAddColumn={() => {
           console.log('add new column');
         }}
-        onEditColumn={columnId => {
-          console.log('edit column: ', columnId);
+        onEditColumn={columnName => {
+          console.log('edit column: ', columnName);
         }}
-        onDeleteColumn={columnId => {
-          console.log('delete column: ', columnId);
+        onDeleteColumn={columnName => {
+          console.log('delete column: ', columnName);
         }}
         onAddRow={() => {
           console.log('add new row');
@@ -30,9 +30,9 @@ const App = () => {
         }}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={{
-          supabaseUrl: 'https://dqofwyqljsmbgrubmnzk.supabase.net',
+          supabaseUrl: 'https://fryzipnbzhtjjdgwipxv.supabase.net',
           supabaseKey:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjE0ODE0ODc4LCJleHAiOjE5MzAzOTA4Nzh9.CjLbUVvuw0YrFcjpqDMUMZmef2_v3MFjCo4-Z4C9_0Q',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNjM3MzI5MiwiZXhwIjoxOTMxOTQ5MjkyfQ.YL3ofzqrcrK63GlyuV3NQii6yw5VHoPI6WSs4hirHyU',
         }}
         gridProps={{ height: '100%' }}
       />

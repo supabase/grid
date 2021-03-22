@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { SupabaseGridQueue } from '../constants';
-import { SupaRow, SupaTable } from '../types';
+import { Filter, Sort, SupaRow, SupaTable } from '../types';
 
 class RowService {
   constructor(protected table: SupaTable, protected client: SupabaseClient) {
@@ -15,13 +15,8 @@ class RowService {
   fetchPage(
     page: number,
     rowsPerPage: number,
-    filters: {
-      clause: string;
-      columnId: string | number;
-      condition: string;
-      filterText: string;
-    }[],
-    sorts: { columnId: string | number; order: string }[]
+    filters: Filter[],
+    sorts: Sort[]
   ) {
     const pageFromZero = page > 0 ? page - 1 : page;
     const from = pageFromZero * rowsPerPage;
@@ -36,7 +31,7 @@ class RowService {
     for (let idx in filters) {
       const filter = filters[idx];
       if (filter.filterText == '') continue;
-      const column = this.table.columns.find(x => x.id === filter.columnId);
+      const column = this.table.columns.find(x => x.name === filter.columnName);
       if (!column) continue;
 
       const columnName = column.name;
@@ -65,7 +60,7 @@ class RowService {
     // Then sort
     for (let idx in sorts) {
       const sort = sorts[idx];
-      const column = this.table.columns.find(x => x.id === sort.columnId);
+      const column = this.table.columns.find(x => x.name === sort.columnName);
       if (!column) continue;
 
       const columnName = column.name;

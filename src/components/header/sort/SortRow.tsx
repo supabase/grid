@@ -12,15 +12,15 @@ import { SegmentedControl } from '../../common';
 import { DragItem } from '../../../types';
 
 type SortRowProps = {
-  columnId: string | number;
+  columnName: string;
   index: number;
 };
 
-const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
+const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const column = state?.table?.columns.find(x => x.id === columnId);
-  const sort = state?.sorts.find(x => x.columnId === columnId);
+  const column = state?.table?.columns.find(x => x.name === columnName);
+  const sort = state?.sorts.find(x => x.columnName === columnName);
   if (!column || !sort) return null;
 
   const ref = React.useRef<HTMLDivElement>(null);
@@ -28,7 +28,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'sort-row',
     item: () => {
-      return { id: columnId, index };
+      return { key: columnName, index };
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
@@ -95,14 +95,14 @@ const SortRow: React.FC<SortRowProps> = ({ columnId, index }) => {
   function onToogle(value: string) {
     dispatch({
       type: 'UPDATE_SORT',
-      payload: { columnId, order: value },
+      payload: { columnName, order: value },
     });
   }
 
   function onDeleteClick() {
     dispatch({
       type: 'REMOVE_SORT',
-      payload: { columnId },
+      payload: { columnName },
     });
   }
 

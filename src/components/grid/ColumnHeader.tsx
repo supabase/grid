@@ -17,11 +17,7 @@ import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 import { MENU_IDS } from '../menu';
 
-export function ColumnHeader<R>({
-  column,
-  columnId,
-  columnType,
-}: ColumnHeaderProps<R>) {
+export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const columnIdx = column.idx;
@@ -33,14 +29,14 @@ export function ColumnHeader<R>({
 
   function displayMenu(e: TriggerEvent) {
     showContextMenu(e, {
-      props: { columnId, columnKey, frozen: column.frozen },
+      props: { columnName: columnKey, frozen: column.frozen },
     });
   }
 
   const [{ isDragging }, drag] = useDrag({
     type: 'grid-column-header',
     item: () => {
-      return { id: columnKey, index: columnIdx };
+      return { key: columnKey, index: columnIdx };
     },
     canDrag: () => !column.frozen,
     collect: (monitor: any) => ({
@@ -61,7 +57,7 @@ export function ColumnHeader<R>({
       }
 
       const dragIndex = item.index;
-      const dragKey = item.id;
+      const dragKey = item.key;
       const hoverIndex = columnIdx;
       const hoverKey = columnKey;
 

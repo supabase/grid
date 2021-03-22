@@ -33,25 +33,25 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const columns = state?.table?.columns!.filter(x => {
-    const found = state.sorts.find(y => y.columnId == x.id);
+    const found = state.sorts.find(y => y.columnName == x.name);
     return !found;
   });
   const dropdownOptions =
     columns?.map(x => {
-      return { value: x.id, label: x.name };
+      return { value: x.name, label: x.name };
     }) || [];
 
-  function onAddSort(columnId: string | number) {
+  function onAddSort(columnName: string | number) {
     dispatch({
       type: 'ADD_SORT',
-      payload: { columnId, order: 'ASC' },
+      payload: { columnName, order: 'ASC' },
     });
   }
 
   return (
     <div className="p-2">
       {state.sorts.map((x, index) => (
-        <SortRow key={x.columnId} columnId={x.columnId} index={index} />
+        <SortRow key={x.columnName} columnName={x.columnName} index={index} />
       ))}
       {state.sorts.length == 0 && (
         <div>

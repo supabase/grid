@@ -100,12 +100,12 @@ function initTable(
   state: InitialStateType,
   dispatch: (value: any) => void
 ) {
-  function onLoadStorage(storageRef: string, tableId: string | number) {
+  function onLoadStorage(storageRef: string, tableName: string) {
     const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef);
     const jsonStr = localStorage.getItem(key);
     if (!jsonStr) return;
     const json = JSON.parse(jsonStr);
-    return json[tableId];
+    return json[tableName];
   }
 
   function onInitTable(tableDef: SupaTable, props: SupabaseGridProps) {
@@ -116,7 +116,7 @@ function initTable(
 
     let savedState;
     if (props.storageRef)
-      savedState = onLoadStorage(props.storageRef, tableDef.id);
+      savedState = onLoadStorage(props.storageRef, tableDef.name);
     console.log('savedState', savedState);
 
     dispatch({
@@ -153,9 +153,9 @@ function saveStorage(state: InitialStateType, storageRef: string) {
   let savedJson;
   if (savedStr) {
     savedJson = JSON.parse(savedStr);
-    savedJson = { ...savedJson, [state.table.id]: config };
+    savedJson = { ...savedJson, [state.table.name]: config };
   } else {
-    savedJson = { [state.table.id]: config };
+    savedJson = { [state.table.name]: config };
   }
   localStorage.setItem(key, JSON.stringify(savedJson));
 }

@@ -27,11 +27,11 @@ export type SupabaseGridProps = {
   /**
    * show edit column menu if available
    */
-  onEditColumn?: (columnId: string | number) => void;
+  onEditColumn?: (columnName: string) => void;
   /**
    * show delete column menu if available
    */
-  onDeleteColumn?: (columnId: string | number) => void;
+  onDeleteColumn?: (columnName: string) => void;
   /**
    * show add row button if available
    */

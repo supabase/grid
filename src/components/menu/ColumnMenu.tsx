@@ -6,8 +6,8 @@ import { useDispatch } from '../../store';
 export const COLUMN_MENU_ID = 'column-menu-id';
 
 type ColumnMenuProps = {
-  onEditColumn?: (columnId: string | number) => void;
-  onDeleteColumn?: (columnId: string | number) => void;
+  onEditColumn?: (columnName: string) => void;
+  onDeleteColumn?: (columnName: string) => void;
 };
 
 const ColumnMenu: React.FC<ColumnMenuProps> = ({
@@ -18,8 +18,8 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
 
   function onDeleteRow(p: ItemParams) {
     const { props } = p;
-    const { columnId } = props;
-    if (onDeleteColumn) onDeleteColumn(columnId);
+    const { columnName } = props;
+    if (onDeleteColumn) onDeleteColumn(columnName);
   }
 
   function onFreezeColumn(p: ItemParams) {
@@ -36,8 +36,8 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
 
   function onEditColumnClick(p: ItemParams) {
     const { props } = p;
-    const { columnId } = props;
-    if (onEditColumn) onEditColumn(columnId);
+    const { columnName } = props;
+    if (onEditColumn) onEditColumn(columnName);
   }
 
   function isItemHidden({ props, data }: PredicateParams) {

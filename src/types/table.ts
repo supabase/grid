@@ -1,39 +1,27 @@
 import { Dictionary } from './base';
 
-export type SupaRelationship = {
-  readonly id: number;
-  readonly name: string;
-  readonly sourceSchema: string;
-  readonly sourceTableName: string;
-  readonly sourceColumnName: string;
-  readonly targetTableSchema: string;
-  readonly targetTableName: string;
-  readonly targetColumnName: string;
-};
-
-export interface SupaBase {
-  readonly id: string | number;
-  readonly comment: string | null;
-  readonly name: string;
-  readonly schema: string;
-}
-
-export interface SupaColumn extends SupaBase {
-  readonly defaultValue: string | null;
+export interface SupaColumn {
   readonly dataType: string;
-  readonly enums: string[];
   readonly format: string;
-  readonly isIdentity: boolean;
-  readonly isGeneratable: boolean;
-  readonly isNullable: boolean;
-  readonly isUpdatable: boolean;
-  readonly tableId: number;
+  readonly name: string;
+  readonly comment?: string;
+  readonly defaultValue?: string | null;
+  readonly enum?: string[];
+  readonly isIdentity?: boolean;
+  readonly isGeneratable?: boolean;
+  readonly isNullable?: boolean;
+  readonly isUpdatable?: boolean;
+  readonly targetTableSchema?: string;
+  readonly targetTableName?: string;
+  readonly targetColumnName?: string;
   position: number;
 }
 
-export interface SupaTable extends SupaBase {
+export interface SupaTable {
   readonly columns: SupaColumn[];
-  readonly relationships: SupaRelationship[];
+  readonly name: string;
+  readonly schema?: string;
+  readonly comment?: string;
   totalRows: number;
 }
 

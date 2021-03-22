@@ -29,9 +29,7 @@ export function getGridColumns(
     const columnType = _getColumnType(x);
 
     columnDef.headerRenderer = props => {
-      return (
-        <ColumnHeader {...props} columnId={x.id} columnType={columnType} />
-      );
+      return <ColumnHeader {...props} columnType={columnType} />;
     };
 
     _setupColumnEditor(x, columnType, columnDef);
@@ -66,7 +64,7 @@ function _setupColumnEditor(
       break;
     }
     case 'enum': {
-      const options = columnDef.enums.map(x => {
+      const options = columnDef.enum!.map(x => {
         return { label: x, value: x };
       });
       config.formatter = p => {

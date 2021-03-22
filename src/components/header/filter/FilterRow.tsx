@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { Button, Input, IconXSquare } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
+import { Filter } from '../../../types';
 
 const filterClauseOptions = [
   { value: 'where', label: 'WHERE' },
@@ -26,12 +27,7 @@ const filterConditionOptions = [
 const updateFilterText = (
   payload: {
     filterIdx: number;
-    value: {
-      clause: string;
-      columnId: string | number;
-      condition: string;
-      filterText: string;
-    };
+    value: Filter;
   },
   dispatch: (value: unknown) => void
 ) => {
@@ -50,10 +46,10 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const filter = state.filters[filterIdx];
-  const column = state.table?.columns.find(x => x.id === filter.columnId);
+  const column = state.table?.columns.find(x => x.name === filter.columnName);
   const columnOptions =
     state.table?.columns?.map(x => {
-      return { value: x.id, label: x.name };
+      return { value: x.name, label: x.name };
     }) || [];
   const [filterText, setFilterText] = React.useState(filter.filterText);
 
@@ -64,10 +60,10 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
     });
   }
 
-  function onColumnChange(columnId: string | number) {
+  function onColumnChange(columnName: string | number) {
     dispatch({
       type: 'UPDATE_FILTER',
-      payload: { filterIdx, value: { ...filter, columnId } },
+      payload: { filterIdx, value: { ...filter, columnName } },
     });
   }
 

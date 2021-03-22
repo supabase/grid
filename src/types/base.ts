@@ -5,13 +5,13 @@ export interface Dictionary<T> {
 }
 
 export interface Sort {
-  columnId: string | number;
+  columnName: string;
   order: string;
 }
 
 export interface Filter {
   clause: string;
-  columnId: string | number;
+  columnName: string;
   condition: string;
   filterText: string;
 }
@@ -24,8 +24,7 @@ export interface SavedState {
 
 export interface DragItem {
   index: number;
-  id: string;
-  type: string;
+  key: string;
 }
 
 export type ColumnType =
@@ -40,6 +39,5 @@ export type ColumnType =
   | 'unknown';
 
 export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {
-  columnId: string | number;
   columnType: ColumnType;
 }

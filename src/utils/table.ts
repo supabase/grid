@@ -26,9 +26,7 @@ export function getSupaTable(
 ) {
   const supaColumns: SupaColumn[] = columns.map(x => {
     return {
-      tableId: x.table_id,
       schema: x.schema,
-      id: x.id,
       position: x.ordinal_position,
       name: x.name,
       defaultValue: x.default_value,
@@ -38,13 +36,12 @@ export function getSupaTable(
       isGeneratable: x.identity_generation == 'BY DEFAULT',
       isNullable: x.is_nullable,
       isUpdatable: x.is_updatable,
-      enums: x.enums,
+      enum: x.enums,
       comment: x.comment,
     };
   });
 
   return {
-    id: table.id,
     name: table.name,
     comment: table.comment,
     schema: table.schema,

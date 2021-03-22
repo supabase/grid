@@ -36,7 +36,7 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
       type: 'ADD_FILTER',
       payload: {
         clause: 'where',
-        columnId: state.table?.columns[0].id,
+        columnName: state.table?.columns[0].name,
         condition: 'eq',
         filterText: '',
       },
