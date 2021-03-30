@@ -6,11 +6,13 @@ import { SupaRow } from '../../types';
 export function SelectColumn(
   onEditRow?: (rowIdx: number) => void
 ): Column<any, any> {
+  const size = onEditRow ? 65 : 35;
+  console.log('size', size);
   return {
     key: 'select-row',
     name: '',
-    width: 65,
-    maxWidth: 65,
+    width: size,
+    maxWidth: size,
     resizable: false,
     sortable: false,
     frozen: true,
