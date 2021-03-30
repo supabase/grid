@@ -29,7 +29,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
 
   function displayMenu(e: TriggerEvent) {
     showContextMenu(e, {
-      props: { columnName: columnKey, frozen: column.frozen },
+      props: { columnKey, frozen: column.frozen },
     });
   }
 

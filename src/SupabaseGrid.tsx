@@ -125,6 +125,7 @@ function initTable(
         gridProps: props.gridProps,
         gridColumns,
         savedState,
+        editable: props.editable,
       },
     });
   }

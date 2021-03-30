@@ -64,7 +64,12 @@ export const Grid: React.FC<GridProps> = memo(
         });
       }
 
-      return <GridRow {...props} onContextMenu={displayMenu} />;
+      return (
+        <GridRow
+          {...props}
+          onContextMenu={state.editable ? displayMenu : undefined}
+        />
+      );
     }
 
     if (!columnHeaders || columnHeaders.length == 0)

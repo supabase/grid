@@ -14,6 +14,7 @@ export interface BaseInitialState {
   rowService: RowService | null;
   refreshPageFlag: number;
   isInitialComplete: boolean;
+  editable: boolean;
 }
 
 export const baseInitialState: BaseInitialState = {
@@ -24,6 +25,7 @@ export const baseInitialState: BaseInitialState = {
   rowService: null,
   refreshPageFlag: 0,
   isInitialComplete: false,
+  editable: false,
 };
 
 export type INIT_ACTIONTYPE =
@@ -43,6 +45,7 @@ export type INIT_ACTIONTYPE =
         gridColumns: Column<any, any>[];
         gridProps?: GridProps;
         savedState?: SavedState;
+        editable?: boolean;
       };
     };
 
@@ -71,6 +74,7 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
         rowService: new RowService(action.payload.table, state.client!),
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
         isInitialComplete: true,
+        editable: action.payload.editable || false,
       };
     }
     default:

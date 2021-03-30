@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
-import { useDispatch } from '../../store';
+import { useDispatch, useTrackedState } from '../../store';
 
 export const COLUMN_MENU_ID = 'column-menu-id';
 
@@ -14,6 +14,7 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
   onEditColumn,
   onDeleteColumn,
 }) => {
+  const state = useTrackedState();
   const dispatch = useDispatch();
 
   function onDeleteRow(p: ItemParams) {
@@ -41,9 +42,13 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
   }
 
   function isItemHidden({ props, data }: PredicateParams) {
-    if (data === 'edit') return onEditColumnClick == undefined;
-    else if (data === 'freeze') return props.frozen;
-    else return !props.frozen;
+    if (data === 'edit') {
+      return !state.editable || onEditColumnClick == undefined;
+    } else if (data === 'freeze') {
+      return props.frozen;
+    } else {
+      return !props.frozen;
+    }
   }
 
   return (
