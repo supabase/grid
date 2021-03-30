@@ -52,9 +52,9 @@ const App = () => {
   //       }}
   //       storageRef="dqofwyqljsmbgrubmnzk"
   //       clientProps={{
-  //         supabaseUrl: 'https://fryzipnbzhtjjdgwipxv.supabase.net',
+  //         supabaseUrl: 'https://eswutwdkpzgacrlriize.supabase.net',
   //         supabaseKey:
-  //           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNjM3MzI5MiwiZXhwIjoxOTMxOTQ5MjkyfQ.YL3ofzqrcrK63GlyuV3NQii6yw5VHoPI6WSs4hirHyU',
+  //           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNzA3NTU4OCwiZXhwIjoxOTMyNjUxNTg4fQ.h1TuIObta3ZBAgJ-XefdQGgFaFCFIEwQIlSHxcd4o18',
   //       }}
   //       gridProps={{ height: '100%' }}
   //     />
