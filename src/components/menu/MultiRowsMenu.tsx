@@ -1,5 +1,4 @@
 import * as React from 'react';
-import 'react-contexify/dist/ReactContexify.css';
 import { Menu, Item, ItemParams } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
 
