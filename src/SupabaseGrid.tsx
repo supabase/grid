@@ -74,8 +74,10 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   }, [state.client]);
 
   React.useEffect(() => {
-    if (state.client && !state.table) initTable(props, state, dispatch);
-  }, [state.client, state.table]);
+    if (state.client && (!state.table || state.table!.name != props.table)) {
+      initTable(props, state, dispatch);
+    }
+  }, [state.client, state.table, props.table]);
 
   return (
     <div className="flex flex-col h-full">

@@ -7,7 +7,7 @@ export function SelectColumn(
   onEditRow?: (rowIdx: number) => void
 ): Column<any, any> {
   const size = onEditRow ? 65 : 35;
-  console.log('size', size);
+
   return {
     key: 'select-row',
     name: '',
