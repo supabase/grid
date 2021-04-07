@@ -88,7 +88,6 @@ const countries: SupaTable = {
   name: 'countries',
   comment: 'Full list of countries.',
   schema: 'public',
-  totalRows: 249,
   columns: [colId, colName, colIso2, colIso3, colLocalName, colContinent],
 };
 export default countries;
