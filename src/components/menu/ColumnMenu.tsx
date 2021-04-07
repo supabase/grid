@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
+import {
+  Menu,
+  Item,
+  ItemParams,
+  PredicateParams,
+  theme,
+} from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const COLUMN_MENU_ID = 'column-menu-id';
@@ -15,12 +21,6 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
 }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-
-  function onDeleteRow(p: ItemParams) {
-    const { props } = p;
-    const { columnName } = props;
-    if (onDeleteColumn) onDeleteColumn(columnName);
-  }
 
   function onFreezeColumn(p: ItemParams) {
     const { props } = p;
@@ -40,9 +40,17 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
     if (onEditColumn) onEditColumn(columnName);
   }
 
+  function onDeleteColumnClick(p: ItemParams) {
+    const { props } = p;
+    const { columnName } = props;
+    if (onDeleteColumn) onDeleteColumn(columnName);
+  }
+
   function isItemHidden({ props, data }: PredicateParams) {
     if (data === 'edit') {
-      return !state.editable || onEditColumnClick == undefined;
+      return !state.editable || onEditColumn == undefined;
+    } else if (data === 'delete') {
+      return !state.editable || onDeleteColumn == undefined;
     } else if (data === 'freeze') {
       return props.frozen;
     } else {
@@ -51,7 +59,7 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
   }
 
   return (
-    <Menu id={COLUMN_MENU_ID} animation={false}>
+    <Menu id={COLUMN_MENU_ID} animation={false} theme={theme.dark}>
       <Item onClick={onEditColumnClick} hidden={isItemHidden} data="edit">
         Edit column
       </Item>
@@ -61,7 +69,9 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
       <Item onClick={onUnfreezeColumn} hidden={isItemHidden} data="unfreeze">
         Unfreeze column
       </Item>
-      <Item onClick={onDeleteRow}>Delete row</Item>
+      <Item onClick={onDeleteColumnClick} hidden={isItemHidden} data="delete">
+        Delete Column
+      </Item>
     </Menu>
   );
 };

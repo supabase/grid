@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
+import {
+  Menu,
+  Item,
+  ItemParams,
+  PredicateParams,
+  theme,
+} from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const ROW_MENU_ID = 'row-menu-id';
@@ -32,7 +38,7 @@ const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
   }
 
   return (
-    <Menu id={ROW_MENU_ID} animation={false}>
+    <Menu id={ROW_MENU_ID} animation={false} theme={theme.dark}>
       <Item onClick={onEditRowClick} hidden={isItemHidden} data="edit">
         Edit row
       </Item>

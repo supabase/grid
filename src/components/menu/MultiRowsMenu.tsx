@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Menu, Item, ItemParams } from 'react-contexify';
+import { Menu, Item, ItemParams, theme } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const MULTI_ROWS_MENU_ID = 'multi-rows-menu-id';
@@ -20,7 +20,7 @@ const MultiRowsMenu: React.FC<MultiRowsMenuProps> = () => {
   }
 
   return (
-    <Menu id={MULTI_ROWS_MENU_ID}>
+    <Menu id={MULTI_ROWS_MENU_ID} theme={theme.dark}>
       <Item onClick={onRowsDelete}>Delete all selected rows</Item>
     </Menu>
   );
