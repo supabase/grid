@@ -36,14 +36,14 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({
 
   function onEditColumnClick(p: ItemParams) {
     const { props } = p;
-    const { columnName } = props;
-    if (onEditColumn) onEditColumn(columnName);
+    const { columnKey } = props;
+    if (onEditColumn) onEditColumn(columnKey);
   }
 
   function onDeleteColumnClick(p: ItemParams) {
     const { props } = p;
-    const { columnName } = props;
-    if (onDeleteColumn) onDeleteColumn(columnName);
+    const { columnKey } = props;
+    if (onDeleteColumn) onDeleteColumn(columnKey);
   }
 
   function isItemHidden({ props, data }: PredicateParams) {
