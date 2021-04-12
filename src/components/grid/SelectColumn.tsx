@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Column } from '@phamhieu1998/react-data-grid';
-import { Button, IconEdit } from '@supabase/ui';
+import { TriggerEvent, useContextMenu } from 'react-contexify';
+import { Button, IconEdit, IconChevronDown } from '@supabase/ui';
 import { SupaRow } from '../../types';
+import { MENU_IDS } from '../menu';
 
 export function SelectColumn(
   onEditRow?: (rowIdx: number) => void
 ): Column<any, any> {
-  const size = onEditRow ? 65 : 35;
-
   return {
     key: 'select-row',
     name: '',
-    width: size,
-    maxWidth: size,
+    width: 65,
+    maxWidth: 65,
     resizable: false,
     sortable: false,
     frozen: true,
     headerRenderer(props) {
       return (
-        <SelectCellFormatter
+        <SelectCellHeader
           aria-label="Select All"
           value={props.allRowsSelected}
           onChange={props.onAllRowsSelectionChange}
@@ -122,6 +122,66 @@ function SelectCellFormatter({
           style={{ padding: '3px' }}
         />
       )}
+    </div>
+  );
+}
+
+interface SelectCellHeaderProps extends SharedInputProps {
+  value: boolean;
+  onChange: (value: boolean, isShiftClick: boolean) => void;
+}
+
+function SelectCellHeader({
+  disabled,
+  tabIndex,
+  value,
+  onChange,
+  onClick,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+}: SelectCellHeaderProps) {
+  const { show } = useContextMenu({
+    id: MENU_IDS.MULTI_ROWS_MENU_ID,
+  });
+  const triggerRef = React.useRef(null);
+  const ref = React.useRef<HTMLInputElement>(null);
+
+  function getMenuPosition() {
+    const ref = triggerRef?.current! as any;
+    const { left, bottom } = ref.button.getBoundingClientRect();
+    return { x: left, y: bottom + 8 };
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
+  }
+
+  function onMenuClick(e: TriggerEvent) {
+    show(e, { position: getMenuPosition() });
+  }
+
+  return (
+    <div className="flex items-center h-full">
+      <input
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        tabIndex={tabIndex}
+        ref={ref}
+        type="checkbox"
+        className="focus:ring-brand-500 h-4 w-4 border-gray-300"
+        disabled={disabled}
+        checked={value}
+        onChange={handleChange}
+        onClick={onClick}
+      />
+      <Button
+        type="text"
+        className="ml-3"
+        ref={triggerRef}
+        icon={<IconChevronDown />}
+        onClick={onMenuClick}
+        style={{ padding: '3px' }}
+      />
     </div>
   );
 }

@@ -19,8 +19,13 @@ const MultiRowsMenu: React.FC<MultiRowsMenuProps> = () => {
     dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
   }
 
+  function onRowsExport() {
+    console.log('export rows to csv');
+  }
+
   return (
-    <Menu id={MULTI_ROWS_MENU_ID} theme={theme.dark}>
+    <Menu id={MULTI_ROWS_MENU_ID} animation={false} theme={theme.dark}>
+      <Item onClick={onRowsExport}>Export to csv</Item>
       <Item onClick={onRowsDelete}>Delete all selected rows</Item>
     </Menu>
   );
