@@ -21,7 +21,7 @@ import { MENU_IDS } from '../menu';
 
 export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const triggerRef = React.useRef(null);
+  const triggerRef = React.useRef<any>(null);
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
@@ -31,8 +31,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   });
 
   function getMenuPosition() {
-    const ref = triggerRef?.current! as any;
-    const { left, bottom } = ref.button.getBoundingClientRect();
+    const { left, bottom } = triggerRef?.current.button.getBoundingClientRect();
     return { x: left, y: bottom + 8 };
   }
 

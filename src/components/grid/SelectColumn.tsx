@@ -143,12 +143,11 @@ function SelectCellHeader({
   const { show } = useContextMenu({
     id: MENU_IDS.MULTI_ROWS_MENU_ID,
   });
-  const triggerRef = React.useRef(null);
+  const triggerRef = React.useRef<any>(null);
   const ref = React.useRef<HTMLInputElement>(null);
 
   function getMenuPosition() {
-    const ref = triggerRef?.current! as any;
-    const { left, bottom } = ref.button.getBoundingClientRect();
+    const { left, bottom } = triggerRef?.current.button.getBoundingClientRect();
     return { x: left, y: bottom + 8 };
   }
 
@@ -157,7 +156,7 @@ function SelectCellHeader({
   }
 
   function displayMenu(e: TriggerEvent) {
-    show(e, { position: getMenuPosition() });
+    show(e, { position: getMenuPosition(), props: { allRowsSelected: true } });
   }
 
   return (

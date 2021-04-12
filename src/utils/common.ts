@@ -1,3 +1,5 @@
+import { SupaColumn, SupaRow } from '../types';
+
 export function getStorageKey(prefix: string, ref: string) {
   return `${prefix}_${ref}`;
 }
@@ -8,4 +10,33 @@ export function deepClone(obj: unknown) {
   } catch (e) {
     throw e;
   }
+}
+
+export function exportRowsToCsv(
+  columns: SupaColumn[],
+  rows: SupaRow[],
+  separator: string = ','
+) {
+  const keys = columns.map(x => x.name) || [];
+  const csv =
+    keys.join(separator) +
+    '\n' +
+    rows
+      .map(row => {
+        return keys
+          .map(k => {
+            let cell = row[k] === null || row[k] === undefined ? '' : row[k];
+            cell =
+              cell instanceof Date
+                ? cell.toLocaleString()
+                : cell.toString().replace(/"/g, '""');
+            if (cell.search(/("|,|\n)/g) >= 0) {
+              cell = `"${cell}"`;
+            }
+            return cell;
+          })
+          .join(separator);
+      })
+      .join('\n');
+  return csv;
 }
