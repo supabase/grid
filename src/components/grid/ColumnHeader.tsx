@@ -1,5 +1,7 @@
 import * as React from 'react';
 import {
+  Button,
+  IconChevronDown,
   IconBox,
   IconClock,
   IconKey,
@@ -19,6 +21,7 @@ import { MENU_IDS } from '../menu';
 
 export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const triggerRef = React.useRef(null);
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
@@ -27,8 +30,15 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
     id: MENU_IDS.COLUMN_MENU_ID,
   });
 
+  function getMenuPosition() {
+    const ref = triggerRef?.current! as any;
+    const { left, bottom } = ref.button.getBoundingClientRect();
+    return { x: left, y: bottom + 8 };
+  }
+
   function displayMenu(e: TriggerEvent) {
     showContextMenu(e, {
+      position: getMenuPosition(),
       props: { columnKey, frozen: column.frozen },
     });
   }
@@ -115,16 +125,21 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   drag(drop(ref));
 
   return (
-    <div
-      ref={ref}
-      data-handler-id={handlerId}
-      style={{ opacity }}
-      onContextMenu={displayMenu}
-    >
+    <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor}`}>
           {renderColumnIcon(columnType)}
-          <label className="ml-1">{column.name}</label>
+          <label className="ml-1" style={{ flexGrow: 1 }}>
+            {column.name}
+          </label>
+          <Button
+            type="text"
+            className="ml-3"
+            ref={triggerRef}
+            icon={<IconChevronDown />}
+            onClick={displayMenu}
+            style={{ padding: '3px' }}
+          />
         </div>
       </SortableHeaderCell>
     </div>

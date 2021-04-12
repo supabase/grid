@@ -156,7 +156,7 @@ function SelectCellHeader({
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }
 
-  function onMenuClick(e: TriggerEvent) {
+  function displayMenu(e: TriggerEvent) {
     show(e, { position: getMenuPosition() });
   }
 
@@ -179,7 +179,7 @@ function SelectCellHeader({
         className="ml-3"
         ref={triggerRef}
         icon={<IconChevronDown />}
-        onClick={onMenuClick}
+        onClick={displayMenu}
         style={{ padding: '3px' }}
       />
     </div>
