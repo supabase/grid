@@ -1,4 +1,5 @@
 {
+  "name": "@supabase/grid",
   "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
@@ -40,7 +41,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@supabase/grid",
   "module": "dist/supabase-grid.esm.js",
   "size-limit": [
     {
@@ -54,8 +54,7 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.2",
-    "@tailwindcss/forms": "^0.2.1",
-    "@tailwindcss/jit": "^0.1.17",
+    "@tailwindcss/forms": "^0.3.2",
     "@types/react": "^16.9.11",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "^16.8.4",
@@ -72,7 +71,7 @@
     "rollup-plugin-postcss": "^4.0.0",
     "size-limit": "^4.9.2",
     "styled-components": "^5.2.1",
-    "tailwindcss": "^2.0.3",
+    "tailwindcss": "^2.1.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^3.9.9"

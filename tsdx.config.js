@@ -3,7 +3,7 @@ const replace = require('@rollup/plugin-replace');
 const postcss = require('rollup-plugin-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
-const tailwindcssjit = require('@tailwindcss/jit');
+const tailwindcss = require('tailwindcss');
 const tailwindconfig = require('./tailwind.config');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
     config.plugins.push(
       postcss({
         plugins: [
-          tailwindcssjit(tailwindconfig),
+          tailwindcss(tailwindconfig),
           autoprefixer(),
           cssnano({
             preset: 'default',
