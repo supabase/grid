@@ -3,7 +3,6 @@ import { Button, IconPlus } from '@supabase/ui';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
-import Pagination from './pagination';
 
 type HeaderProps = {
   onAddColumn?: () => void;
@@ -46,9 +45,6 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
         <SortDropdown />
         {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
-      </div>
-      <div className="flex items-center">
-        <Pagination />
       </div>
       <div className="flex items-center">
         <StatusLabel />

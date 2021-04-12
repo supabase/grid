@@ -61,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }
 
   return (
-    <div className="fixed right-2 flex items-center">
+    <div className="flex items-center">
       <Button
         icon={<IconArrowLeft />}
         type="outline"
@@ -93,7 +93,7 @@ const Pagination: React.FC<PaginationProps> = () => {
         <DropdownControl
           options={rowsPerPageOptions}
           onSelect={onRowsPerPageChange}
-          placement="bottomRight"
+          placement="topRight"
         >
           <Button
             type="outline"

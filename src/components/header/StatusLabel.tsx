@@ -29,7 +29,7 @@ const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   });
 
   return (
-    <div className="fixed right-80 text-white text-sm">
+    <div className="text-white text-sm">
       {msg && (
         <div className="flex justify-center">
           <label className="">{msg}</label>

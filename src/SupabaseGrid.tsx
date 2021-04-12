@@ -14,6 +14,7 @@ import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './GridColumns';
 import { Grid } from './components/grid';
 import Header from './components/header';
+import Footer from './components/footer';
 
 /**
  * Supabase Grid.
@@ -83,6 +84,7 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
     <div className="flex flex-col h-full">
       <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
       <Grid {...gridProps} />
+      <Footer />
       {createPortal(
         <ColumnMenu
           onEditColumn={onEditColumn}
