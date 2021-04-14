@@ -4,7 +4,12 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { createPortal } from 'react-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { SupabaseGridProps, SupaTable } from './types';
+import {
+  Dictionary,
+  SupabaseGridProps,
+  SupabaseGridRef,
+  SupaTable,
+} from './types';
 import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
@@ -21,89 +26,106 @@ import Footer from './components/footer';
  *
  * React component to render database table.
  */
-export const SupabaseGrid: React.FC<SupabaseGridProps> = props => {
+export const SupabaseGrid = React.forwardRef<
+  SupabaseGridRef,
+  SupabaseGridProps
+>((props, ref) => {
+  console.log('SupabaseGrid ref v1.2323232', ref);
   return (
     <StoreProvider>
       <DndProvider backend={HTML5Backend}>
-        <SupabaseGridLayout {...props} />
+        <SupabaseGridLayout ref={ref} {...props} />
       </DndProvider>
     </StoreProvider>
   );
-};
+});
 
-const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
-  const {
-    schema,
-    storageRef,
-    clientProps,
-    gridProps,
-    onEditRow,
-    onEditColumn,
-    onDeleteColumn,
-  } = props;
-  const dispatch = useDispatch();
-  const state = useTrackedState();
+const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
+  (props, ref) => {
+    const {
+      schema,
+      storageRef,
+      clientProps,
+      gridProps,
+      onEditRow,
+      onEditColumn,
+      onDeleteColumn,
+    } = props;
+    const dispatch = useDispatch();
+    const state = useTrackedState();
 
-  React.useEffect(() => {
-    if (state.isInitialComplete && storageRef && state.table) {
-      saveStorageDebounced(state, storageRef);
-    }
-  }, [
-    state.table,
-    state.isInitialComplete,
-    state.gridColumns,
-    state.sorts,
-    state.filters,
-    storageRef,
-  ]);
+    console.log('SupabaseGridLayout ref', ref);
 
-  React.useEffect(() => {
-    if (state.refreshPageFlag == REFRESH_PAGE_IMMEDIATELY) {
-      fetchPage(state, dispatch);
-    } else if (state.refreshPageFlag != 0) {
-      refreshPageDebounced(state, dispatch);
-    }
-  }, [state.refreshPageFlag]);
+    React.useImperativeHandle(ref, () => ({
+      rowAdded(row: Dictionary<any>) {
+        console.log('rowAdded: ', row);
+      },
+      rowEdited(row: Dictionary<any>) {
+        console.log('rowEdited: ', row);
+      },
+    }));
 
-  React.useEffect(() => {
-    if (!state.client) {
-      dispatch({
-        type: 'INIT_CLIENT',
-        payload: { ...clientProps, schema },
-      });
-    }
-  }, [state.client]);
+    React.useEffect(() => {
+      if (state.isInitialComplete && storageRef && state.table) {
+        saveStorageDebounced(state, storageRef);
+      }
+    }, [
+      state.table,
+      state.isInitialComplete,
+      state.gridColumns,
+      state.sorts,
+      state.filters,
+      storageRef,
+    ]);
 
-  React.useEffect(() => {
-    if (!state.client) return;
+    React.useEffect(() => {
+      if (state.refreshPageFlag == REFRESH_PAGE_IMMEDIATELY) {
+        fetchPage(state, dispatch);
+      } else if (state.refreshPageFlag != 0) {
+        refreshPageDebounced(state, dispatch);
+      }
+    }, [state.refreshPageFlag]);
 
-    if (
-      !state.table ||
-      (typeof props.table == 'string' && state.table!.name != props.table) ||
-      (typeof props.table != 'string' &&
-        JSON.stringify(props.table) !== JSON.stringify(state.table))
-    ) {
-      initTable(props, state, dispatch);
-    }
-  }, [state.client, state.table, props.table]);
+    React.useEffect(() => {
+      if (!state.client) {
+        dispatch({
+          type: 'INIT_CLIENT',
+          payload: { ...clientProps, schema },
+        });
+      }
+    }, [state.client]);
 
-  return (
-    <div className="flex flex-col h-full">
-      <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
-      <Grid {...gridProps} />
-      <Footer />
-      {createPortal(
-        <ColumnMenu
-          onEditColumn={onEditColumn}
-          onDeleteColumn={onDeleteColumn}
-        />,
-        document.body
-      )}
-      {createPortal(<RowMenu onEditRow={onEditRow} />, document.body)}
-      {createPortal(<MultiRowsMenu />, document.body)}
-    </div>
-  );
-};
+    React.useEffect(() => {
+      if (!state.client) return;
+
+      if (
+        !state.table ||
+        (typeof props.table == 'string' && state.table!.name != props.table) ||
+        (typeof props.table != 'string' &&
+          JSON.stringify(props.table) !== JSON.stringify(state.table))
+      ) {
+        initTable(props, state, dispatch);
+      }
+    }, [state.client, state.table, props.table]);
+
+    return (
+      <div className="flex flex-col h-full">
+        <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
+        <Grid {...gridProps} />
+        <Footer />
+        {createPortal(
+          <ColumnMenu
+            onEditColumn={onEditColumn}
+            onDeleteColumn={onDeleteColumn}
+          />,
+          document.body
+        )}
+        {createPortal(<RowMenu onEditRow={onEditRow} />, document.body)}
+        {createPortal(<MultiRowsMenu />, document.body)}
+      </div>
+    );
+  }
+);
 
 function initTable(
   props: SupabaseGridProps,

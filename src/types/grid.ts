@@ -54,9 +54,14 @@ export type SupabaseGridProps = {
   /**
    * show add row button if available
    */
-  onAddRow?: () => Dictionary<any>;
+  onAddRow?: () => void;
   /**
    * show edit row button if available
    */
-  onEditRow?: (rowIdx: number) => void;
+  onEditRow?: (row: Dictionary<any>) => void;
+};
+
+export type SupabaseGridRef = {
+  rowAdded(row: Dictionary<any>): void;
+  rowEdited(row: Dictionary<any>): void;
 };

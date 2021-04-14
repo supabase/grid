@@ -7,11 +7,12 @@ import {
   theme,
 } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
+import { Dictionary } from '../../types';
 
 export const ROW_MENU_ID = 'row-menu-id';
 
 type RowMenuProps = {
-  onEditRow?: (rowIdx: number) => void;
+  onEditRow?: (row: Dictionary<any>) => void;
 };
 
 const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
@@ -29,7 +30,10 @@ const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
   function onEditRowClick(p: ItemParams) {
     const { props } = p;
     const { rowIdx } = props;
-    if (onEditRow) onEditRow(rowIdx);
+    const row = state.rows[rowIdx];
+    // remove idx from row data
+    const { idx, ...rawRowData } = row;
+    if (onEditRow) onEditRow(rawRowData);
   }
 
   function isItemHidden({ data }: PredicateParams) {
