@@ -75,7 +75,14 @@ const SupabaseGridLayout: React.FC<SupabaseGridProps> = props => {
   }, [state.client]);
 
   React.useEffect(() => {
-    if (state.client && (!state.table || state.table!.name != props.table)) {
+    if (!state.client) return;
+
+    if (
+      !state.table ||
+      (typeof props.table == 'string' && state.table!.name != props.table) ||
+      (typeof props.table != 'string' &&
+        JSON.stringify(props.table) !== JSON.stringify(state.table))
+    ) {
       initTable(props, state, dispatch);
     }
   }, [state.client, state.table, props.table]);
