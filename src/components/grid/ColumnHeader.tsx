@@ -128,9 +128,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor}`}>
           {renderColumnIcon(columnType)}
-          <label className="ml-1" style={{ flexGrow: 1 }}>
-            {column.name}
-          </label>
+          <span className="inline-block ml-2 flex-grow">{column.name}</span>
           <Button
             type="text"
             className="ml-3"
