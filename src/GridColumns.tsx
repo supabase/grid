@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { Column } from '@phamhieu1998/react-data-grid';
-import {
-  ColumnType,
-  Dictionary,
-  SupaColumn,
-  SupaRow,
-  SupaTable,
-} from './types';
+import { ColumnType, SupaColumn, SupaRow, SupaTable } from './types';
 import {
   CheckboxEditor,
   NumberEditor,
@@ -19,7 +13,7 @@ import { COLUMN_MIN_WIDTH } from './constants';
 export function getGridColumns(
   table: SupaTable,
   options?: {
-    onEditRow?: (row: Dictionary<any>) => void;
+    onEditRow?: (row: SupaRow) => void;
     defaultWidth?: string | number;
   }
 ): any[] {

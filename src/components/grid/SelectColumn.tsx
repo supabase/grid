@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Column } from '@phamhieu1998/react-data-grid';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Button, IconEdit, IconChevronDown } from '@supabase/ui';
-import { Dictionary, SupaRow } from '../../types';
+import { SupaRow } from '../../types';
 import { MENU_IDS } from '../menu';
 
 export function SelectColumn(
-  onEditRow?: (row: Dictionary<any>) => void
+  onEditRow?: (row: SupaRow) => void
 ): Column<any, any> {
   return {
     key: 'select-row',
@@ -70,7 +70,7 @@ interface SelectCellFormatterProps extends SharedInputProps {
   value: boolean;
   row?: SupaRow;
   onChange: (value: boolean, isShiftClick: boolean) => void;
-  onEditRow?: (row: Dictionary<any>) => void;
+  onEditRow?: (row: SupaRow) => void;
 }
 
 function SelectCellFormatter({
@@ -97,9 +97,7 @@ function SelectCellFormatter({
 
   function onEditClick() {
     if (onEditRow && row) {
-      // remove idx from row data
-      const { idx, ...rawRowData } = row;
-      onEditRow(rawRowData);
+      onEditRow(row);
     }
   }
 
