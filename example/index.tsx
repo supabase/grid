@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import 'react-contexify/dist/ReactContexify.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { SupabaseGrid } from '../.';
+import { SupabaseGrid, SupabaseGridRef } from '../.';
 // import countries from './countries'
 
 const clientProps = {
@@ -14,12 +14,17 @@ const clientProps = {
 };
 
 const App = () => {
-  const [tableName, setName] = React.useState('countries_view');
+  const gridRef = React.useRef<SupabaseGridRef>(null);
+  const [tableName, setName] = React.useState('countries');
   const isReadonly = tableName == 'countries_view';
 
   function onClick() {
     const name = tableName == 'countries_view' ? 'countries' : 'countries_view';
     setName(name);
+  }
+
+  function onRowAdded() {
+    if (gridRef.current) gridRef.current.rowAdded({});
   }
 
   // READONLY
@@ -28,6 +33,7 @@ const App = () => {
   function renderReadonlyTable() {
     return (
       <SupabaseGrid
+        ref={gridRef}
         table={tableName}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={clientProps}
@@ -42,6 +48,7 @@ const App = () => {
   function renderTable() {
     return (
       <SupabaseGrid
+        ref={gridRef}
         table={tableName}
         editable={true}
         storageRef="dqofwyqljsmbgrubmnzk"
@@ -69,8 +76,11 @@ const App = () => {
 
   return (
     <div>
-      <div style={{ height: '5vh' }}>
+      <div style={{ display: 'flex', height: '5vh' }}>
         <button onClick={onClick}>Change Table</button>
+        <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
+          Row Added
+        </button>
       </div>
       <div style={{ height: '95vh' }}>
         {isReadonly ? renderReadonlyTable() : renderTable()}
