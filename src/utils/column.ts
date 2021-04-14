@@ -19,14 +19,14 @@ export function getInitialGridColumns(
     result = [];
     for (let i = 0; i < savedState.gridColumns.length; i++) {
       const x = savedState.gridColumns[i];
-      const found = gridColumns.find(y => y.key === x.key);
+      const found = gridColumns.find(y => y.key === x.name);
       // merge with savedState item props: width
       if (found) result.push({ ...found, width: x.width, frozen: x.frozen });
     }
     // console.log('exist grid columns', result);
     // check for newly created columns
     const newGridColumns = gridColumns.filter(x => {
-      const found = savedState.gridColumns.find(y => y.key === x.key);
+      const found = savedState.gridColumns.find(y => y.key === x.name);
       return found ? false : true;
     });
     // console.log('newGridColumns', newGridColumns);
