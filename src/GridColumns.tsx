@@ -8,6 +8,7 @@ import {
   TextEditor,
 } from './components/editor';
 import { ColumnHeader, SelectColumn } from './components/grid';
+import { COLUMN_MIN_WIDTH } from './constants';
 
 export function getGridColumns(
   table: SupaTable,
@@ -23,7 +24,7 @@ export function getGridColumns(
       name: x.name,
       resizable: true,
       width: options?.defaultWidth || _getColumnWidth(x),
-      minWidth: 50,
+      minWidth: COLUMN_MIN_WIDTH,
       frozen: x.isIdentity,
     };
     const columnType = _getColumnType(x);

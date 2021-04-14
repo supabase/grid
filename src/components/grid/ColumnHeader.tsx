@@ -127,8 +127,10 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor}`}>
-          {renderColumnIcon(columnType)}
-          <span className="inline-block ml-2 flex-grow">{column.name}</span>
+          <div className="h-8 w-8">{renderColumnIcon(columnType)}</div>
+          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis">
+            {column.name}
+          </span>
           <Button
             type="text"
             className="ml-3"
