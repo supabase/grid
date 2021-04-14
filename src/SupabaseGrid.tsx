@@ -30,7 +30,6 @@ export const SupabaseGrid = React.forwardRef<
   SupabaseGridRef,
   SupabaseGridProps
 >((props, ref) => {
-  console.log('SupabaseGrid ref v1.2323232', ref);
   return (
     <StoreProvider>
       <DndProvider backend={HTML5Backend}>
@@ -54,14 +53,20 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     const dispatch = useDispatch();
     const state = useTrackedState();
 
-    console.log('SupabaseGridLayout ref', ref);
-
     React.useImperativeHandle(ref, () => ({
       rowAdded(row: Dictionary<any>) {
+        dispatch({
+          type: 'ADD_NEW_ROW',
+          payload: row,
+        });
         console.log('rowAdded: ', row);
       },
-      rowEdited(row: Dictionary<any>) {
-        console.log('rowEdited: ', row);
+      rowEdited(row: Dictionary<any>, idx: number) {
+        dispatch({
+          type: 'EDIT_ROW',
+          payload: { row, idx },
+        });
+        console.log('rowEdited: ', row, 'at index: ', idx);
       },
     }));
 

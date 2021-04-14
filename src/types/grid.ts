@@ -63,5 +63,5 @@ export type SupabaseGridProps = {
 
 export type SupabaseGridRef = {
   rowAdded(row: Dictionary<any>): void;
-  rowEdited(row: Dictionary<any>): void;
+  rowEdited(row: Dictionary<any>, idx: number): void;
 };

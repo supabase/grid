@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import { SupaRow } from '../../types';
+import { Dictionary, SupaRow } from '../../types';
 
 export interface RowInitialState {
   rows: SupaRow[];
@@ -24,7 +24,8 @@ type ROW_ACTIONTYPE =
       payload: { rows: SupaRow[]; totalRows: number };
     }
   | { type: 'ADD_ROWS'; payload: SupaRow[] }
-  | { type: 'ADD_NEW_ROW'; payload: SupaRow }
+  | { type: 'ADD_NEW_ROW'; payload: Dictionary<any> }
+  | { type: 'EDIT_ROW'; payload: { row: Dictionary<any>; idx: number } }
   | { type: 'REMOVE_ROWS'; payload: { rowIdxs: number[] } };
 
 const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
@@ -59,11 +60,21 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       };
     }
     case 'ADD_NEW_ROW': {
+      const supaRow = { ...action.payload, idx: state.rows.length };
       const totalRows = state.totalRows + 1;
       return {
         ...state,
-        rows: update(state.rows, { $push: [action.payload] }),
+        rows: update(state.rows, { $push: [supaRow] }),
         totalRows: totalRows,
+      };
+    }
+    case 'EDIT_ROW': {
+      const supaRow = { ...action.payload.row, idx: action.payload.idx };
+      return {
+        ...state,
+        rows: update(state.rows, {
+          [action.payload.idx]: { $set: supaRow },
+        }),
       };
     }
     case 'REMOVE_ROWS': {
