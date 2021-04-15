@@ -11,7 +11,7 @@ type DropdownControlProps = {
     | 'bottomCenter'
     | 'topLeft'
     | 'topRight'
-    | 'topCentre'
+    | 'topCenter'
     | undefined;
 };
 

@@ -20,10 +20,6 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {
-    "react": "^16.12 || ^17.0",
-    "react-dom": "^16.12 || ^17.0"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -78,14 +74,13 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@phamhieu1998/react-data-grid": "^7.0.0-canary.40",
-    "@popperjs/core": "^2.9.0",
-    "@supabase/supabase-js": "^1.7.5",
-    "@supabase/ui": "^0.21.5",
+    "@phamhieu1998/react-data-grid": "^7.0.0-canary.42",
+    "@supabase/supabase-js": "^1.11.2",
+    "@supabase/ui": "^0.23.2",
     "awesome-debounce-promise": "^2.1.0",
     "file-saver": "^2.0.5",
     "immutability-helper": "^3.1.1",
-    "p-queue": "^6.6.2",
+    "p-queue": "^7.1.0",
     "react-contexify": "^5.0.0",
     "react-dnd": "^14.0.1",
     "react-dnd-html5-backend": "^14.0.0",
