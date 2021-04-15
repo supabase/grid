@@ -135,7 +135,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
         />
         <Typography.Text>{column.name}</Typography.Text>
       </div>
-      <div className="flex items-center w-32">
+      <div className="flex items-center">
         <SegmentedControl
           options={['ASC', 'DESC']}
           value={sort.order}
