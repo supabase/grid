@@ -42,6 +42,7 @@ export const SupabaseGrid = React.forwardRef<
 const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   (props, ref) => {
     const {
+      editable,
       schema,
       storageRef,
       clientProps,
@@ -115,17 +116,23 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
 
     return (
       <div className="flex flex-col h-full">
-        <Header onAddRow={props.onAddRow} onAddColumn={props.onAddColumn} />
+        <Header
+          onAddRow={editable ? props.onAddRow : undefined}
+          onAddColumn={editable ? props.onAddColumn : undefined}
+        />
         <Grid {...gridProps} />
         <Footer />
         {createPortal(
           <ColumnMenu
-            onEditColumn={onEditColumn}
-            onDeleteColumn={onDeleteColumn}
+            onEditColumn={editable ? onEditColumn : undefined}
+            onDeleteColumn={editable ? onDeleteColumn : undefined}
           />,
           document.body
         )}
-        {createPortal(<RowMenu onEditRow={onEditRow} />, document.body)}
+        {createPortal(
+          <RowMenu onEditRow={editable ? onEditRow : undefined} />,
+          document.body
+        )}
         {createPortal(<MultiRowsMenu />, document.body)}
       </div>
     );
@@ -148,7 +155,7 @@ function initTable(
   function onInitTable(tableDef: SupaTable, props: SupabaseGridProps) {
     const gridColumns = getGridColumns(tableDef, {
       defaultWidth: props.gridProps?.defaultColumnWidth,
-      onEditRow: props.onEditRow,
+      onEditRow: props.editable ? props.onEditRow : undefined,
     });
 
     let savedState;
