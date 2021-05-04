@@ -74,12 +74,14 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@phamhieu1998/react-data-grid": "^7.0.0-canary.42",
+    "@supabase/react-data-grid": "^7.0.0-canary.45",
     "@supabase/supabase-js": "^1.11.2",
     "@supabase/ui": "^0.23.2",
     "awesome-debounce-promise": "^2.1.0",
     "file-saver": "^2.0.5",
     "immutability-helper": "^3.1.1",
+    "install": "^0.13.0",
+    "npm": "^7.11.2",
     "p-queue": "^6.6.2",
     "react-contexify": "^5.0.0",
     "react-dnd": "^14.0.1",
