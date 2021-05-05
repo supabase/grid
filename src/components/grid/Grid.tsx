@@ -4,7 +4,7 @@ import DataGrid, {
   Row as GridRow,
   RowRendererProps,
   RowsChangeData,
-} from '@phamhieu1998/react-data-grid';
+} from '@supabase/react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { GridProps, SupaRow } from '../../types';

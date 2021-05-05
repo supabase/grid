@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column } from '@phamhieu1998/react-data-grid';
+import { Column } from '@supabase/react-data-grid';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Button, IconEdit, IconChevronDown } from '@supabase/ui';
 import { SupaRow } from '../../types';

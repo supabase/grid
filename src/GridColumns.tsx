@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column } from '@phamhieu1998/react-data-grid';
+import { Column } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from './types';
 import {
   CheckboxEditor,

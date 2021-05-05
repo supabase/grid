@@ -1,4 +1,4 @@
-import { Column } from '@phamhieu1998/react-data-grid';
+import { Column } from '@supabase/react-data-grid';
 import { SavedState } from '../types';
 import { deepClone } from './common';
 

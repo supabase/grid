@@ -14,7 +14,7 @@ import {
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
-import { SortableHeaderCell } from '@phamhieu1998/react-data-grid';
+import { SortableHeaderCell } from '@supabase/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 import { MENU_IDS } from '../menu';
