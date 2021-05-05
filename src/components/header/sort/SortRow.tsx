@@ -119,12 +119,12 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
 
   return (
     <div
-      className="flex justify-between py-1"
+      className="grid-flex grid-justify-between grid-py-1"
       ref={ref}
       style={{ opacity }}
       data-handler-id={handlerId}
     >
-      <div className="flex items-center">
+      <div className="grid-flex grid-items-center">
         <Button
           className="mr-4 p-2"
           icon={<IconXSquare />}
@@ -135,13 +135,13 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
         />
         <Typography.Text>{column.name}</Typography.Text>
       </div>
-      <div className="flex items-center">
+      <div className="grid-flex grid-items-center">
         <SegmentedControl
           options={['ASC', 'DESC']}
           value={sort.order}
           onToggle={onToogle}
         />
-        <div className="ml-5">
+        <div className="grid-ml-5">
           <IconAlignJustify size="tiny" />
         </div>
       </div>

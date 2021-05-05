@@ -35,7 +35,7 @@ const DropdownItem: React.FC<DropdownControlProps> = ({
   return (
     <Menu>
       {options.length == 0 && (
-        <Typography.Text className="block px-2 py-4">
+        <Typography.Text className="grid-block grid-px-2 grid-py-4">
           No more items
         </Typography.Text>
       )}

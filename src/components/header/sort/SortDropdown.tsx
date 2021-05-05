@@ -13,12 +13,12 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
 
   return (
     <Dropdown
-      className="w-80 overflow-visible"
+      className="grid-w-80 grid-overflow-visible"
       placement="bottomLeft"
       overlay={<Sort {...p} />}
     >
       <Button
-        className="ml-2"
+        className="grid-ml-2"
         type="outline"
         style={{ padding: '3px 10px', borderColor: '#333' }}
       >
@@ -49,7 +49,7 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
   }
 
   return (
-    <div className="p-2">
+    <div className="grid-p-2">
       {state.sorts.map((x, index) => (
         <SortRow key={x.columnName} columnName={x.columnName} index={index} />
       ))}
@@ -58,7 +58,7 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
           <Typography.Text>No sorts applied</Typography.Text>
         </div>
       )}
-      <div className="mt-2">
+      <div className="grid-mt-2">
         <DropdownControl options={dropdownOptions} onSelect={onAddSort}>
           <Button>Pick another column to sort by</Button>
         </DropdownControl>

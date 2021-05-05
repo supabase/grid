@@ -120,20 +120,20 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   };
 
   const opacity = isDragging ? 0 : 1;
-  const cursor = column.frozen ? 'cursor-default' : '';
+  const cursor = column.frozen ? 'grid-cursor-default' : '';
   drag(drop(ref));
 
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
-        <div className={`flex items-center ${cursor}`}>
+        <div className={`grid-flex grid-items-center ${cursor}`}>
           <div>{renderColumnIcon(columnType)}</div>
-          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis">
+          <span className="grid-inline-block grid-ml-2 grid-flex-grow grid-overflow-hidden grid-overflow-ellipsis">
             {column.name}
           </span>
           <Button
             type="text"
-            className="ml-3"
+            className="grid-ml-3"
             ref={triggerRef}
             icon={<IconChevronDown />}
             onClick={displayMenu}

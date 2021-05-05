@@ -115,7 +115,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     }, [state.client, state.table, props.table]);
 
     return (
-      <div className="flex flex-col h-full">
+      <div className="grid-flex grid-flex-col grid-h-full">
         <Header
           onAddRow={editable ? props.onAddRow : undefined}
           onAddColumn={editable ? props.onAddColumn : undefined}

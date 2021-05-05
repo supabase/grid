@@ -94,9 +94,9 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   }
 
   return (
-    <div className="flex items-center py-1">
+    <div className="grid-flex grid-items-center grid-py-1">
       <Button
-        className="mr-2 p-2"
+        className="grid-mr-2 grid-p-2"
         icon={<IconXSquare />}
         shadow={false}
         size="tiny"
@@ -104,29 +104,29 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
         onClick={onRemoveFilter}
       />
       <DropdownControl
-        className="z-20"
+        className="grid-z-20"
         options={filterClauseOptions}
         onSelect={onClauseChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button className="grid-mr-2" type="outline">
           {filter.clause}
         </Button>
       </DropdownControl>
       <DropdownControl
-        className="z-20"
+        className="grid-z-20"
         options={columnOptions}
         onSelect={onColumnChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button className="grid-mr-2" type="outline">
           {column?.name || ''}
         </Button>
       </DropdownControl>
       <DropdownControl
-        className="z-20"
+        className="grid-z-20"
         options={filterConditionOptions}
         onSelect={onConditionChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button className="grid-mr-2" type="outline">
           {filter.condition}
         </Button>
       </DropdownControl>

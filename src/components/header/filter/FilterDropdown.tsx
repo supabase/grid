@@ -12,7 +12,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
 
   return (
     <Dropdown
-      className="w-96 overflow-visible"
+      className="grid-w-96 grid-overflow-visible"
       placement="bottomLeft"
       overlay={<Filter {...p} />}
     >
@@ -44,7 +44,7 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
   }
 
   return (
-    <div className="p-2">
+    <div className="grid-p-2">
       <div>
         {state.filters.map((_, index) => (
           <FilterRow key={`filter-${index}`} filterIdx={index} />
@@ -53,7 +53,7 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
           <Typography.Text>No filters applied</Typography.Text>
         )}
       </div>
-      <div className="mt-2">
+      <div className="grid-mt-2">
         <Button icon={<IconPlus />} onClick={onAddFilter}>
           Add filter
         </Button>
