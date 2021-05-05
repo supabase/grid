@@ -89,5 +89,13 @@
     "react-tiny-popover": "^6.0.4",
     "react-tracked": "^1.6.5",
     "scheduler": "^0.19.1"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
