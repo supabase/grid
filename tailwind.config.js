@@ -1,5 +1,6 @@
 module.exports = {
   mode: 'jit',
+  prefix: 'supa-grid-',
   purge: ['./src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
   theme: {
