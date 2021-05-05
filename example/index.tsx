@@ -8,9 +8,9 @@ import { SupabaseGrid, SupabaseGridRef } from '../.';
 // import countries from './countries'
 
 const clientProps = {
-  supabaseUrl: 'https://eswutwdkpzgacrlriize.supabase.net',
+  supabaseUrl: 'https://elwnyzeispughydvblgw.supabase.co',
   supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNzA3NTU4OCwiZXhwIjoxOTMyNjUxNTg4fQ.h1TuIObta3ZBAgJ-XefdQGgFaFCFIEwQIlSHxcd4o18',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMDAwMTg0NSwiZXhwIjoxOTM1NTc3ODQ1fQ.NqLZjLKCukqjVfiynZ41Fsq7ih8U2JmvWYYlGtcuELo',
 };
 
 const App = () => {
