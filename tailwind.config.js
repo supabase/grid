@@ -4,10 +4,6 @@ module.exports = {
   purge: ['./src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    borderColor: theme => ({
-      ...theme('colors'),
-      DEFAULT: theme('colors.gray.650', 'currentColor'),
-    }),
     extend: {
       colors: {
         brand: {
