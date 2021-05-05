@@ -43,7 +43,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   }
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'grid-column-header',
+    type: 'column-header',
     item: () => {
       return { key: columnKey, index: columnIdx };
     },
@@ -54,7 +54,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   });
 
   const [{ handlerId }, drop] = useDrop({
-    accept: 'grid-column-header',
+    accept: 'column-header',
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -120,20 +120,20 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   };
 
   const opacity = isDragging ? 0 : 1;
-  const cursor = column.frozen ? 'grid-cursor-default' : '';
+  const cursor = column.frozen ? 'cursor-default' : '';
   drag(drop(ref));
 
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
-        <div className={`grid-flex grid-items-center ${cursor}`}>
+        <div className={`flex items-center ${cursor}`}>
           <div>{renderColumnIcon(columnType)}</div>
-          <span className="grid-inline-block grid-ml-2 grid-flex-grow grid-overflow-hidden grid-overflow-ellipsis">
+          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis text-sm">
             {column.name}
           </span>
           <Button
             type="text"
-            className="grid-ml-3"
+            className="ml-3"
             ref={triggerRef}
             icon={<IconChevronDown />}
             onClick={displayMenu}

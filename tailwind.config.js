@@ -1,37 +1,140 @@
+const gray = {
+  '100': '#eeeeee',
+  '200': '#e0e0e0',
+  '300': '#bbbbbb',
+  '400': '#666666',
+  '500': '#444444',
+  '650': '#333',
+  '600': '#2a2a2a',
+  '700': '#1f1f1f',
+  '800': '#181818',
+  '900': '#0f0f0f',
+};
+const green = {
+  '100': '#c5f1dd',
+  '200': '#c5f1dd',
+  '300': '#9fe7c7',
+  '400': '#65d9a5',
+  '500': '#24b47e',
+  '600': '#38bc81',
+  '700': '#1c8656',
+  '800': '#10633e',
+  '900': '#10633e',
+};
+
+const blueGray = {
+  '50': '#F8FAFC',
+  '100': '#F1F5F9',
+  '200': '#E2E8F0',
+  '300': '#CBD5E1',
+  '400': '#94A3B8',
+  '500': '#64748B',
+  '600': '#475569',
+  '700': '#334155',
+  '800': '#1E293B',
+  '900': '#0F172A',
+};
+
+const coolGray = {
+  '50': '#F9FAFB',
+  '100': '#F3F4F6',
+  '200': '#E5E7EB',
+  '300': '#D1D5DB',
+  '400': '#9CA3AF',
+  '500': '#6B7280',
+  '600': '#4B5563',
+  '700': '#374151',
+  '800': '#1F2937',
+  '900': '#111827',
+};
+
 module.exports = {
   mode: 'jit',
-  prefix: 'grid-',
+  darkMode: 'class',
   purge: ['./src/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
   theme: {
+    borderColor: theme => ({
+      ...theme('colors'),
+      dark: theme('colors.gray.600', 'currentColor'),
+    }),
     extend: {
+      fontSize: {
+        xs: '11px',
+        sm: '13px',
+        base: '15px',
+        lg: '18px',
+        xl: '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+        '5xl': '3rem',
+        '6xl': '4rem',
+      },
       colors: {
-        brand: {
-          50: '#82dab0',
-          100: '#82dab0',
-          200: '#69d3a0',
-          300: '#50cb90',
-          400: '#C5F1DD',
-          500: '#9FE7C7',
-          600: '#65D9A5',
-          700: '#3ECF8E',
-          800: '#24b47e', // green-500 in dashboard
-          900: '#2c9c6a',
+        gray: { ...gray },
+        green: { ...green },
+        blueGray: { ...blueGray },
+        coolGray: { ...coolGray },
+
+        /* 
+          typography
+        */
+        'typography-body': {
+          light: coolGray[600],
+          dark: gray[200],
         },
 
-        gray: {
-          100: '#eeeeee',
-          200: '#e0e0e0',
-          300: '#bbbbbb',
-          400: '#666666',
-          500: '#444444',
-          600: '#2a2a2a',
-          650: '#333',
-          700: '#1f1f1f',
-          800: '#181818',
-          900: '#0f0f0f',
+        /*
+          Tables
+        */
+        'table-body': {
+          light: 'white',
+          dark: gray[800],
+        },
+        'table-header': {
+          light: blueGray[50], // gray[100],
+          dark: gray[700], // '#1a1a1a', //gray[700],
+        },
+        'table-footer': {
+          light: '#f8f9fb', // gray[100],
+          dark: '#1a1a1a', //gray[700],
+        },
+        'table-border': {
+          light: '#eff1f4', //gray[100],
+          dark: gray[600], // '#222', // gray[600],
+        },
+
+        /* 
+          app backgrounds
+        */
+        'bg-secondary': {
+          light: blueGray[100],
+          dark: gray[700],
+        },
+        'bg-alt': {
+          light: blueGray[50], // gray[100],
+          dark: gray[600],
         },
       },
+    },
+    fontFamily: {
+      sans: [
+        'circular',
+        'BlinkMacSystemFont',
+        '-apple-system',
+        'Segoe UI',
+        'Roboto',
+        'Oxygen',
+        'Ubuntu',
+        'Cantarell',
+        'Fira Sans',
+        'Droid Sans',
+        'Helvetica Neue',
+        'Helvetica',
+        'Arial',
+        'sans-serif',
+      ],
+      mono: ['source code pro', 'Menlo', 'monospace'],
     },
   },
   variants: {

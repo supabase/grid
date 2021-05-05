@@ -2,3 +2,111 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rdg-cell {
+  @apply border-r border-b dark:border-dark text-sm;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rdg-cell-frozen-last {
+  @apply border-r dark:border-dark shadow-none;
+}
+
+.rdg-cell-selected {
+  box-shadow: inset 0 0 0 1px #24b47e;
+}
+
+.rdg {
+  @apply bg-transparent box-border overflow-x-auto overflow-y-scroll select-none;
+  contain: strict;
+  -webkit-user-select: none;
+  font-size: 14px;
+}
+
+.rdg *,
+.rdg ::after,
+.rdg ::before {
+  box-sizing: inherit;
+}
+
+@supports not (contain: strict) {
+  .rdg {
+    position: relative;
+    z-index: 0;
+  }
+}
+
+.rdg-focus-sink {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: 0;
+  outline: 0;
+}
+
+.rdg-header-row {
+  @apply bg-table-header-light dark:bg-table-header-dark border-none select-none;
+}
+
+.rdg-header-row {
+  height: var(--header-row-height);
+  line-height: var(--header-row-height);
+  top: 0;
+}
+.rdg-header-row .rdg-cell {
+  @apply bg-table-header-light dark:bg-table-header-dark border-b dark:border-dark;
+  @apply text-typography-body-light dark:text-typography-body-dark;
+}
+.rdg-header-row .rdg-cell p,
+.rdg-header-row .rdg-cell svg {
+  @apply text-typography-body-light dark:text-typography-body-dark;
+}
+.rdg-header-row .rdg-cell .react-contextmenu-wrapper {
+  @apply h-full flex items-center px-2 transition ease-in-out duration-100;
+}
+.rdg-header-row .rdg-cell .react-contextmenu-wrapper:hover {
+  @apply bg-gray-400;
+}
+.rdg-header-row .rdg-checkbox {
+  @apply border bg-table-header-light dark:bg-table-header-dark rounded-sm dark:border-dark;
+}
+.rdg-header-row .rdg-checkbox-input:checked + .rdg-checkbox {
+  @apply border-4 bg-green-500 border-gray-400;
+}
+.rdg-header-row .rdg-checkbox-input:focus + .rdg-checkbox {
+  box-shadow: none;
+}
+
+.rdg-cell .Select {
+  max-height: 30px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.rdg-row {
+  @apply bg-table-body-light dark:bg-table-body-dark transition-colors;
+}
+.rdg-row .rdg-cell span,
+.rdg-row .rdg-cell svg,
+.rdg-row .rdg-cell div {
+  @apply text-typography-body-light dark:text-typography-body-dark;
+}
+
+.rdg-row:hover {
+  @apply bg-table-header-light dark:bg-table-header-dark;
+}
+
+.rdg-row-selected {
+  @apply bg-bg-secondary-light dark:bg-bg-secondary-dark;
+}
+
+.rdg-row-selected:hover {
+  @apply bg-bg-alt-light dark:bg-bg-alt-dark;
+}
+
+.tab-cursor {
+  cursor: pointer !important;
+}

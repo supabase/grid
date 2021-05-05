@@ -61,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }
 
   return (
-    <div className="grid-flex grid-items-center">
+    <div className="flex items-center">
       <Button
         icon={<IconArrowLeft />}
         type="outline"
@@ -69,8 +69,8 @@ const Pagination: React.FC<PaginationProps> = () => {
         onClick={onPreviousPage}
         style={{ padding: '3px 10px', borderColor: '#333' }}
       />
-      <Typography.Text className="grid-mx-2">Page</Typography.Text>
-      <div className="grid-w-12">
+      <Typography.Text className="mx-2">Page</Typography.Text>
+      <div className="w-12">
         <InputNumber
           value={page}
           onChange={onPageChange}
@@ -81,7 +81,7 @@ const Pagination: React.FC<PaginationProps> = () => {
           min={1}
         />
       </div>
-      <Typography.Text className="grid-mx-2">{`of ${totalPages}`}</Typography.Text>
+      <Typography.Text className="mx-2">{`of ${totalPages}`}</Typography.Text>
       <Button
         icon={<IconArrowRight />}
         type="outline"
@@ -89,7 +89,7 @@ const Pagination: React.FC<PaginationProps> = () => {
         onClick={onNextPage}
         style={{ padding: '3px 10px', borderColor: '#333' }}
       />
-      <div className="grid-ml-2">
+      <div className="ml-2">
         <DropdownControl
           options={rowsPerPageOptions}
           onSelect={onRowsPerPageChange}

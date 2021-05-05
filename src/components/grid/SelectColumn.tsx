@@ -102,14 +102,14 @@ function SelectCellFormatter({
   }
 
   return (
-    <div className="grid-flex grid-items-center grid-h-full">
+    <div className="flex items-center h-full">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:grid-ring-brand-500 grid-h-4 grid-w-4 grid-border-gray-300"
+        className="focus:ring-brand-500 h-4 w-4 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}
@@ -162,14 +162,14 @@ function SelectCellHeader({
   }
 
   return (
-    <div className="grid-flex grid-items-center grid-h-full">
+    <div className="flex items-center h-full">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:grid-ring-brand-500 grid-h-4 grid-w-4 grid-border-gray-300"
+        className="focus:ring-brand-500 h-4 w-4 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}
@@ -177,7 +177,7 @@ function SelectCellHeader({
       />
       <Button
         type="text"
-        className="grid-ml-3"
+        className="ml-3"
         ref={triggerRef}
         icon={<IconChevronDown />}
         onClick={displayMenu}

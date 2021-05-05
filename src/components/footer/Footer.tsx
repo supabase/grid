@@ -5,8 +5,8 @@ type FooterProps = {};
 
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <div className="grid-flex grid-justify-between grid-h-10 grid-z-10 grid-px-2 grid-bg-gray-700">
-      <div className="grid-flex grid-items-center">
+    <div className="flex justify-between h-10 z-10 px-2 bg-gray-700">
+      <div className="flex items-center">
         <Pagination />
       </div>
     </div>

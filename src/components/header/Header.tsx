@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
     if (!onAddColumn) return null;
     return (
       <Button
-        className="grid-ml-2"
+        className="ml-2"
         type="outline"
         style={{ padding: '3px 10px', borderColor: '#333' }}
         onClick={onAddColumn}
@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
     if (!onAddRow) return null;
     return (
       <Button
-        className="grid-ml-2"
+        className="ml-2"
         style={{ padding: '3px 10px' }}
         icon={<IconPlus />}
         onClick={onAddRow}
@@ -39,14 +39,14 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
   };
 
   return (
-    <div className="grid-flex grid-justify-between grid-h-10 grid-z-10 grid-px-2 grid-bg-gray-700">
-      <div className="grid-flex grid-items-center">
+    <div className="flex justify-between h-10 z-10 px-2 bg-gray-700">
+      <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />
         {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
       </div>
-      <div className="grid-flex grid-items-center">
+      <div className="flex items-center">
         <StatusLabel />
       </div>
     </div>
