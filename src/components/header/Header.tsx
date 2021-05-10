@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
       <Button
         className="ml-2"
         type="outline"
-        style={{ padding: '3px 10px', borderColor: '#333' }}
+        style={{ padding: '3px 10px' }}
         onClick={onAddColumn}
       >
         New Column
@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
   };
 
   return (
-    <div className="flex justify-between h-10 z-10 px-2 bg-gray-700">
+    <div className="flex justify-between h-10 z-10 px-2 dark:bg-gray-700">
       <div className="flex items-center">
         <FilterDropdown />
         <SortDropdown />

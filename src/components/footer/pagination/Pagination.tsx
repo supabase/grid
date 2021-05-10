@@ -67,16 +67,18 @@ const Pagination: React.FC<PaginationProps> = () => {
         type="outline"
         disabled={state.page <= 1}
         onClick={onPreviousPage}
-        style={{ padding: '3px 10px', borderColor: '#333' }}
+        style={{ padding: '3px 10px' }}
       />
       <Typography.Text className="mx-2">Page</Typography.Text>
       <div className="w-12">
         <InputNumber
           value={page}
           onChange={onPageChange}
-          className="block"
+          className="block pagination-input"
           size="tiny"
-          style={{ width: '3rem' }}
+          style={{
+            width: '3rem',
+          }}
           max={maxPages}
           min={1}
         />
@@ -87,7 +89,7 @@ const Pagination: React.FC<PaginationProps> = () => {
         type="outline"
         disabled={state.page >= maxPages}
         onClick={onNextPage}
-        style={{ padding: '3px 10px', borderColor: '#333' }}
+        style={{ padding: '3px 10px' }}
       />
       <div className="ml-2">
         <DropdownControl
@@ -97,7 +99,7 @@ const Pagination: React.FC<PaginationProps> = () => {
         >
           <Button
             type="outline"
-            style={{ padding: '3px 10px', borderColor: '#333' }}
+            style={{ padding: '3px 10px' }}
           >{`${state.rowsPerPage} rows`}</Button>
         </DropdownControl>
       </div>

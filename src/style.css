@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.pagination-input .sbui-inputnumber {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
 .rdg-cell {
-  @apply border-r border-b dark:border-dark text-sm;
+  @apply border-r border-b dark:border-dark;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

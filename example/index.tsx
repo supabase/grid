@@ -16,7 +16,7 @@ const clientProps = {
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [tableName, setName] = React.useState('countries');
-  const [uiMode, setUiMode] = React.useState('dark');
+  const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
   function onClick() {

@@ -16,10 +16,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
       placement="bottomLeft"
       overlay={<Filter {...p} />}
     >
-      <Button
-        type="outline"
-        style={{ padding: '3px 10px', borderColor: '#333' }}
-      >
+      <Button type="outline" style={{ padding: '3px 10px' }}>
         {btnText}
       </Button>
     </Dropdown>
