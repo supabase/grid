@@ -16,6 +16,7 @@ const clientProps = {
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [tableName, setName] = React.useState('countries');
+  const [uiMode, setUiMode] = React.useState('dark');
   const isReadonly = tableName == 'countries_view';
 
   function onClick() {
@@ -25,6 +26,11 @@ const App = () => {
 
   function onRowAdded() {
     if (gridRef.current) gridRef.current.rowAdded({});
+  }
+
+  function onToggleDarkMode() {
+    if (uiMode == 'dark') setUiMode('');
+    else setUiMode('dark');
   }
 
   // READONLY
@@ -75,11 +81,14 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', height: '5vh' }}>
+    <div className={uiMode}>
+      <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
         <button onClick={onClick}>Change Table</button>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
-          Row Added
+          Trigger Row Added
+        </button>
+        <button onClick={onToggleDarkMode} style={{ marginLeft: '1rem' }}>
+          Dark Mode Toggle
         </button>
       </div>
       <div style={{ height: '95vh' }}>
