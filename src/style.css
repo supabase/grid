@@ -8,7 +8,7 @@
 }
 
 .rdg-cell {
-  @apply border-r border-b border-gray-100 dark:border-dark;
+  @apply border-r border-b border-gray-100 dark:border-dark text-sm;
   @apply text-typography-body-light dark:text-typography-body-dark;
   white-space: nowrap;
   overflow: hidden;
