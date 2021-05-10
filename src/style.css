@@ -8,7 +8,8 @@
 }
 
 .rdg-cell {
-  @apply border-r border-b dark:border-dark;
+  @apply border-r border-b border-gray-100 dark:border-dark;
+  @apply text-typography-body-light dark:text-typography-body-dark;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -24,6 +25,7 @@
 
 .rdg {
   @apply bg-transparent box-border overflow-x-auto overflow-y-scroll select-none;
+  @apply border-gray-100 dark:border-dark;
   contain: strict;
   -webkit-user-select: none;
   font-size: 14px;
