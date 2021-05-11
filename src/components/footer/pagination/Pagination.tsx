@@ -33,6 +33,10 @@ const Pagination: React.FC<PaginationProps> = () => {
   const maxPages = Math.ceil(state.totalRows / state.rowsPerPage);
   const totalPages = state.totalRows > 0 ? maxPages : 1;
 
+  React.useEffect(() => {
+    if (state.page != page) setPage(state.page);
+  }, [state.page, page]);
+
   function onPreviousPage() {
     if (state.page > 1) {
       const previousPage = state.page - 1;
