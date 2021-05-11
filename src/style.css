@@ -16,7 +16,7 @@
 }
 
 .rdg-cell-frozen-last {
-  @apply border-r dark:border-dark shadow-none;
+  @apply border-r-4 dark:border-dark shadow-none;
 }
 
 .rdg-cell-selected {
