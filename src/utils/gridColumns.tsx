@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Column } from '@supabase/react-data-grid';
-import { ColumnType, SupaColumn, SupaRow, SupaTable } from './types';
+import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   CheckboxEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
-} from './components/editor';
-import { ColumnHeader, SelectColumn } from './components/grid';
-import { COLUMN_MIN_WIDTH } from './constants';
+} from '../components/editor';
+import { ColumnHeader, SelectColumn } from '../components/grid';
+import { COLUMN_MIN_WIDTH } from '../constants';
 
 export function getGridColumns(
   table: SupaTable,

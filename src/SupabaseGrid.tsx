@@ -16,7 +16,7 @@ import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
 import { ColumnMenu, RowMenu, MultiRowsMenu } from './components/menu';
 import { InitialStateType } from './store/reducers';
-import { getGridColumns } from './GridColumns';
+import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
 import Header from './components/header';
 import Footer from './components/footer';
