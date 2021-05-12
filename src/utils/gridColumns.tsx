@@ -8,7 +8,6 @@ import {
   TextEditor,
 } from '../components/editor';
 import { ColumnHeader, SelectColumn } from '../components/grid';
-import { NullValue } from '../components/common';
 import { COLUMN_MIN_WIDTH } from '../constants';
 
 export function getGridColumns(
@@ -45,7 +44,6 @@ const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
 ) => {
   const value = p.row[p.column.key];
-  if (!value) return <NullValue />;
   return <>{value}</>;
 };
 
@@ -55,6 +53,7 @@ function _setupColumnEditor(
   config: Column<SupaRow>
 ) {
   if (columnDef.isIdentity || !columnDef.isUpdatable) {
+    config.formatter = DefaultFormatter;
     return;
   }
 
