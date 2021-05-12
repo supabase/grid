@@ -52,7 +52,12 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
         />
       }
     >
-      <div className="px-2" onClick={() => setIsPopoverOpen(!isPopoverOpen)}>
+      <div
+        className={`${
+          !!value && value.trim().length == 0 ? 'fillContainer' : ''
+        } px-2`}
+        onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+      >
         {value ? value : <NullValue />}
       </div>
     </Popover>
