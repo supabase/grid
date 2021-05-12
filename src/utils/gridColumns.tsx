@@ -8,6 +8,7 @@ import {
   TextEditor,
 } from '../components/editor';
 import { ColumnHeader, SelectColumn } from '../components/grid';
+import { NullValue } from '../components/common';
 import { COLUMN_MIN_WIDTH } from '../constants';
 
 export function getGridColumns(
@@ -39,10 +40,6 @@ export function getGridColumns(
   console.log('columns', columns);
   return [selectColumn, ...columns];
 }
-
-const NullValue = () => {
-  return <span className="block text-center">[null]</span>;
-};
 
 const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
