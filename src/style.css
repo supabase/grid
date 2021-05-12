@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.fillContainer:after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
 .pagination-input .sbui-inputnumber {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
