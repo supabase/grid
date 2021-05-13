@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { EditorProps } from '@supabase/react-data-grid';
-import styles from './editor.module.css';
 
 function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.focus();
@@ -13,14 +12,20 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
   onRowChange,
   onClose,
 }: EditorProps<TRow, TSummaryRow>) {
+  const value = (row[column.key as keyof TRow] as unknown) as string;
+
+  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
+    let _value = event.target.value;
+    if (_value == '') onRowChange({ ...row, [column.key]: null });
+    else onRowChange({ ...row, [column.key]: _value });
+  }
+
   return (
     <input
-      className={styles.textEditor}
+      className="w-full h-full border-0 px-2"
       ref={autoFocusAndSelect}
-      value={(row[column.key as keyof TRow] as unknown) as string}
-      onChange={event =>
-        onRowChange({ ...row, [column.key]: event.target.value })
-      }
+      value={value || ''}
+      onChange={onChange}
       onBlur={() => onClose(true)}
       type="number"
     />
