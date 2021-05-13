@@ -43,7 +43,8 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       content={
         <textarea
           ref={autoFocusAndSelect}
-          className="p-2 resize-none text-sm rounded-none border-0 bg-white"
+          className="p-2 resize-none text-sm rounded-none border-0 
+          text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700"
           style={{ width: `${gridColumn?.width || column.width}px` }}
           value={value || ''}
           rows={5}
