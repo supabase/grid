@@ -6,6 +6,9 @@ import {
   NumberEditor,
   SelectEditor,
   TextEditor,
+  DateEditor,
+  DateTimeEditor,
+  TimeEditor,
 } from '../components/editor';
 import { ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
@@ -74,7 +77,27 @@ function _setupColumnEditor(
       break;
     }
     case 'date': {
+      config.editor = DateEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
+      break;
+    }
+    case 'datetime': {
+      config.editor = DateTimeEditor;
+      config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
+      break;
+    }
+    case 'time': {
+      config.editor = TimeEditor;
+      config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'enum': {
@@ -127,8 +150,12 @@ function _getColumnType(columnDef: SupaColumn): ColumnType {
     return 'json';
   } else if (_isTextColumn(columnDef.dataType)) {
     return 'text';
-  } else if (_isDateTimeColumn(columnDef.dataType)) {
+  } else if (_isDateColumn(columnDef.format)) {
     return 'date';
+  } else if (_isTimeColumn(columnDef.format)) {
+    return 'time';
+  } else if (_isDateTimeColumn(columnDef.format)) {
+    return 'datetime';
   } else if (_isBoolColumn(columnDef.dataType)) {
     return 'boolean';
   } else if (_isEnumColumn(columnDef.dataType)) {
@@ -141,7 +168,11 @@ function _getColumnType(columnDef: SupaColumn): ColumnType {
 function _getColumnWidth(columnDef: SupaColumn): string | number | undefined {
   if (_isNumericalColumn(columnDef.dataType)) {
     return 100;
-  } else if (_isDateTimeColumn(columnDef.dataType)) {
+  } else if (
+    _isDateTimeColumn(columnDef.format) ||
+    _isDateColumn(columnDef.format) ||
+    _isTimeColumn(columnDef.format)
+  ) {
     return 150;
   } else if (_isBoolColumn(columnDef.dataType)) {
     return 100;
@@ -180,9 +211,19 @@ function _isTextColumn(type: string) {
   return TEXT_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-const TIMESTAMP_TYPES = ['date', 'time', 'timestamp', 'timetz', 'timestamptz'];
+const TIMESTAMP_TYPES = ['timestamp', 'timestamptz'];
 function _isDateTimeColumn(type: string) {
   return TIMESTAMP_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+const DATE_TYPES = ['date'];
+function _isDateColumn(type: string) {
+  return DATE_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+const TIME_TYPES = ['time', 'timetz'];
+function _isTimeColumn(type: string) {
+  return TIME_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const BOOL_TYPES = ['boolean', 'bool'];

@@ -78,6 +78,7 @@
     "@supabase/supabase-js": "^1.11.11",
     "@supabase/ui": "^0.24.3",
     "awesome-debounce-promise": "^2.1.0",
+    "dayjs": "^1.10.4",
     "file-saver": "^2.0.5",
     "immutability-helper": "^3.1.1",
     "install": "^0.13.0",

@@ -30,12 +30,14 @@ export interface DragItem {
 export type ColumnType =
   | 'boolean'
   | 'date'
+  | 'datetime'
   | 'enum'
   | 'foreign_key'
   | 'json'
   | 'number'
   | 'primary_key'
   | 'text'
+  | 'time'
   | 'unknown';
 
 export interface ColumnHeaderProps<R> extends HeaderRendererProps<R> {
