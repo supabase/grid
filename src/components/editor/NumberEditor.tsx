@@ -22,7 +22,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <input
-      className="w-full h-full border-0 px-2"
+      className="w-full h-full px-2 border-0 rounded-none"
       ref={autoFocusAndSelect}
       value={value || ''}
       placeholder={value ? '' : '[null]'}

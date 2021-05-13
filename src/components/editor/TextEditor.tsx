@@ -43,7 +43,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       content={
         <textarea
           ref={autoFocusAndSelect}
-          className="p-2 resize-none text-sm"
+          className="p-2 resize-none text-sm rounded-none border-0 bg-white"
           style={{ width: `${gridColumn?.width || column.width}px` }}
           value={value || ''}
           rows={5}
@@ -55,7 +55,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       <div
         className={`${
           !!value && value.trim().length == 0 ? 'fillContainer' : ''
-        } px-2`}
+        } px-2 text-sm`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
         {value ? value : <NullValue />}
