@@ -19,17 +19,6 @@ const App = () => {
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
-  React.useEffect(() => {
-    const bodyEl = document.querySelector('body');
-    if (bodyEl) {
-      if (uiMode == '') {
-        bodyEl.classList.remove('dark');
-      } else {
-        bodyEl.classList.add(uiMode);
-      }
-    }
-  }, [uiMode]);
-
   function showTestTable() {
     setName('test-table');
   }
@@ -47,8 +36,11 @@ const App = () => {
   }
 
   function onToggleDarkMode() {
-    if (uiMode == 'dark') setUiMode('');
-    else setUiMode('dark');
+    let mode = '';
+    if (uiMode != 'dark') mode = 'dark';
+
+    setUiMode(mode);
+    document.body.className = mode;
   }
 
   // READONLY
