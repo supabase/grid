@@ -15,13 +15,20 @@ const clientProps = {
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [tableName, setName] = React.useState('countries');
+  const [tableName, setName] = React.useState('test-table');
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
-  function onClick() {
-    const name = tableName == 'countries_view' ? 'countries' : 'countries_view';
-    setName(name);
+  function showTestTable() {
+    setName('test-table');
+  }
+
+  function showCountriesTable() {
+    setName('countries');
+  }
+
+  function showCountriesView() {
+    setName('countries_view');
   }
 
   function onRowAdded() {
@@ -83,7 +90,9 @@ const App = () => {
   return (
     <div className={uiMode}>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
-        <button onClick={onClick}>Change Table</button>
+        <button onClick={showTestTable}>Test Table</button>
+        <button onClick={showCountriesTable}>Countries Table</button>
+        <button onClick={showCountriesView}>Countries View</button>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
           Trigger Row Added
         </button>
