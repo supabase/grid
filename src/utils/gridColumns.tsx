@@ -98,6 +98,9 @@ function _setupColumnEditor(
     }
     case 'number': {
       config.editor = NumberEditor;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'text': {

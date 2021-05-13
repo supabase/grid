@@ -25,6 +25,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
       className="w-full h-full border-0 px-2"
       ref={autoFocusAndSelect}
       value={value || ''}
+      placeholder={value ? '' : '[null]'}
       onChange={onChange}
       onBlur={() => onClose(true)}
       type="number"
