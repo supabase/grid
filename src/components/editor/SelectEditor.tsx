@@ -32,7 +32,7 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
       autoFocus
     >
       <option disabled value="">
-        - Please select -
+        [null]
       </option>
       {options.map(({ label, value }) => (
         <option key={value} value={value}>
