@@ -43,7 +43,11 @@ export function getGridColumns(
 const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
 ) => {
-  const value = p.row[p.column.key];
+  let value = p.row[p.column.key];
+  if (!value) return <></>;
+  if (typeof value == 'object' || Array.isArray(value)) {
+    value = JSON.stringify(value);
+  }
   return <>{value}</>;
 };
 
