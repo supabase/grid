@@ -19,6 +19,17 @@ const App = () => {
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
+  React.useEffect(() => {
+    const bodyEl = document.querySelector('body');
+    if (bodyEl) {
+      if (uiMode == '') {
+        bodyEl.classList.remove('dark');
+      } else {
+        bodyEl.classList.add(uiMode);
+      }
+    }
+  }, [uiMode]);
+
   function showTestTable() {
     setName('test-table');
   }
@@ -88,7 +99,7 @@ const App = () => {
   }
 
   return (
-    <div className={uiMode}>
+    <div>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
         <button onClick={showTestTable}>Test Table</button>
         <button onClick={showCountriesTable}>Countries Table</button>
