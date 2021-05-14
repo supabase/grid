@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import Editor from '@monaco-editor/react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from '@supabase/react-data-grid';
@@ -19,7 +18,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
   const jsonString = value ? JSON.stringify(value) : '';
   const prettyJsonValue = prettifyJSON(jsonString);
 
-  function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
+  function handleEditorDidMount(editor: any) {
     setTimeout(() => {
       editor?.focus();
     }, 0);
