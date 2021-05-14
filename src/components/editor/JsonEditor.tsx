@@ -9,14 +9,19 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
-  onClose,
 }: EditorProps<TRow, TSummaryRow>) {
   const state = useTrackedState();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const gridColumn = state.gridColumns.find(x => x.name == column.key);
-  const value = row[column.key as keyof TRow] as unknown;
-  const jsonString = value ? JSON.stringify(value) : '';
+  const initialValue = row[column.key as keyof TRow] as unknown;
+  const jsonString = initialValue ? JSON.stringify(initialValue) : '';
   const prettyJsonValue = prettifyJSON(jsonString);
+  const [value, setValue] = React.useState<string | null>(prettyJsonValue);
+
+  const onEscape = React.useCallback((newValue: string | null) => {
+    commitChange(newValue);
+    setIsPopoverOpen(false);
+  }, []);
 
   function handleEditorDidMount(editor: any) {
     setTimeout(() => {
@@ -25,19 +30,22 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
   }
 
   function onChange(_value: string | undefined) {
-    if (!_value || _value == '') {
-      onRowChange({ ...row, [column.key]: null });
-    } else {
-      if (verifyJSON(_value)) {
-        const jsonValue = JSON.parse(_value);
-        onRowChange({ ...row, [column.key]: jsonValue });
-      }
-    }
+    if (!_value || _value == '') setValue(null);
+    else setValue(_value);
   }
 
   function onBlur() {
+    commitChange(value);
     setIsPopoverOpen(false);
-    onClose(true);
+  }
+
+  function commitChange(newValue: string | null) {
+    if (!newValue) {
+      onRowChange({ ...row, [column.key]: null }, true);
+    } else if (verifyJSON(newValue)) {
+      const jsonValue = JSON.parse(newValue);
+      onRowChange({ ...row, [column.key]: jsonValue }, true);
+    }
   }
 
   return (
@@ -49,13 +57,13 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
       positions={['bottom', 'top', 'left']}
       align="start"
       content={
-        <BlockKeys>
+        <BlockKeys value={value} onEscape={onEscape}>
           <Editor
             width={`${gridColumn?.width || column.width}px`}
             height="200px"
             theme="vs-dark"
             defaultLanguage="json"
-            defaultValue={prettyJsonValue || ''}
+            defaultValue={value || ''}
             onChange={onChange}
             onMount={handleEditorDidMount}
             options={{

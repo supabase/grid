@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 type BlockKeysProps = {
-  onEscape?: () => void;
-  onEnter?: () => void;
+  onEscape?: (value: string | null) => void;
+  onEnter?: (value: string | null) => void;
+  value: string | null;
 };
 
 /**
@@ -13,6 +14,7 @@ type BlockKeysProps = {
 export const BlockKeys: React.FC<BlockKeysProps> = ({
   onEscape,
   onEnter,
+  value,
   children,
 }) => {
   const handleKeyDown = React.useCallback(
@@ -20,15 +22,15 @@ export const BlockKeys: React.FC<BlockKeysProps> = ({
       switch (ev.key) {
         case 'Escape':
           ev.stopPropagation();
-          if (onEscape) onEscape();
+          if (onEscape) onEscape(value);
           break;
         case 'Enter':
           ev.stopPropagation();
-          if (onEnter) onEnter();
+          if (onEnter) onEnter(value);
           break;
       }
     },
-    []
+    [value]
   );
   return <div onKeyDown={handleKeyDown}>{children}</div>;
 };

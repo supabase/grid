@@ -16,25 +16,29 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
-  onClose,
 }: EditorProps<TRow, TSummaryRow>) {
   const state = useTrackedState();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const gridColumn = state.gridColumns.find(x => x.name == column.key);
-  const value = (row[column.key as keyof TRow] as unknown) as string;
+  const initialValue = (row[column.key as keyof TRow] as unknown) as string;
+  const [value, setValue] = React.useState<string | null>(initialValue);
+
+  const onEscape = React.useCallback((newValue: string | null) => {
+    onRowChange({ ...row, [column.key]: newValue }, true);
+    setIsPopoverOpen(false);
+  }, []);
 
   function onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    console.log('onChange onChange onChange');
     const _value = event.target.value;
-    if (_value == '') onRowChange({ ...row, [column.key]: null });
-    else onRowChange({ ...row, [column.key]: _value });
+    if (_value == '') setValue(null);
+    else setValue(_value);
   }
 
-  function onBlur() {
-    console.log('onBlur onBlur onBlur');
+  const onBlur = () => {
+    console.log('onBlur onBlur onBlur', value);
+    onRowChange({ ...row, [column.key]: value }, true);
     setIsPopoverOpen(false);
-    onClose(true);
-  }
+  };
 
   return (
     <Popover
@@ -45,7 +49,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       positions={['bottom', 'top', 'left']}
       align="start"
       content={
-        <BlockKeys>
+        <BlockKeys value={value} onEscape={onEscape}>
           <textarea
             ref={autoFocusAndSelect}
             className="p-2 resize-none text-sm rounded-none border-0 
