@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from '@supabase/react-data-grid';
 import { useTrackedState } from '../../store';
-import { NullValue } from '../common';
+import { BlockKeys, NullValue } from '../common';
 
 function autoFocusAndSelect(input: HTMLTextAreaElement | null) {
   // nee a timeout to wait for popover appear
@@ -24,10 +24,14 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
   const value = (row[column.key as keyof TRow] as unknown) as string;
 
   function onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    onRowChange({ ...row, [column.key]: event.target.value });
+    console.log('onChange onChange onChange');
+    const _value = event.target.value;
+    if (_value == '') onRowChange({ ...row, [column.key]: null });
+    else onRowChange({ ...row, [column.key]: _value });
   }
 
   function onBlur() {
+    console.log('onBlur onBlur onBlur');
     setIsPopoverOpen(false);
     onClose(true);
   }
@@ -41,16 +45,18 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       positions={['bottom', 'top', 'left']}
       align="start"
       content={
-        <textarea
-          ref={autoFocusAndSelect}
-          className="p-2 resize-none text-sm rounded-none border-0 
+        <BlockKeys>
+          <textarea
+            ref={autoFocusAndSelect}
+            className="p-2 resize-none text-sm rounded-none border-0 
           text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700"
-          style={{ width: `${gridColumn?.width || column.width}px` }}
-          value={value || ''}
-          rows={5}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
+            style={{ width: `${gridColumn?.width || column.width}px` }}
+            value={value || ''}
+            rows={5}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+        </BlockKeys>
       }
     >
       <div

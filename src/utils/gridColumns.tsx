@@ -3,11 +3,12 @@ import { Column, FormatterProps } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   CheckboxEditor,
+  DateEditor,
+  DateTimeEditor,
+  JsonEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
-  DateEditor,
-  DateTimeEditor,
   TimeEditor,
 } from '../components/editor';
 import { ColumnHeader, SelectColumn } from '../components/grid';
@@ -116,7 +117,11 @@ function _setupColumnEditor(
       break;
     }
     case 'json': {
+      config.editor = JsonEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'number': {

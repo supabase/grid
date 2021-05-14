@@ -15,7 +15,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
   const value = (row[column.key as keyof TRow] as unknown) as string;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    let _value = event.target.value;
+    const _value = event.target.value;
     if (_value == '') onRowChange({ ...row, [column.key]: null });
     else onRowChange({ ...row, [column.key]: _value });
   }
