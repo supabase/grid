@@ -6,6 +6,7 @@ import {
   DateEditor,
   DateTimeEditor,
   JsonEditor,
+  ForeignKeyEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
@@ -113,7 +114,11 @@ function _setupColumnEditor(
       break;
     }
     case 'foreign_key': {
+      config.editor = ForeignKeyEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'json': {
