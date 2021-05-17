@@ -149,6 +149,8 @@ function _setupColumnEditor(
 function _getColumnType(columnDef: SupaColumn): ColumnType {
   if (columnDef.isIdentity) {
     return 'primary_key';
+  } else if (_isForeignKeyColumn(columnDef)) {
+    return 'foreign_key';
   } else if (_isNumericalColumn(columnDef.dataType)) {
     return 'number';
   } else if (_isJsonColumn(columnDef.dataType)) {
@@ -165,8 +167,6 @@ function _getColumnType(columnDef: SupaColumn): ColumnType {
     return 'boolean';
   } else if (_isEnumColumn(columnDef.dataType)) {
     return 'enum';
-  } else if (_isForeignKeyColumn()) {
-    return 'foreign_key';
   } else return 'unknown';
 }
 
@@ -241,7 +241,7 @@ function _isEnumColumn(type: string) {
   return ENUM_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-// TODO
-function _isForeignKeyColumn() {
-  return false;
+function _isForeignKeyColumn(columnDef: SupaColumn) {
+  const { targetTableSchema, targetTableName, targetColumnName } = columnDef;
+  return !!targetTableSchema && !!targetTableName && !!targetColumnName;
 }
