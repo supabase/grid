@@ -44,7 +44,7 @@ export const SupabaseGrid = React.forwardRef<
           { token: 'predefined.sql', foreground: 'D4D4D4' },
         ],
         colors: {
-          'editor.background': '#1f1f1f',
+          'editor.background': '#30313f',
         },
       });
     }
