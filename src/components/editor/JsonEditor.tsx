@@ -1,9 +1,8 @@
 import * as React from 'react';
-import Editor from '@monaco-editor/react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from '@supabase/react-data-grid';
 import { useTrackedState } from '../../store';
-import { BlockKeys, NullValue } from '../common';
+import { BlockKeys, MonacoEditor, NullValue } from '../common';
 
 export function JsonEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -58,26 +57,12 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
       align="start"
       content={
         <BlockKeys value={value} onEscape={onEscape}>
-          <Editor
+          <MonacoEditor
             width={`${gridColumn?.width || column.width}px`}
-            height="200px"
-            theme="vs-dark"
-            defaultLanguage="json"
-            defaultValue={value || ''}
+            value={value || ''}
+            language="json"
             onChange={onChange}
             onMount={handleEditorDidMount}
-            options={{
-              tabSize: 2,
-              fontSize: 11,
-              minimap: {
-                enabled: false,
-              },
-              glyphMargin: false,
-              folding: false,
-              lineNumbers: 'off',
-              lineDecorationsWidth: 0,
-              lineNumbersMinChars: 0,
-            }}
           />
         </BlockKeys>
       }
@@ -85,7 +70,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
       <div
         className={`${
           !!value && jsonString.trim().length == 0 ? 'fillContainer' : ''
-        } px-2 text-sm`}
+        } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
         {value ? jsonString : <NullValue />}

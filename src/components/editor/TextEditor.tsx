@@ -2,15 +2,7 @@ import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from '@supabase/react-data-grid';
 import { useTrackedState } from '../../store';
-import { BlockKeys, NullValue } from '../common';
-
-function autoFocusAndSelect(input: HTMLTextAreaElement | null) {
-  // nee a timeout to wait for popover appear
-  setTimeout(() => {
-    input?.focus();
-    input?.select();
-  }, 0);
-}
+import { BlockKeys, MonacoEditor, NullValue } from '../common';
 
 export function TextEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -28,14 +20,18 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     setIsPopoverOpen(false);
   }, []);
 
-  function onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    const _value = event.target.value;
-    if (_value == '') setValue(null);
+  function handleEditorDidMount(editor: any) {
+    setTimeout(() => {
+      editor?.focus();
+    }, 0);
+  }
+
+  function onChange(_value: string | undefined) {
+    if (!_value || _value == '') setValue(null);
     else setValue(_value);
   }
 
   const onBlur = () => {
-    console.log('onBlur onBlur onBlur', value);
     onRowChange({ ...row, [column.key]: value }, true);
     setIsPopoverOpen(false);
   };
@@ -50,15 +46,11 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       align="start"
       content={
         <BlockKeys value={value} onEscape={onEscape}>
-          <textarea
-            ref={autoFocusAndSelect}
-            className="p-2 resize-none text-sm rounded-none border-0 
-          text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700"
-            style={{ width: `${gridColumn?.width || column.width}px` }}
+          <MonacoEditor
+            width={`${gridColumn?.width || column.width}px`}
             value={value || ''}
-            rows={5}
             onChange={onChange}
-            onBlur={onBlur}
+            onMount={handleEditorDidMount}
           />
         </BlockKeys>
       }
@@ -66,7 +58,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
       <div
         className={`${
           !!value && value.trim().length == 0 ? 'fillContainer' : ''
-        } px-2 text-sm`}
+        } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
         {value ? value : <NullValue />}
