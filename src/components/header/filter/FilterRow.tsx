@@ -108,7 +108,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
         options={filterClauseOptions}
         onSelect={onClauseChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button as="span" className="mr-2" type="outline">
           {filter.clause}
         </Button>
       </DropdownControl>
@@ -117,7 +117,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
         options={columnOptions}
         onSelect={onColumnChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button as="span" className="mr-2" type="outline">
           {column?.name || ''}
         </Button>
       </DropdownControl>
@@ -126,7 +126,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
         options={filterConditionOptions}
         onSelect={onConditionChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button as="span" className="mr-2" type="outline">
           {filter.condition}
         </Button>
       </DropdownControl>

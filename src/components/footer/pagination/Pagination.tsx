@@ -102,6 +102,7 @@ const Pagination: React.FC<PaginationProps> = () => {
           placement="topRight"
         >
           <Button
+            as="span"
             type="outline"
             style={{ padding: '3px 10px' }}
           >{`${state.rowsPerPage} rows`}</Button>

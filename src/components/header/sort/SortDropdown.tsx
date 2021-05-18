@@ -56,7 +56,7 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
       )}
       <div className="mt-2">
         <DropdownControl options={dropdownOptions} onSelect={onAddSort}>
-          <Button>Pick another column to sort by</Button>
+          <Button as="span">Pick another column to sort by</Button>
         </DropdownControl>
       </div>
     </div>
