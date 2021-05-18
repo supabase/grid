@@ -99,7 +99,8 @@ const Pagination: React.FC<PaginationProps> = () => {
         <DropdownControl
           options={rowsPerPageOptions}
           onSelect={onRowsPerPageChange}
-          placement="topRight"
+          side="top"
+          align="start"
         >
           <Button
             as="span"

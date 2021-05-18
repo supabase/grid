@@ -14,7 +14,7 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
   return (
     <Dropdown
       className="w-80 overflow-visible"
-      placement="bottomLeft"
+      side="bottom"
       overlay={<Sort {...p} />}
     >
       <Button className="ml-2" type="outline" style={{ padding: '3px 10px' }}>

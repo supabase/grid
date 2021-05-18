@@ -13,7 +13,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
   return (
     <Dropdown
       className="w-96 overflow-visible"
-      placement="bottomLeft"
+      side="bottom"
       overlay={<Filter {...p} />}
     >
       <Button type="outline" style={{ padding: '3px 10px' }}>
