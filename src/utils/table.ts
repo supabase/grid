@@ -16,8 +16,7 @@ export async function fetchTableInfo(
     resColumns.data &&
     resRelationships.data &&
     resTable.data.length > 0 &&
-    resColumns.data.length > 0 &&
-    resRelationships.data.length > 0
+    resColumns.data.length > 0
   ) {
     const supaTable = parseSupaTable(
       resTable.data[0],
