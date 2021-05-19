@@ -96,14 +96,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   function renderRows() {
     if (!rows) return null;
     const temp = rows.map((x, i) => {
-      const keys = Object.keys(x);
-      return (
-        <Menu.Item key={`menu-${i}`} onClick={() => onItemSelect(x)}>
-          {keys.map((key, j) => {
-            return <span key={`item-${j}`}>{`${key}:${x[key]}`}</span>;
-          })}
-        </Menu.Item>
-      );
+      return <RowItem key={`menu-${i}`} item={x} onSelect={onItemSelect} />;
     });
     return <Menu>{temp}</Menu>;
   }
@@ -121,7 +114,10 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
           <Modal visible={visible} onCancel={toggle} closable hideFooter>
             <Typography.Text>This is the content of the Modal</Typography.Text>
             <Divider />
-            <div className="overflow-scroll" style={{ maxHeight: '10rem' }}>
+            <div
+              className="w-full overflow-scroll"
+              style={{ maxHeight: '10rem' }}
+            >
               {renderRows()}
             </div>
             <Divider />
@@ -129,5 +125,28 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
         </ModalPortal>
       )}
     </>
+  );
+};
+
+type RowItemProps = {
+  item: Dictionary<any>;
+  onSelect: (item: Dictionary<any>) => void;
+};
+
+export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
+  const keys = Object.keys(item);
+  return (
+    <Menu.Item onClick={() => onSelect(item)}>
+      <div className="flex space-x-4">
+        {keys.map((key, j) => {
+          return (
+            <div className="flex flex-col flex-initial" key={`item-${j}`}>
+              <Typography.Text strong>{key}</Typography.Text>
+              <Typography.Text>{item[key] || '[null]'}</Typography.Text>
+            </div>
+          );
+        })}
+      </div>
+    </Menu.Item>
   );
 };
