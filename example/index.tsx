@@ -33,6 +33,14 @@ const App = () => {
     else setUiMode('dark');
   }
 
+  React.useEffect(() => {
+    if (uiMode == 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [uiMode]);
+
   // READONLY
   // using postgrest OpenApi description to retrieve table, column definition
   // so it supports both table, view
@@ -81,7 +89,7 @@ const App = () => {
   }
 
   return (
-    <div className={uiMode}>
+    <div>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
         <button onClick={onClick}>Change Table</button>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
