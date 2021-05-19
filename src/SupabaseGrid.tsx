@@ -14,7 +14,7 @@ import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
-import { ColumnMenu, RowMenu, MultiRowsMenu } from './components/menu';
+import { RowMenu, MultiRowsMenu, MenuContextProvider } from './components/menu';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
@@ -120,15 +120,15 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
           onAddRow={editable ? props.onAddRow : undefined}
           onAddColumn={editable ? props.onAddColumn : undefined}
         />
-        <Grid {...gridProps} />
+        <MenuContextProvider
+          onEditRow={onEditRow}
+          onEditColumn={onEditColumn}
+          onDeleteColumn={onDeleteColumn}
+          editable={editable}
+        >
+          <Grid {...gridProps} />
+        </MenuContextProvider>
         <Footer />
-        {createPortal(
-          <ColumnMenu
-            onEditColumn={editable ? onEditColumn : undefined}
-            onDeleteColumn={editable ? onDeleteColumn : undefined}
-          />,
-          document.body
-        )}
         {createPortal(
           <RowMenu onEditRow={editable ? onEditRow : undefined} />,
           document.body
