@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  Typography,
-  Button,
-  IconXSquare,
-  IconAlignJustify,
-} from '@supabase/ui';
+import { Typography, Button, IconMenu, IconX, Dropdown } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { useDispatch, useTrackedState } from '../../../store';
@@ -118,34 +113,43 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   drag(drop(ref));
 
   return (
-    <div
-      className="flex justify-between py-1"
-      ref={ref}
-      style={{ opacity }}
-      data-handler-id={handlerId}
-    >
-      <div className="flex items-center">
-        <Button
-          className="mr-4 p-2"
-          icon={<IconXSquare />}
-          shadow={false}
-          size="tiny"
-          type="text"
-          onClick={onDeleteClick}
-        />
-        <Typography.Text>{column.name}</Typography.Text>
-      </div>
-      <div className="flex items-center">
-        <SegmentedControl
-          options={['ASC', 'DESC']}
-          value={sort.order}
-          onToggle={onToogle}
-        />
-        <div className="ml-5">
-          <IconAlignJustify size="tiny" />
+    <Dropdown.Misc>
+      <div
+        className="flex justify-between"
+        ref={ref}
+        style={{ opacity }}
+        data-handler-id={handlerId}
+      >
+        <div className="flex items-center space-x-3">
+          <Button
+            icon={<IconX />}
+            className="p-0 bg-transparent hover:bg-transparent"
+            shadow={false}
+            size="tiny"
+            type="text"
+            onClick={onDeleteClick}
+          />
+          <div className="flex items-center space-x-2">
+            <Typography.Text type="secondary" small>
+              {index > 0 ? 'then by' : 'sort by'}
+            </Typography.Text>
+            <Typography.Text>{column.name}</Typography.Text>
+          </div>
+        </div>
+        <div className="flex items-center space-x-3">
+          <SegmentedControl
+            options={['ASC', 'DESC']}
+            value={sort.order}
+            onToggle={onToogle}
+          />
+          <div className="">
+            <Typography.Text className="cursor-move">
+              <IconMenu size="tiny" />
+            </Typography.Text>
+          </div>
         </div>
       </div>
-    </div>
+    </Dropdown.Misc>
   );
 };
 export default React.memo(SortRow);

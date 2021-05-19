@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
     return (
       <Button
         className="ml-2"
-        type="outline"
+        type="text"
         style={{ padding: '3px 10px' }}
         onClick={onAddColumn}
       >

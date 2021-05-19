@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Dropdown, Button, IconPlus, Typography } from '@supabase/ui';
+import {
+  Dropdown,
+  Button,
+  IconPlus,
+  Typography,
+  IconFilter,
+} from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
 import FilterRow from './FilterRow';
 
@@ -16,7 +22,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
       side="bottom"
       overlay={<Filter {...p} />}
     >
-      <Button type="outline" style={{ padding: '3px 10px' }}>
+      <Button type="text" style={{ padding: '3px 10px' }} icon={<IconFilter />}>
         {btnText}
       </Button>
     </Dropdown>
