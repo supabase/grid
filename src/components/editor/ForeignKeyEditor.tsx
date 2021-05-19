@@ -93,14 +93,44 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     }
   }
 
-  async function fetchData() {
+  async function fetchData(filter?: {
+    columnName: string;
+    condition: string;
+    filterText: string;
+  }) {
     if (!state.client || !columnDefinition?.targetTableName) return;
 
-    const res = await state.client
-      .from(columnDefinition?.targetTableName)
-      .select()
-      .limit(10);
+    let request = state.client.from(columnDefinition?.targetTableName).select();
 
+    if (filter) {
+      const { columnName, condition, filterText } = filter;
+      switch (condition) {
+        case 'is':
+          const _filterText = filterText.toLowerCase();
+          if (_filterText == 'null') request = request.is(columnName, null);
+          else if (_filterText == 'true')
+            request = request.is(columnName, true);
+          else if (_filterText == 'false')
+            request = request.is(columnName, false);
+          break;
+        case 'in':
+          const filterValues = filterText.split(',').map(x => x.trim());
+          request = request.in(columnName, filterValues);
+          break;
+        default:
+          request = request.filter(
+            columnName,
+            // @ts-ignore
+            condition.toLowerCase(),
+            filterText
+          );
+          break;
+      }
+    }
+
+    // TODO: How to let users know that filter result limit at 20 results
+    // should we allow a higher value?
+    const res = await request.limit(20);
     if (!res.data || res.error) {
       setRows(null);
     } else {
@@ -135,7 +165,8 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     condition: string;
     filterText: string;
   }) {
-    console.log('onFilterChange', value);
+    const { columnName, condition, filterText } = value;
+    if (columnName && condition && filterText) fetchData(value);
   }
 
   return (
@@ -203,24 +234,30 @@ export const Filter: React.FC<FilterProps> = ({ foreignColumns, onChange }) => {
       return { value: x.name, label: x.name };
     }) || [];
 
-  function triggerOnChange() {
-    onFilterChangeDebounced(columnName, condition, filterText, onChange);
+  function triggerOnChange(
+    _columnName: string,
+    _condition: string,
+    _filterText: string
+  ) {
+    onFilterChangeDebounced(_columnName, _condition, _filterText, onChange);
   }
 
   function onColumnChange(value: string | number) {
-    setColumnName(value + '');
-    triggerOnChange();
+    const _value = value + '';
+    setColumnName(_value);
+    triggerOnChange(_value, condition, filterText);
   }
 
-  function onConditionChange(condition: string | number) {
-    setCondition(condition + '');
-    triggerOnChange();
+  function onConditionChange(value: string | number) {
+    const _value = value + '';
+    setCondition(_value);
+    triggerOnChange(columnName, _value, filterText);
   }
 
   function onFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setFilterText(value);
-    triggerOnChange();
+    triggerOnChange(columnName, condition, value);
   }
 
   return (
