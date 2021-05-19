@@ -9,16 +9,12 @@ import {
   IconCheckCircle,
   IconList,
 } from '@supabase/ui';
-// import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { SortableHeaderCell } from '@supabase/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
-import {
-  ColumnMenu,
-  // MENU_IDS
-} from '../menu';
+import { ColumnMenu } from '../menu';
 
 export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -26,22 +22,6 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
-
-  // const { show: showContextMenu } = useContextMenu({
-  //   id: MENU_IDS.COLUMN_MENU_ID,
-  // });
-
-  // function getMenuPosition() {
-  //   const { left, bottom } = triggerRef?.current.button.getBoundingClientRect();
-  //   return { x: left, y: bottom + 8 };
-  // }
-
-  // function displayMenu(e: TriggerEvent) {
-  //   showContextMenu(e, {
-  //     position: getMenuPosition(),
-  //     props: { columnKey, frozen: column.frozen },
-  //   });
-  // }
 
   const [{ isDragging }, drag] = useDrag({
     type: 'column-header',

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Divider } from '@supabase/ui';
+import { Button, Divider, IconPlus } from '@supabase/ui';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
   const renderNewColumn = (onAddColumn?: () => void) => {
     if (!onAddColumn) return null;
     return (
-      <Button type="text" style={{ padding: '4px 8px' }} onClick={onAddColumn}>
+      <Button type="text" onClick={onAddColumn}>
         New Column
       </Button>
     );
@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
       <Button
         className="ml-2"
         style={{ padding: '4px 8px' }}
-        // icon={<IconPlus size="tiny" />}
+        icon={<IconPlus size="tiny" />}
         onClick={onAddRow}
       >
         Insert row
