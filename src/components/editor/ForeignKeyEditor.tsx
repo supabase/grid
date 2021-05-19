@@ -5,13 +5,17 @@ import {
   Divider,
   Modal,
   Menu,
+  Input,
   Typography,
   IconExternalLink,
   IconX,
 } from '@supabase/ui';
 import { useTrackedState } from '../../store';
-import { ModalPortal, NullValue } from '../common';
+import { DropdownControl, ModalPortal, NullValue } from '../common';
 import { Dictionary } from '../../types';
+import { FilterConditionOptions } from '../../components/header/filter/FilterRow';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import TableService from '../../services/TableService';
 
 export function ForeignKeyEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -59,13 +63,35 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   onChange,
 }) => {
   const [visible, setVisible] = React.useState(false);
+  const [foreignColumns, setForeignColumns] = React.useState<
+    Dictionary<any>[] | null
+  >(null);
   const [rows, setRows] = React.useState<Dictionary<any>[] | null>(null);
   const state = useTrackedState();
   const columnDefinition = state.table?.columns.find(x => x.name == columnName);
 
   React.useEffect(() => {
+    fetchColumns();
     fetchData();
   }, []);
+
+  async function fetchColumns() {
+    if (
+      !state.client ||
+      !columnDefinition?.targetTableName ||
+      !columnDefinition?.targetTableSchema
+    )
+      return;
+
+    const tableService = new TableService(state.client);
+    const resColumns = await tableService.fetchColumns(
+      columnDefinition?.targetTableName,
+      columnDefinition?.targetTableSchema
+    );
+    if (resColumns.data && resColumns.data.length > 0) {
+      setForeignColumns(resColumns.data);
+    }
+  }
 
   async function fetchData() {
     if (!state.client || !columnDefinition?.targetTableName) return;
@@ -75,8 +101,11 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
       .select()
       .limit(10);
 
-    if (!res.data || res.error) setRows(null);
-    else setRows(res.data);
+    if (!res.data || res.error) {
+      setRows(null);
+    } else {
+      setRows(res.data);
+    }
   }
 
   function toggle(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -101,6 +130,14 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     return <Menu>{temp}</Menu>;
   }
 
+  function onFilterChange(value: {
+    columnName: string;
+    condition: string;
+    filterText: string;
+  }) {
+    console.log('onFilterChange', value);
+  }
+
   return (
     <>
       <Button
@@ -112,11 +149,14 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
       {visible && (
         <ModalPortal>
           <Modal visible={visible} onCancel={toggle} closable hideFooter>
-            <Typography.Text>This is the content of the Modal</Typography.Text>
+            <Filter
+              foreignColumns={foreignColumns || []}
+              onChange={onFilterChange}
+            />
             <Divider />
             <div
               className="w-full overflow-scroll"
-              style={{ maxHeight: '10rem' }}
+              style={{ minHeight: '20rem', maxHeight: '20rem' }}
             >
               {renderRows()}
             </div>
@@ -125,6 +165,92 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
         </ModalPortal>
       )}
     </>
+  );
+};
+
+const onFilterChange = (
+  columnName: string,
+  condition: string,
+  filterText: string,
+  onChange: (value: {
+    columnName: string;
+    condition: string;
+    filterText: string;
+  }) => void
+) => {
+  onChange({ columnName, condition, filterText });
+};
+const onFilterChangeDebounced = AwesomeDebouncePromise(onFilterChange, 500);
+
+type FilterProps = {
+  foreignColumns: Dictionary<any>[];
+  onChange: (value: {
+    columnName: string;
+    condition: string;
+    filterText: string;
+  }) => void;
+};
+
+export const Filter: React.FC<FilterProps> = ({ foreignColumns, onChange }) => {
+  const [columnName, setColumnName] = React.useState(foreignColumns[0].name);
+  const [condition, setCondition] = React.useState(
+    FilterConditionOptions[0].value
+  );
+  const [filterText, setFilterText] = React.useState('');
+
+  const columnOptions =
+    foreignColumns.map(x => {
+      return { value: x.name, label: x.name };
+    }) || [];
+
+  function triggerOnChange() {
+    onFilterChangeDebounced(columnName, condition, filterText, onChange);
+  }
+
+  function onColumnChange(value: string | number) {
+    setColumnName(value + '');
+    triggerOnChange();
+  }
+
+  function onConditionChange(condition: string | number) {
+    setCondition(condition + '');
+    triggerOnChange();
+  }
+
+  function onFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    setFilterText(value);
+    triggerOnChange();
+  }
+
+  return (
+    <div className="flex items-center w-full">
+      <DropdownControl
+        className="z-20"
+        options={columnOptions}
+        onSelect={onColumnChange}
+      >
+        <Button className="mr-2" type="outline">
+          {columnName}
+        </Button>
+      </DropdownControl>
+      <DropdownControl
+        className="z-20"
+        options={FilterConditionOptions}
+        onSelect={onConditionChange}
+      >
+        <Button className="mr-2" type="outline">
+          {condition}
+        </Button>
+      </DropdownControl>
+      <Input
+        size="tiny"
+        className="flex-grow"
+        placeholder="Find a record"
+        value={filterText}
+        onChange={onFilterChange}
+      />
+    </div>
   );
 };
 

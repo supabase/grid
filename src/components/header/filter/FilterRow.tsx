@@ -5,13 +5,13 @@ import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import { Filter } from '../../../types';
 
-const filterClauseOptions = [
+const FilterClauseOptions = [
   { value: 'where', label: 'WHERE' },
   { value: 'and', label: 'AND' },
   { value: 'or', label: 'OR' },
 ];
 
-const filterConditionOptions = [
+export const FilterConditionOptions = [
   { value: 'eq', label: '[eq] equals' },
   { value: 'neq', label: '[neq] not equal' },
   { value: 'gt', label: '[gt] greater than' },
@@ -105,7 +105,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
       />
       <DropdownControl
         className="z-20"
-        options={filterClauseOptions}
+        options={FilterClauseOptions}
         onSelect={onClauseChange}
       >
         <Button className="mr-2" type="outline">
@@ -123,7 +123,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
       </DropdownControl>
       <DropdownControl
         className="z-20"
-        options={filterConditionOptions}
+        options={FilterConditionOptions}
         onSelect={onConditionChange}
       >
         <Button className="mr-2" type="outline">
