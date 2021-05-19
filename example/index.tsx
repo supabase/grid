@@ -10,7 +10,7 @@ import { SupabaseGrid, SupabaseGridRef } from '../.';
 const clientProps = {
   supabaseUrl: 'https://elwnyzeispughydvblgw.supabase.co',
   supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMDAwMTg0NSwiZXhwIjoxOTM1NTc3ODQ1fQ.NqLZjLKCukqjVfiynZ41Fsq7ih8U2JmvWYYlGtcuELo',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic3VwYWJhc2VfYWRtaW4iLCJpYXQiOjE2MjAwMDE4NDUsImV4cCI6MTkzNTU3Nzg0NX0.PYPs2TWfinXgcv3OGtoq2i1SEJs_iz6FlwcRcNoYxtk',
 };
 
 const App = () => {
