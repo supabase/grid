@@ -76,7 +76,7 @@
   "dependencies": {
     "@supabase/react-data-grid": "^7.0.0-canary.45",
     "@supabase/supabase-js": "^1.11.11",
-    "@supabase/ui": "^0.26.0",
+    "@supabase/ui": "^0.26.1",
     "awesome-debounce-promise": "^2.1.0",
     "file-saver": "^2.0.5",
     "immutability-helper": "^3.1.1",
