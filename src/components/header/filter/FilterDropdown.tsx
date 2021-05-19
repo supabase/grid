@@ -5,6 +5,7 @@ import {
   IconPlus,
   Typography,
   IconFilter,
+  Divider,
 } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
 import FilterRow from './FilterRow';
@@ -14,15 +15,19 @@ type FilterDropdownProps = {};
 const FilterDropdown: React.FC<FilterDropdownProps> = p => {
   const state = useTrackedState();
   const btnText =
-    state.filters.length > 0 ? `Filter ${state.filters.length}` : 'Filter';
+    state.filters.length > 0
+      ? `Filtered by ${state.filters.length} rule${
+          state.filters.length > 1 ? 's' : ''
+        }`
+      : 'Filter';
 
   return (
     <Dropdown
-      className="w-96 overflow-visible"
+      className="overflow-visible"
       side="bottom"
       overlay={<Filter {...p} />}
     >
-      <Button type="text" style={{ padding: '3px 10px' }} icon={<IconFilter />}>
+      <Button type="text" icon={<IconFilter />}>
         {btnText}
       </Button>
     </Dropdown>
@@ -47,20 +52,28 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
   }
 
   return (
-    <div className="p-2">
+    <div className="">
       <div>
         {state.filters.map((_, index) => (
           <FilterRow key={`filter-${index}`} filterIdx={index} />
         ))}
         {state.filters.length == 0 && (
-          <Typography.Text>No filters applied</Typography.Text>
+          <Dropdown.Misc>
+            <div className="py-2">
+              <Typography.Text>No filters applied to this view</Typography.Text>
+              <Typography.Text small type="secondary" className="block">
+                Add a column below to filter the view
+              </Typography.Text>
+            </div>
+          </Dropdown.Misc>
         )}
       </div>
-      <div className="mt-2">
-        <Button icon={<IconPlus />} onClick={onAddFilter}>
+      <Divider light />
+      <Dropdown.Misc>
+        <Button icon={<IconPlus />} type="text" onClick={onAddFilter}>
           Add filter
         </Button>
-      </div>
+      </Dropdown.Misc>
     </div>
   );
 };

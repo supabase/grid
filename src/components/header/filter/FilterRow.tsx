@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
-import { Button, Input, IconXSquare } from '@supabase/ui';
+import { Button, Input, Dropdown, IconX, IconChevronDown } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import { Filter } from '../../../types';
@@ -94,49 +94,50 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
   }
 
   return (
-    <div className="flex items-center py-1">
-      <Button
-        className="mr-2 p-2"
-        icon={<IconXSquare />}
-        shadow={false}
-        size="tiny"
-        type="text"
-        onClick={onRemoveFilter}
-      />
-      <DropdownControl
-        className="z-20"
-        options={filterClauseOptions}
-        onSelect={onClauseChange}
-      >
-        <Button as="span" className="mr-2" type="outline">
-          {filter.clause}
-        </Button>
-      </DropdownControl>
-      <DropdownControl
-        className="z-20"
-        options={columnOptions}
-        onSelect={onColumnChange}
-      >
-        <Button as="span" className="mr-2" type="outline">
-          {column?.name || ''}
-        </Button>
-      </DropdownControl>
-      <DropdownControl
-        className="z-20"
-        options={filterConditionOptions}
-        onSelect={onConditionChange}
-      >
-        <Button as="span" className="mr-2" type="outline">
-          {filter.condition}
-        </Button>
-      </DropdownControl>
-      <Input
-        size="tiny"
-        value={filterText}
-        style={{ width: '7rem' }}
-        onChange={onFilterChange}
-      />
-    </div>
+    <Dropdown.Misc>
+      <div className="flex items-center justify-between w-full space-x-3">
+        <div className="flex items-center space-x-3">
+          <Button
+            icon={<IconX />}
+            className="p-0 bg-transparent hover:bg-transparent"
+            shadow={false}
+            size="tiny"
+            type="text"
+            onClick={onRemoveFilter}
+          />
+          <DropdownControl
+            align="start"
+            options={filterClauseOptions}
+            onSelect={onClauseChange}
+          >
+            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+              {filter.clause}
+            </Button>
+          </DropdownControl>
+          <DropdownControl
+            align="start"
+            options={columnOptions}
+            onSelect={onColumnChange}
+          >
+            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+              {column?.name || ''}
+            </Button>
+          </DropdownControl>
+          <DropdownControl
+            align="start"
+            options={filterConditionOptions}
+            onSelect={onConditionChange}
+          >
+            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+              {filter.condition}
+            </Button>
+          </DropdownControl>
+        </div>
+        <div>
+          <Input size="tiny" value={filterText} onChange={onFilterChange} />
+        </div>
+      </div>
+    </Dropdown.Misc>
   );
 };
 export default FilterRow;

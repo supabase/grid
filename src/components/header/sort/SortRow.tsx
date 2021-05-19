@@ -115,7 +115,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   return (
     <Dropdown.Misc>
       <div
-        className="flex justify-between"
+        className="flex justify-between space-x-3"
         ref={ref}
         style={{ opacity }}
         data-handler-id={handlerId}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, IconPlus } from '@supabase/ui';
+import { Button, Divider } from '@supabase/ui';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
@@ -13,12 +13,7 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
   const renderNewColumn = (onAddColumn?: () => void) => {
     if (!onAddColumn) return null;
     return (
-      <Button
-        className="ml-2"
-        type="text"
-        style={{ padding: '3px 10px' }}
-        onClick={onAddColumn}
-      >
+      <Button type="text" style={{ padding: '4px 8px' }} onClick={onAddColumn}>
         New Column
       </Button>
     );
@@ -29,20 +24,21 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
     return (
       <Button
         className="ml-2"
-        style={{ padding: '3px 10px' }}
-        icon={<IconPlus />}
+        style={{ padding: '4px 8px' }}
+        // icon={<IconPlus size="tiny" />}
         onClick={onAddRow}
       >
-        Add Row
+        Insert row
       </Button>
     );
   };
 
   return (
     <div className="flex justify-between h-10 z-10 px-2 dark:bg-gray-700">
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
         <FilterDropdown />
         <SortDropdown />
+        <Divider type="vertical" className="py-2" />
         {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
       </div>
