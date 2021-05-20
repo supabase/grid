@@ -1,26 +1,21 @@
 import * as React from 'react';
-import { Dropdown, Menu, Typography } from '@supabase/ui';
+import { Dropdown, Typography } from '@supabase/ui';
 
 type DropdownControlProps = {
   options: { value: string | number; label: string }[];
   onSelect: (value: string | number) => void;
   className?: string;
-  placement?:
-    | 'bottomLeft'
-    | 'bottomRight'
-    | 'bottomCenter'
-    | 'topLeft'
-    | 'topRight'
-    | 'topCenter'
-    | undefined;
+  side?: 'bottom' | 'left' | 'top' | 'right' | undefined;
+  align?: 'start' | 'center' | 'end' | undefined;
 };
 
 export const DropdownControl: React.FC<DropdownControlProps> = p => {
-  const { className, children, placement } = p;
+  const { className, children, side, align } = p;
   return (
     <Dropdown
       className={className}
-      placement={placement || 'bottomLeft'}
+      side={side}
+      align={align}
       overlay={<DropdownItem {...p} />}
     >
       {children}
@@ -33,7 +28,7 @@ const DropdownItem: React.FC<DropdownControlProps> = ({
   onSelect,
 }) => {
   return (
-    <Menu>
+    <>
       {options.length == 0 && (
         <Typography.Text className="block px-2 py-4">
           No more items
@@ -41,11 +36,11 @@ const DropdownItem: React.FC<DropdownControlProps> = ({
       )}
       {options.map(x => {
         return (
-          <Menu.Item key={x.value} onClick={() => onSelect(x.value)}>
+          <Dropdown.Item key={x.value} onClick={() => onSelect(x.value)}>
             {x.label}
-          </Menu.Item>
+          </Dropdown.Item>
         );
       })}
-    </Menu>
+    </>
   );
 };

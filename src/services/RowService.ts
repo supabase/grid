@@ -24,7 +24,6 @@ class RowService {
       .range(from, to);
 
     // Filter first
-    // TODO: need to support filter.clause
     for (let idx in filters) {
       const filter = filters[idx];
       if (filter.filterText == '') continue;

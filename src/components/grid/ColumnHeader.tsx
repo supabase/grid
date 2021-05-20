@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {
-  Button,
-  IconChevronDown,
   IconBox,
   IconClock,
   IconKey,
@@ -11,39 +9,22 @@ import {
   IconCheckCircle,
   IconList,
 } from '@supabase/ui';
-import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { SortableHeaderCell } from '@supabase/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
-import { MENU_IDS } from '../menu';
+import { ColumnMenu } from '../menu';
 
 export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const triggerRef = React.useRef<any>(null);
+  // const triggerRef = React.useRef<any>(null);
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
 
-  const { show: showContextMenu } = useContextMenu({
-    id: MENU_IDS.COLUMN_MENU_ID,
-  });
-
-  function getMenuPosition() {
-    const { left, bottom } = triggerRef?.current.button.getBoundingClientRect();
-    return { x: left, y: bottom + 8 };
-  }
-
-  function displayMenu(e: TriggerEvent) {
-    showContextMenu(e, {
-      position: getMenuPosition(),
-      props: { columnKey, frozen: column.frozen },
-    });
-  }
-
   const [{ isDragging }, drag] = useDrag({
-    type: 'grid-column-header',
+    type: 'column-header',
     item: () => {
       return { key: columnKey, index: columnIdx };
     },
@@ -54,7 +35,7 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   });
 
   const [{ handlerId }, drop] = useDrop({
-    accept: 'grid-column-header',
+    accept: 'column-header',
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -127,18 +108,11 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor}`}>
-          <div>{renderColumnIcon(columnType)}</div>
-          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis">
+          {renderColumnIcon(columnType)}
+          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis text-sm">
             {column.name}
           </span>
-          <Button
-            type="text"
-            className="ml-3"
-            ref={triggerRef}
-            icon={<IconChevronDown />}
-            onClick={displayMenu}
-            style={{ padding: '3px' }}
-          />
+          <ColumnMenu column={column} />
         </div>
       </SortableHeaderCell>
     </div>

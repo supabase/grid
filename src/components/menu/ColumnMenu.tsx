@@ -1,78 +1,94 @@
-import * as React from 'react';
 import {
-  Menu,
-  Item,
-  ItemParams,
-  PredicateParams,
-  theme,
-} from 'react-contexify';
+  Dropdown,
+  IconChevronDown,
+  Divider,
+  IconEdit,
+  IconTrash,
+  IconLock,
+  IconUnlock,
+  Typography,
+} from '@supabase/ui';
+import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
+
+import { useMenuContext } from './../menu/MenuContext';
 
 export const COLUMN_MENU_ID = 'column-menu-id';
 
-type ColumnMenuProps = {
-  onEditColumn?: (columnName: string) => void;
-  onDeleteColumn?: (columnName: string) => void;
-};
-
-const ColumnMenu: React.FC<ColumnMenuProps> = ({
-  onEditColumn,
-  onDeleteColumn,
-}) => {
+export function ColumnMenu({ column }: any) {
   const state = useTrackedState();
   const dispatch = useDispatch();
+  const {
+    onEditColumn: onEditColumnFunc,
+    onDeleteColumn: onDeleteColumnFunc,
+  } = useMenuContext();
 
-  function onFreezeColumn(p: ItemParams) {
-    const { props } = p;
-    const { columnKey } = props;
+  console.log(column);
+
+  const columnKey = column.key;
+
+  function onFreezeColumn() {
     dispatch({ type: 'FREEZE_COLUMN', payload: { columnKey } });
   }
 
-  function onUnfreezeColumn(p: ItemParams) {
-    const { props } = p;
-    const { columnKey } = props;
+  function onUnfreezeColumn() {
     dispatch({ type: 'UNFREEZE_COLUMN', payload: { columnKey } });
   }
 
-  function onEditColumnClick(p: ItemParams) {
-    const { props } = p;
-    const { columnKey } = props;
-    if (onEditColumn) onEditColumn(columnKey);
+  function onEditColumn() {
+    if (onEditColumnFunc) onEditColumnFunc(columnKey);
   }
 
-  function onDeleteColumnClick(p: ItemParams) {
-    const { props } = p;
-    const { columnKey } = props;
-    if (onDeleteColumn) onDeleteColumn(columnKey);
-  }
-
-  function isItemHidden({ props, data }: PredicateParams) {
-    if (data === 'edit') {
-      return !state.editable || onEditColumn == undefined;
-    } else if (data === 'delete') {
-      return !state.editable || onDeleteColumn == undefined;
-    } else if (data === 'freeze') {
-      return props.frozen;
-    } else {
-      return !props.frozen;
-    }
+  function onDeleteColumn() {
+    if (onDeleteColumnFunc) onDeleteColumnFunc(columnKey);
   }
 
   return (
-    <Menu id={COLUMN_MENU_ID} animation={false} theme={theme.dark}>
-      <Item onClick={onEditColumnClick} hidden={isItemHidden} data="edit">
-        Edit column
-      </Item>
-      <Item onClick={onFreezeColumn} hidden={isItemHidden} data="freeze">
-        Freeze column
-      </Item>
-      <Item onClick={onUnfreezeColumn} hidden={isItemHidden} data="unfreeze">
-        Unfreeze column
-      </Item>
-      <Item onClick={onDeleteColumnClick} hidden={isItemHidden} data="delete">
-        Delete Column
-      </Item>
-    </Menu>
+    <>
+      <Dropdown
+        align="end"
+        side="bottom"
+        overlay={[
+          <>
+            {state.editable && onEditColumn !== undefined && (
+              <Dropdown.Item
+                onClick={onEditColumn}
+                icon={<IconEdit size="tiny" />}
+              >
+                Edit column
+              </Dropdown.Item>
+            )}
+            <Dropdown.Item
+              onClick={column.frozen ? onUnfreezeColumn : onFreezeColumn}
+              icon={
+                column.frozen ? (
+                  <IconUnlock size="tiny" />
+                ) : (
+                  <IconLock size="tiny" />
+                )
+              }
+            >
+              {column.frozen ? 'Unfreeze column' : 'Freeze column'}
+            </Dropdown.Item>
+            {state.editable && onDeleteColumn !== undefined && (
+              <>
+                <Divider light />
+                <Dropdown.Item
+                  onClick={onDeleteColumn}
+                  icon={<IconTrash size="tiny" />}
+                >
+                  Delete Column
+                </Dropdown.Item>
+              </>
+            )}
+          </>,
+        ]}
+      >
+        <Typography.Text className="flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer ">
+          <IconChevronDown size="tiny" />
+        </Typography.Text>
+      </Dropdown>
+    </>
   );
-};
+}
 export default ColumnMenu;

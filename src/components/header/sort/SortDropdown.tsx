@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Dropdown, Button, Typography } from '@supabase/ui';
+import {
+  Dropdown,
+  Button,
+  Typography,
+  IconList,
+  IconChevronDown,
+  Divider,
+} from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
@@ -9,18 +16,24 @@ type SortDropdownProps = {};
 const SortDropdown: React.FC<SortDropdownProps> = p => {
   const state = useTrackedState();
   const btnText =
-    state.sorts.length > 0 ? `Sort ${state.sorts.length}` : 'Sort';
+    state.sorts.length > 0
+      ? `Sorted by ${state.sorts.length} rule${
+          state.sorts.length > 1 ? 's' : ''
+        }`
+      : 'Sort';
 
   return (
     <Dropdown
-      className="w-80 overflow-visible"
-      placement="bottomLeft"
+      side="bottom"
+      align="start"
       overlay={<Sort {...p} />}
+      className="w-96"
     >
       <Button
-        className="ml-2"
-        type="outline"
-        style={{ padding: '3px 10px', borderColor: '#333' }}
+        as={'span'}
+        type="text"
+        // style={{ padding: '3px 10px' }}
+        icon={<IconList />}
       >
         {btnText}
       </Button>
@@ -49,20 +62,47 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
   }
 
   return (
-    <div className="p-2">
+    <div>
       {state.sorts.map((x, index) => (
         <SortRow key={x.columnName} columnName={x.columnName} index={index} />
       ))}
       {state.sorts.length == 0 && (
-        <div>
-          <Typography.Text>No sorts applied</Typography.Text>
-        </div>
+        <Dropdown.Misc>
+          <div className="py-2">
+            <Typography.Text>No sorts applied to this view</Typography.Text>
+            <Typography.Text small type="secondary" className="block">
+              Add a column below to sort the view
+            </Typography.Text>
+          </div>
+        </Dropdown.Misc>
       )}
-      <div className="mt-2">
-        <DropdownControl options={dropdownOptions} onSelect={onAddSort}>
-          <Button>Pick another column to sort by</Button>
-        </DropdownControl>
-      </div>
+
+      <Divider light />
+      <Dropdown.Misc>
+        {columns && columns.length > 0 ? (
+          <DropdownControl
+            options={dropdownOptions}
+            onSelect={onAddSort}
+            side="bottom"
+            align="start"
+          >
+            <Button
+              as="span"
+              type="text"
+              iconRight={<IconChevronDown />}
+              className="my-1"
+            >
+              {`Pick ${
+                state.sorts.length > 1 ? 'another' : 'a'
+              } column to sort by`}
+            </Button>
+          </DropdownControl>
+        ) : (
+          <Typography.Text small type="secondary">
+            All columns have been added
+          </Typography.Text>
+        )}
+      </Dropdown.Misc>
     </div>
   );
 };

@@ -8,14 +8,15 @@ import { SupabaseGrid, SupabaseGridRef } from '../.';
 // import countries from './countries'
 
 const clientProps = {
-  supabaseUrl: 'https://eswutwdkpzgacrlriize.supabase.net',
+  supabaseUrl: 'https://elwnyzeispughydvblgw.supabase.co',
   supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNzA3NTU4OCwiZXhwIjoxOTMyNjUxNTg4fQ.h1TuIObta3ZBAgJ-XefdQGgFaFCFIEwQIlSHxcd4o18',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMDAwMTg0NSwiZXhwIjoxOTM1NTc3ODQ1fQ.NqLZjLKCukqjVfiynZ41Fsq7ih8U2JmvWYYlGtcuELo',
 };
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [tableName, setName] = React.useState('countries');
+  const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
   function onClick() {
@@ -26,6 +27,19 @@ const App = () => {
   function onRowAdded() {
     if (gridRef.current) gridRef.current.rowAdded({});
   }
+
+  function onToggleDarkMode() {
+    if (uiMode == 'dark') setUiMode('');
+    else setUiMode('dark');
+  }
+
+  React.useEffect(() => {
+    if (uiMode == 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [uiMode]);
 
   // READONLY
   // using postgrest OpenApi description to retrieve table, column definition
@@ -76,10 +90,13 @@ const App = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', height: '5vh' }}>
+      <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
         <button onClick={onClick}>Change Table</button>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
-          Row Added
+          Trigger Row Added
+        </button>
+        <button onClick={onToggleDarkMode} style={{ marginLeft: '1rem' }}>
+          Dark Mode Toggle
         </button>
       </div>
       <div style={{ height: '95vh' }}>

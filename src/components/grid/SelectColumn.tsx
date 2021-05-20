@@ -109,7 +109,7 @@ function SelectCellFormatter({
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:ring-brand-500 h-4 w-4 border-gray-300"
+        className="focus:ring-brand-500 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}
@@ -169,7 +169,7 @@ function SelectCellHeader({
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:ring-brand-500 h-4 w-4 border-gray-300"
+        className="focus:ring-brand-500 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}

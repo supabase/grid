@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { Column } from '@supabase/react-data-grid';
-import { ColumnType, SupaColumn, SupaRow, SupaTable } from './types';
+import { Column, FormatterProps } from '@supabase/react-data-grid';
+import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   CheckboxEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
-} from './components/editor';
-import { ColumnHeader, SelectColumn } from './components/grid';
-import { COLUMN_MIN_WIDTH } from './constants';
+} from '../components/editor';
+import { ColumnHeader, SelectColumn } from '../components/grid';
+import { COLUMN_MIN_WIDTH } from '../constants';
 
 export function getGridColumns(
   table: SupaTable,
@@ -40,12 +40,20 @@ export function getGridColumns(
   return [selectColumn, ...columns];
 }
 
+const DefaultFormatter = (
+  p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
+) => {
+  const value = p.row[p.column.key];
+  return <>{value}</>;
+};
+
 function _setupColumnEditor(
   columnDef: SupaColumn,
   columnType: ColumnType,
   config: Column<SupaRow>
 ) {
   if (columnDef.isIdentity || !columnDef.isUpdatable) {
+    config.formatter = DefaultFormatter;
     return;
   }
 
@@ -62,15 +70,14 @@ function _setupColumnEditor(
       break;
     }
     case 'date': {
+      config.formatter = DefaultFormatter;
       break;
     }
     case 'enum': {
       const options = columnDef.enum!.map(x => {
         return { label: x, value: x };
       });
-      config.formatter = p => {
-        return <>{p.row[p.column.key]}</>;
-      };
+      config.formatter = DefaultFormatter;
       config.editor = p => <SelectEditor {...p} options={options} />;
       config.editorOptions = {
         editOnClick: true,
@@ -78,9 +85,11 @@ function _setupColumnEditor(
       break;
     }
     case 'foreign_key': {
+      config.formatter = DefaultFormatter;
       break;
     }
     case 'json': {
+      config.formatter = DefaultFormatter;
       break;
     }
     case 'number': {
@@ -92,9 +101,11 @@ function _setupColumnEditor(
       config.editorOptions = {
         editOnClick: true,
       };
+      config.formatter = DefaultFormatter;
       break;
     }
     default: {
+      config.formatter = DefaultFormatter;
       break;
     }
   }
