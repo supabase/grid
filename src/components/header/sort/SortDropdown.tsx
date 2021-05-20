@@ -29,12 +29,7 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       overlay={<Sort {...p} />}
       className="w-96"
     >
-      <Button
-        as={'span'}
-        type="text"
-        // style={{ padding: '3px 10px' }}
-        icon={<IconList />}
-      >
+      <Button as={'span'} type="text" icon={<IconList />}>
         {btnText}
       </Button>
     </Dropdown>

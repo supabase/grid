@@ -23,8 +23,6 @@ export function ColumnMenu({ column }: any) {
     onDeleteColumn: onDeleteColumnFunc,
   } = useMenuContext();
 
-  console.log(column);
-
   const columnKey = column.key;
 
   function onFreezeColumn() {
@@ -43,47 +41,44 @@ export function ColumnMenu({ column }: any) {
     if (onDeleteColumnFunc) onDeleteColumnFunc(columnKey);
   }
 
+  function renderMenu() {
+    return (
+      <>
+        {state.editable && onEditColumn !== undefined && (
+          <Dropdown.Item onClick={onEditColumn} icon={<IconEdit size="tiny" />}>
+            Edit column
+          </Dropdown.Item>
+        )}
+        <Dropdown.Item
+          onClick={column.frozen ? onUnfreezeColumn : onFreezeColumn}
+          icon={
+            column.frozen ? (
+              <IconUnlock size="tiny" />
+            ) : (
+              <IconLock size="tiny" />
+            )
+          }
+        >
+          {column.frozen ? 'Unfreeze column' : 'Freeze column'}
+        </Dropdown.Item>
+        {state.editable && onDeleteColumn !== undefined && (
+          <>
+            <Divider light />
+            <Dropdown.Item
+              onClick={onDeleteColumn}
+              icon={<IconTrash size="tiny" />}
+            >
+              Delete Column
+            </Dropdown.Item>
+          </>
+        )}
+      </>
+    );
+  }
+
   return (
     <>
-      <Dropdown
-        align="end"
-        side="bottom"
-        overlay={[
-          <>
-            {state.editable && onEditColumn !== undefined && (
-              <Dropdown.Item
-                onClick={onEditColumn}
-                icon={<IconEdit size="tiny" />}
-              >
-                Edit column
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item
-              onClick={column.frozen ? onUnfreezeColumn : onFreezeColumn}
-              icon={
-                column.frozen ? (
-                  <IconUnlock size="tiny" />
-                ) : (
-                  <IconLock size="tiny" />
-                )
-              }
-            >
-              {column.frozen ? 'Unfreeze column' : 'Freeze column'}
-            </Dropdown.Item>
-            {state.editable && onDeleteColumn !== undefined && (
-              <>
-                <Divider light />
-                <Dropdown.Item
-                  onClick={onDeleteColumn}
-                  icon={<IconTrash size="tiny" />}
-                >
-                  Delete Column
-                </Dropdown.Item>
-              </>
-            )}
-          </>,
-        ]}
-      >
+      <Dropdown align="end" side="bottom" overlay={renderMenu()}>
         <Typography.Text className="flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer ">
           <IconChevronDown size="tiny" />
         </Typography.Text>
