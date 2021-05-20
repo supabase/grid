@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { EditorProps } from '@supabase/react-data-grid';
-import styles from './editor.module.css';
 
 export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -17,9 +16,9 @@ export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   }
 
   return (
-    <div className={styles.checkboxContainer}>
+    <div className="flex w-full h-full">
       <input
-        className={styles.checkboxEditor}
+        className="m-auto w-4 h-4"
         checked={(row[column.key as keyof TRow] as unknown) as boolean}
         onChange={onChange}
         onBlur={onBlur}

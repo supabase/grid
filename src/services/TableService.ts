@@ -9,8 +9,14 @@ class TableService {
       filter_name: name,
     });
   }
-  fetchColumnsInfo(name: string, schema?: string) {
+  fetchColumns(name: string, schema?: string) {
     return this.client.rpc('load_table_columns', {
+      filter_schema: schema || 'public',
+      filter_name: name,
+    });
+  }
+  fetchRelationships(name: string, schema?: string) {
+    return this.client.rpc('load_table_relationships', {
       filter_schema: schema || 'public',
       filter_name: name,
     });

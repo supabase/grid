@@ -9,14 +9,20 @@ export async function fetchTableInfo(
   schema?: string
 ): Promise<SupaTable | null> {
   const resTable = await service.fetchInfo(tableName, schema);
-  const resColumns = await service.fetchColumnsInfo(tableName, schema);
+  const resColumns = await service.fetchColumns(tableName, schema);
+  const resRelationships = await service.fetchRelationships(tableName, schema);
   if (
     resTable.data &&
     resColumns.data &&
+    resRelationships.data &&
     resTable.data.length > 0 &&
     resColumns.data.length > 0
   ) {
-    const supaTable = parseSupaTable(resTable.data[0], resColumns.data);
+    const supaTable = parseSupaTable(
+      resTable.data[0],
+      resColumns.data,
+      resRelationships.data
+    );
     return supaTable;
   }
   return null;
@@ -24,10 +30,11 @@ export async function fetchTableInfo(
 
 export function parseSupaTable(
   table: Dictionary<any>,
-  columns: Dictionary<any>[]
+  columns: Dictionary<any>[],
+  relationships: Dictionary<any>[]
 ): SupaTable {
   const supaColumns: SupaColumn[] = columns.map(x => {
-    return {
+    const temp = {
       position: x.ordinal_position,
       name: x.name,
       defaultValue: x.default_value,
@@ -39,7 +46,19 @@ export function parseSupaTable(
       isUpdatable: x.is_updatable,
       enum: x.enums,
       comment: x.comment,
+      targetTableSchema: null,
+      targetTableName: null,
+      targetColumnName: null,
     };
+    const relationship = relationships.find(r => {
+      return r.source_column_name == x.name;
+    });
+    if (relationship) {
+      temp.targetTableSchema = relationship.target_table_schema;
+      temp.targetTableName = relationship.target_table_name;
+      temp.targetColumnName = relationship.target_column_name;
+    }
+    return temp;
   });
 
   return {

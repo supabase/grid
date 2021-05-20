@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { EditorProps } from '@supabase/react-data-grid';
-import styles from './editor.module.css';
 
 interface SelectEditorProps<TRow, TSummaryRow = unknown>
   extends EditorProps<TRow, TSummaryRow> {
@@ -26,14 +25,14 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <select
-      className={styles.textEditor}
+      className="w-full h-full"
       value={value || ''}
       onChange={onChange}
       onBlur={onBlur}
       autoFocus
     >
       <option disabled value="">
-        - Please select -
+        [null]
       </option>
       {options.map(({ label, value }) => (
         <option key={value} value={value}>

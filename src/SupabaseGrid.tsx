@@ -1,6 +1,7 @@
 import './style.css';
 import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import { useMonaco } from '@monaco-editor/react';
 import { createPortal } from 'react-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -30,6 +31,25 @@ export const SupabaseGrid = React.forwardRef<
   SupabaseGridRef,
   SupabaseGridProps
 >((props, ref) => {
+  const monaco = useMonaco();
+
+  React.useEffect(() => {
+    if (monaco) {
+      monaco.editor.defineTheme('supabase', {
+        base: 'vs-dark', // can also be vs-dark or hc-black
+        inherit: true, // can also be false to completely replace the builtin rules
+        rules: [
+          { token: 'string.sql', foreground: '24b47e' },
+          { token: 'comment', foreground: '666666' },
+          { token: 'predefined.sql', foreground: 'D4D4D4' },
+        ],
+        colors: {
+          'editor.background': '#30313f',
+        },
+      });
+    }
+  }, [monaco]);
+
   return (
     <StoreProvider>
       <DndProvider backend={HTML5Backend}>

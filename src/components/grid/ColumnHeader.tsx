@@ -8,6 +8,7 @@ import {
   IconHash,
   IconCheckCircle,
   IconList,
+  IconCalendar,
 } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
@@ -124,6 +125,10 @@ function renderColumnIcon(type: ColumnType) {
     case 'boolean':
       return <IconCheckCircle size="tiny" />;
     case 'date':
+      return <IconCalendar size="tiny" />;
+    case 'datetime':
+      return <IconClock size="tiny" />;
+    case 'time':
       return <IconClock size="tiny" />;
     case 'enum':
       return <IconList size="tiny" />;

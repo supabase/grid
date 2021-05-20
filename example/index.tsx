@@ -10,18 +10,25 @@ import { SupabaseGrid, SupabaseGridRef } from '../.';
 const clientProps = {
   supabaseUrl: 'https://elwnyzeispughydvblgw.supabase.co',
   supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMDAwMTg0NSwiZXhwIjoxOTM1NTc3ODQ1fQ.NqLZjLKCukqjVfiynZ41Fsq7ih8U2JmvWYYlGtcuELo',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic3VwYWJhc2VfYWRtaW4iLCJpYXQiOjE2MjAwMDE4NDUsImV4cCI6MTkzNTU3Nzg0NX0.PYPs2TWfinXgcv3OGtoq2i1SEJs_iz6FlwcRcNoYxtk',
 };
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [tableName, setName] = React.useState('countries');
+  const [tableName, setName] = React.useState('test-table');
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
-  function onClick() {
-    const name = tableName == 'countries_view' ? 'countries' : 'countries_view';
-    setName(name);
+  function showTestTable() {
+    setName('test-table');
+  }
+
+  function showCountriesTable() {
+    setName('countries');
+  }
+
+  function showCountriesView() {
+    setName('countries_view');
   }
 
   function onRowAdded() {
@@ -29,8 +36,11 @@ const App = () => {
   }
 
   function onToggleDarkMode() {
-    if (uiMode == 'dark') setUiMode('');
-    else setUiMode('dark');
+    let mode = '';
+    if (uiMode != 'dark') mode = 'dark';
+
+    setUiMode(mode);
+    document.body.className = mode;
   }
 
   React.useEffect(() => {
@@ -91,7 +101,9 @@ const App = () => {
   return (
     <div>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
-        <button onClick={onClick}>Change Table</button>
+        <button onClick={showTestTable}>Test Table</button>
+        <button onClick={showCountriesTable}>Countries Table</button>
+        <button onClick={showCountriesView}>Countries View</button>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
           Trigger Row Added
         </button>

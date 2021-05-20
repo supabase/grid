@@ -6,7 +6,7 @@ function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.select();
 }
 
-export function NumberEditor<TRow, TSummaryRow = unknown>({
+export function DateEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
@@ -15,7 +15,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
   const value = (row[column.key as keyof TRow] as unknown) as string;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const _value = event.target.value;
+    let _value = event.target.value;
     if (_value == '') onRowChange({ ...row, [column.key]: null });
     else onRowChange({ ...row, [column.key]: _value });
   }
@@ -28,7 +28,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
       placeholder={value ? '' : '[null]'}
       onChange={onChange}
       onBlur={() => onClose(true)}
-      type="number"
+      type="date"
     />
   );
 }

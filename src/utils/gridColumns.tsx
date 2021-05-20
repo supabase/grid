@@ -3,9 +3,14 @@ import { Column, FormatterProps } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   CheckboxEditor,
+  DateEditor,
+  DateTimeEditor,
+  JsonEditor,
+  ForeignKeyEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
+  TimeEditor,
 } from '../components/editor';
 import { ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
@@ -43,7 +48,11 @@ export function getGridColumns(
 const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
 ) => {
-  const value = p.row[p.column.key];
+  let value = p.row[p.column.key];
+  if (!value) return <></>;
+  if (typeof value == 'object' || Array.isArray(value)) {
+    value = JSON.stringify(value);
+  }
   return <>{value}</>;
 };
 
@@ -70,7 +79,27 @@ function _setupColumnEditor(
       break;
     }
     case 'date': {
+      config.editor = DateEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
+      break;
+    }
+    case 'datetime': {
+      config.editor = DateTimeEditor;
+      config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
+      break;
+    }
+    case 'time': {
+      config.editor = TimeEditor;
+      config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'enum': {
@@ -85,15 +114,26 @@ function _setupColumnEditor(
       break;
     }
     case 'foreign_key': {
+      config.editor = ForeignKeyEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'json': {
+      config.editor = JsonEditor;
       config.formatter = DefaultFormatter;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'number': {
       config.editor = NumberEditor;
+      config.editorOptions = {
+        editOnClick: true,
+      };
       break;
     }
     case 'text': {
@@ -114,27 +154,35 @@ function _setupColumnEditor(
 function _getColumnType(columnDef: SupaColumn): ColumnType {
   if (columnDef.isIdentity) {
     return 'primary_key';
+  } else if (_isForeignKeyColumn(columnDef)) {
+    return 'foreign_key';
   } else if (_isNumericalColumn(columnDef.dataType)) {
     return 'number';
   } else if (_isJsonColumn(columnDef.dataType)) {
     return 'json';
   } else if (_isTextColumn(columnDef.dataType)) {
     return 'text';
-  } else if (_isDateTimeColumn(columnDef.dataType)) {
+  } else if (_isDateColumn(columnDef.format)) {
     return 'date';
+  } else if (_isTimeColumn(columnDef.format)) {
+    return 'time';
+  } else if (_isDateTimeColumn(columnDef.format)) {
+    return 'datetime';
   } else if (_isBoolColumn(columnDef.dataType)) {
     return 'boolean';
   } else if (_isEnumColumn(columnDef.dataType)) {
     return 'enum';
-  } else if (_isForeignKeyColumn()) {
-    return 'foreign_key';
   } else return 'unknown';
 }
 
 function _getColumnWidth(columnDef: SupaColumn): string | number | undefined {
   if (_isNumericalColumn(columnDef.dataType)) {
     return 100;
-  } else if (_isDateTimeColumn(columnDef.dataType)) {
+  } else if (
+    _isDateTimeColumn(columnDef.format) ||
+    _isDateColumn(columnDef.format) ||
+    _isTimeColumn(columnDef.format)
+  ) {
     return 150;
   } else if (_isBoolColumn(columnDef.dataType)) {
     return 100;
@@ -173,9 +221,19 @@ function _isTextColumn(type: string) {
   return TEXT_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-const TIMESTAMP_TYPES = ['date', 'time', 'timestamp', 'timetz', 'timestamptz'];
+const TIMESTAMP_TYPES = ['timestamp', 'timestamptz'];
 function _isDateTimeColumn(type: string) {
   return TIMESTAMP_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+const DATE_TYPES = ['date'];
+function _isDateColumn(type: string) {
+  return DATE_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+const TIME_TYPES = ['time', 'timetz'];
+function _isTimeColumn(type: string) {
+  return TIME_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const BOOL_TYPES = ['boolean', 'bool'];
@@ -188,7 +246,7 @@ function _isEnumColumn(type: string) {
   return ENUM_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-// TODO
-function _isForeignKeyColumn() {
-  return false;
+function _isForeignKeyColumn(columnDef: SupaColumn) {
+  const { targetTableSchema, targetTableName, targetColumnName } = columnDef;
+  return !!targetTableSchema && !!targetTableName && !!targetColumnName;
 }

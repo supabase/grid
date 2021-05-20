@@ -4,7 +4,7 @@ import { EditorProps } from '@supabase/react-data-grid';
 import { useTrackedState } from '../../store';
 import { BlockKeys, MonacoEditor, NullValue } from '../common';
 
-export function TextEditor<TRow, TSummaryRow = unknown>({
+export function JsonEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
@@ -12,11 +12,13 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
   const state = useTrackedState();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const gridColumn = state.gridColumns.find(x => x.name == column.key);
-  const initialValue = (row[column.key as keyof TRow] as unknown) as string;
-  const [value, setValue] = React.useState<string | null>(initialValue);
+  const initialValue = row[column.key as keyof TRow] as unknown;
+  const jsonString = initialValue ? JSON.stringify(initialValue) : '';
+  const prettyJsonValue = prettifyJSON(jsonString);
+  const [value, setValue] = React.useState<string | null>(prettyJsonValue);
 
   const onEscape = React.useCallback((newValue: string | null) => {
-    onRowChange({ ...row, [column.key]: newValue }, true);
+    commitChange(newValue);
     setIsPopoverOpen(false);
   }, []);
 
@@ -31,10 +33,19 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     else setValue(_value);
   }
 
-  const onBlur = () => {
-    onRowChange({ ...row, [column.key]: value }, true);
+  function onBlur() {
+    commitChange(value);
     setIsPopoverOpen(false);
-  };
+  }
+
+  function commitChange(newValue: string | null) {
+    if (!newValue) {
+      onRowChange({ ...row, [column.key]: null }, true);
+    } else if (verifyJSON(newValue)) {
+      const jsonValue = JSON.parse(newValue);
+      onRowChange({ ...row, [column.key]: jsonValue }, true);
+    }
+  }
 
   return (
     <Popover
@@ -49,6 +60,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
           <MonacoEditor
             width={`${gridColumn?.width || column.width}px`}
             value={value || ''}
+            language="json"
             onChange={onChange}
             onMount={handleEditorDidMount}
           />
@@ -57,12 +69,43 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     >
       <div
         className={`${
-          !!value && value.trim().length == 0 ? 'fillContainer' : ''
+          !!value && jsonString.trim().length == 0 ? 'fillContainer' : ''
         } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value ? value : <NullValue />}
+        {value ? jsonString : <NullValue />}
       </div>
     </Popover>
   );
 }
+
+export const prettifyJSON = (value: string) => {
+  if (value.length > 0) {
+    try {
+      return JSON.stringify(JSON.parse(value), undefined, 2);
+    } catch (err) {
+      // dont need to throw error, just return text value
+      // Users have to fix format if they want to save
+      return value;
+    }
+  } else {
+    return value;
+  }
+};
+
+export const minifyJSON = (value: string) => {
+  try {
+    return JSON.stringify(JSON.parse(value));
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const verifyJSON = (value: string) => {
+  try {
+    JSON.parse(value);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
