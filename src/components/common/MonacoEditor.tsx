@@ -31,7 +31,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
       onMount={onMount}
       options={{
         tabSize: 2,
-        fontSize: 11,
+        fontSize: 13,
         minimap: {
           enabled: false,
         },
