@@ -10,29 +10,34 @@ export async function fetchTableInfo(
 ): Promise<SupaTable | null> {
   const resTable = await service.fetchInfo(tableName, schema);
   const resColumns = await service.fetchColumns(tableName, schema);
+  const resPrimaryKeys = await service.fetchPrimaryKeys(tableName, schema);
   const resRelationships = await service.fetchRelationships(tableName, schema);
   if (
     resTable.data &&
     resColumns.data &&
+    resPrimaryKeys.data &&
     resRelationships.data &&
     resTable.data.length > 0 &&
     resColumns.data.length > 0
   ) {
-    const supaTable = parseSupaTable(
-      resTable.data[0],
-      resColumns.data,
-      resRelationships.data
-    );
+    const supaTable = parseSupaTable({
+      table: resTable.data[0],
+      columns: resColumns.data,
+      primaryKeys: resPrimaryKeys.data,
+      relationships: resRelationships.data,
+    });
     return supaTable;
   }
   return null;
 }
 
-export function parseSupaTable(
-  table: Dictionary<any>,
-  columns: Dictionary<any>[],
-  relationships: Dictionary<any>[]
-): SupaTable {
+export function parseSupaTable(data: {
+  table: Dictionary<any>;
+  columns: Dictionary<any>[];
+  primaryKeys: Dictionary<any>[];
+  relationships: Dictionary<any>[];
+}): SupaTable {
+  const { table, columns, primaryKeys, relationships } = data;
   const supaColumns: SupaColumn[] = columns.map(x => {
     const temp = {
       position: x.ordinal_position,
@@ -40,6 +45,7 @@ export function parseSupaTable(
       defaultValue: x.default_value,
       dataType: x.data_type,
       format: x.format,
+      isPrimaryKey: false,
       isIdentity: x.is_identity,
       isGeneratable: x.identity_generation == 'BY DEFAULT',
       isNullable: x.is_nullable,
@@ -50,6 +56,9 @@ export function parseSupaTable(
       targetTableName: null,
       targetColumnName: null,
     };
+    const primaryKey = primaryKeys.find(pk => pk.name == x.name);
+    temp.isPrimaryKey = !!primaryKey;
+
     const relationship = relationships.find(r => {
       return r.source_column_name == x.name;
     });

@@ -79,7 +79,10 @@ class RowService {
 
   update(row: SupaRow): { error?: string } {
     const { primaryKey, error } = this._getPrimaryKey();
-    if (error) return { error };
+    if (error) {
+      console.log('update error', error);
+      return { error };
+    }
 
     const { idx, ...value } = row;
     SupabaseGridQueue.add(async () => {
@@ -114,11 +117,11 @@ class RowService {
 
   _getPrimaryKey(): { primaryKey?: string; error?: string } {
     // find primary key
-    const primaryKeys = this.table.columns.filter(x => x.isIdentity);
+    const primaryKeys = this.table.columns.filter(x => x.isPrimaryKey);
     if (!primaryKeys || primaryKeys.length == 0)
       return { error: "Can't find primary key" };
     else if (primaryKeys.length > 1)
-      return { error: 'Not support multi primary keys' };
+      return { error: 'Not support multiple primary keys' };
     return { primaryKey: primaryKeys[0].name };
   }
 }

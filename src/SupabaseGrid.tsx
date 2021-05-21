@@ -135,7 +135,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     }, [state.client, state.table, props.table]);
 
     return (
-      <div className="flex flex-col h-full">
+      <div className="supabase-grid flex flex-col h-full">
         <Header
           onAddRow={editable ? props.onAddRow : undefined}
           onAddColumn={editable ? props.onAddColumn : undefined}
@@ -179,9 +179,10 @@ function initTable(
     });
 
     let savedState;
-    if (props.storageRef)
+    if (props.storageRef) {
       savedState = onLoadStorage(props.storageRef, tableDef.name);
-    console.log('savedState', savedState);
+      // console.log('savedState', savedState);
+    }
 
     dispatch({
       type: 'INIT_TABLE',

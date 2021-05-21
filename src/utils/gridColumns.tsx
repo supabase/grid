@@ -30,7 +30,7 @@ export function getGridColumns(
       resizable: true,
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
-      frozen: x.isIdentity,
+      frozen: x.isPrimaryKey,
     };
     const columnType = _getColumnType(x);
 
@@ -41,7 +41,8 @@ export function getGridColumns(
     _setupColumnEditor(x, columnType, columnDef);
     return columnDef;
   });
-  console.log('columns', columns);
+  // console.log('table', table);
+  // console.log('columns', columns);
   return [selectColumn, ...columns];
 }
 
@@ -61,7 +62,11 @@ function _setupColumnEditor(
   columnType: ColumnType,
   config: Column<SupaRow>
 ) {
-  if (columnDef.isIdentity || !columnDef.isUpdatable) {
+  if (
+    columnDef.isPrimaryKey ||
+    columnDef.isIdentity ||
+    !columnDef.isUpdatable
+  ) {
     config.formatter = DefaultFormatter;
     return;
   }

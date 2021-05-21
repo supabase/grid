@@ -194,6 +194,41 @@ END
 $$;
 ```
 
+#### Load table primary keys
+
+```sql
+CREATE FUNCTION load_table_primary_keys(filter_schema text, filter_name text)
+returns table (
+  schema name,
+  table_name name,
+  name name,
+  table_id int8
+) LANGUAGE PLPGSQL
+AS $$
+BEGIN
+  RETURN query
+    SELECT
+      n.nspname AS schema,
+      c.relname AS table_name,
+      a.attname AS name,
+      c.oid :: int8 AS table_id
+    FROM
+      pg_index i,
+      pg_class c,
+      pg_attribute a,
+      pg_namespace n
+    WHERE
+      n.nspname = filter_schema
+      AND c.relname = filter_name
+      AND i.indrelid = c.oid
+      AND c.relnamespace = n.oid
+      AND a.attrelid = c.oid
+      AND a.attnum = ANY (i.indkey)
+      AND i.indisprimary;
+END
+$$;
+```
+
 #### Load table relationships
 
 ```sql

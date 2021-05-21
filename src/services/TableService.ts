@@ -15,6 +15,12 @@ class TableService {
       filter_name: name,
     });
   }
+  fetchPrimaryKeys(name: string, schema?: string) {
+    return this.client.rpc('load_table_primary_keys', {
+      filter_schema: schema || 'public',
+      filter_name: name,
+    });
+  }
   fetchRelationships(name: string, schema?: string) {
     return this.client.rpc('load_table_relationships', {
       filter_schema: schema || 'public',

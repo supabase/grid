@@ -16,7 +16,12 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
   const value = (row[column.key as keyof TRow] as unknown) as string;
 
   function onChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    onRowChange({ ...row, [column.key]: event.target.value }, true);
+    const value = event.target.value;
+    if (!value || value == '') {
+      onRowChange({ ...row, [column.key]: null }, true);
+    } else {
+      onRowChange({ ...row, [column.key]: value }, true);
+    }
   }
 
   function onBlur() {
@@ -31,9 +36,7 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
       onBlur={onBlur}
       autoFocus
     >
-      <option disabled value="">
-        [null]
-      </option>
+      <option value={''}>[null]</option>
       {options.map(({ label, value }) => (
         <option key={value} value={value}>
           {label}

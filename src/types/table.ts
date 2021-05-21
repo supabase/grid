@@ -7,6 +7,7 @@ export interface SupaColumn {
   readonly comment?: string | null;
   readonly defaultValue?: string | null;
   readonly enum?: string[] | null;
+  readonly isPrimaryKey?: boolean;
   readonly isIdentity?: boolean;
   readonly isGeneratable?: boolean;
   readonly isNullable?: boolean;
