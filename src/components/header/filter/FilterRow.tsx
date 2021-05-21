@@ -18,7 +18,7 @@ export const FilterConditionOptions = [
   { value: 'lt', label: '[lt] less than' },
   { value: 'gte', label: '[gte] greater than or equal' },
   { value: 'lte', label: '[lte]less than or equal' },
-  { value: 'like', label: '[like] LIKE operato' },
+  { value: 'like', label: '[like] LIKE operator' },
   { value: 'ilike', label: '[ilike] ILIKE operator' },
   { value: 'is', label: '[is] checking for (null,true,false)' },
   { value: 'in', label: '[in] one of a list of values' },

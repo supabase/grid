@@ -15,7 +15,6 @@ import { DropdownControl, ModalPortal, NullValue } from '../common';
 import { Dictionary } from '../../types';
 import { FilterConditionOptions } from '../../components/header/filter/FilterRow';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
-import TableService from '../../services/TableService';
 
 export function ForeignKeyEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -63,9 +62,9 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   onChange,
 }) => {
   const [visible, setVisible] = React.useState(false);
-  const [foreignColumns, setForeignColumns] = React.useState<
-    Dictionary<any>[] | null
-  >(null);
+  const [foreignColumnNames, setForeignColumnNames] = React.useState<string[]>(
+    []
+  );
   const [rows, setRows] = React.useState<Dictionary<any>[] | null>(null);
   const state = useTrackedState();
   const columnDefinition = state.table?.columns.find(x => x.name == columnName);
@@ -77,19 +76,18 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
 
   async function fetchColumns() {
     if (
-      !state.client ||
+      !state.openApiService ||
       !columnDefinition?.targetTableName ||
       !columnDefinition?.targetTableSchema
     )
       return;
 
-    const tableService = new TableService(state.client);
-    const resColumns = await tableService.fetchColumns(
-      columnDefinition?.targetTableName,
-      columnDefinition?.targetTableSchema
-    );
-    if (resColumns.data && resColumns.data.length > 0) {
-      setForeignColumns(resColumns.data);
+    const { data, error } = await state.openApiService.fetchDescription();
+    if (!error && data) {
+      const tableInfo = data.definitions[columnDefinition?.targetTableName];
+      const columns = tableInfo.properties as Dictionary<any>;
+      const columnNames = Object.keys(columns) as string[];
+      setForeignColumnNames(columnNames);
     }
   }
 
@@ -181,7 +179,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
         <ModalPortal>
           <Modal visible={visible} onCancel={toggle} closable hideFooter>
             <Filter
-              foreignColumns={foreignColumns || []}
+              foreignColumnNames={foreignColumnNames}
               onChange={onFilterChange}
             />
             <Divider />
@@ -214,7 +212,7 @@ const onFilterChange = (
 const onFilterChangeDebounced = AwesomeDebouncePromise(onFilterChange, 500);
 
 type FilterProps = {
-  foreignColumns: Dictionary<any>[];
+  foreignColumnNames: string[];
   onChange: (value: {
     columnName: string;
     condition: string;
@@ -222,16 +220,21 @@ type FilterProps = {
   }) => void;
 };
 
-export const Filter: React.FC<FilterProps> = ({ foreignColumns, onChange }) => {
-  const [columnName, setColumnName] = React.useState(foreignColumns[0].name);
+export const Filter: React.FC<FilterProps> = ({
+  foreignColumnNames,
+  onChange,
+}) => {
+  const [columnName, setColumnName] = React.useState(
+    foreignColumnNames.length > 0 ? foreignColumnNames[0] : ''
+  );
   const [condition, setCondition] = React.useState(
     FilterConditionOptions[0].value
   );
   const [filterText, setFilterText] = React.useState('');
 
   const columnOptions =
-    foreignColumns.map(x => {
-      return { value: x.name, label: x.name };
+    foreignColumnNames.map(x => {
+      return { value: x, label: x };
     }) || [];
 
   function triggerOnChange(
@@ -267,7 +270,7 @@ export const Filter: React.FC<FilterProps> = ({ foreignColumns, onChange }) => {
         options={columnOptions}
         onSelect={onColumnChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button as="span" className="mr-2" type="outline">
           {columnName}
         </Button>
       </DropdownControl>
@@ -276,7 +279,7 @@ export const Filter: React.FC<FilterProps> = ({ foreignColumns, onChange }) => {
         options={FilterConditionOptions}
         onSelect={onConditionChange}
       >
-        <Button className="mr-2" type="outline">
+        <Button as="span" className="mr-2" type="outline">
           {condition}
         </Button>
       </DropdownControl>
