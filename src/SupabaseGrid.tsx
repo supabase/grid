@@ -15,7 +15,7 @@ import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
-import { RowMenu, MultiRowsMenu, MenuContextProvider } from './components/menu';
+import { RowMenu, MultiRowsMenu } from './components/menu';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
@@ -68,8 +68,6 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
       clientProps,
       gridProps,
       onEditRow,
-      onEditColumn,
-      onDeleteColumn,
     } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
@@ -118,6 +116,10 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
           type: 'INIT_CLIENT',
           payload: { ...clientProps, schema },
         });
+        dispatch({
+          type: 'INIT_CALLBACK',
+          payload: { ...props },
+        });
       }
     }, [state.client]);
 
@@ -140,14 +142,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
           onAddRow={editable ? props.onAddRow : undefined}
           onAddColumn={editable ? props.onAddColumn : undefined}
         />
-        <MenuContextProvider
-          onEditRow={onEditRow}
-          onEditColumn={onEditColumn}
-          onDeleteColumn={onDeleteColumn}
-          editable={editable}
-        >
-          <Grid {...gridProps} />
-        </MenuContextProvider>
+        <Grid {...gridProps} />
         <Footer />
         {createPortal(
           <RowMenu onEditRow={editable ? onEditRow : undefined} />,

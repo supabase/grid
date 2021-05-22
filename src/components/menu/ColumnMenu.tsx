@@ -1,3 +1,4 @@
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import {
   Dropdown,
   IconChevronDown,
@@ -11,17 +12,19 @@ import {
 import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
 
-import { useMenuContext } from './../menu/MenuContext';
-
 export const COLUMN_MENU_ID = 'column-menu-id';
 
-export function ColumnMenu({ column }: any) {
+type ColumnMenuProps = {
+  column: CalculatedColumn<any, unknown>;
+};
+
+const ColumnMenu: React.FC<ColumnMenuProps> = ({ column }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const {
     onEditColumn: onEditColumnFunc,
     onDeleteColumn: onDeleteColumnFunc,
-  } = useMenuContext();
+  } = state;
 
   const columnKey = column.key;
 
@@ -85,5 +88,5 @@ export function ColumnMenu({ column }: any) {
       </Dropdown>
     </>
   );
-}
+};
 export default ColumnMenu;

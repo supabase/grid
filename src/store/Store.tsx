@@ -2,6 +2,7 @@ import { useReducer } from 'react';
 import { createContainer } from 'react-tracked';
 import {
   BaseReducer,
+  CallbackReducer,
   ColumnReducer,
   FilterReducer,
   RowReducer,
@@ -20,6 +21,7 @@ const combineReducers = (...reducers: Function[]) => (
 
 const storeReducers = combineReducers(
   BaseReducer,
+  CallbackReducer,
   ColumnReducer,
   FilterReducer,
   RowReducer,

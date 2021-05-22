@@ -44,6 +44,14 @@ export type SupabaseGridProps = {
    */
   onAddColumn?: () => void;
   /**
+   * show add row button if available
+   */
+  onAddRow?: () => void;
+  /**
+   * error handler
+   */
+  onError?: (message: string) => void;
+  /**
    * show edit column menu if available
    */
   onEditColumn?: (columnName: string) => void;
@@ -51,10 +59,6 @@ export type SupabaseGridProps = {
    * show delete column menu if available
    */
   onDeleteColumn?: (columnName: string) => void;
-  /**
-   * show add row button if available
-   */
-  onAddRow?: () => void;
   /**
    * show edit row button if available
    */

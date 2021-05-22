@@ -1,4 +1,8 @@
 import BaseReducer, { BaseInitialState, baseInitialState } from './base';
+import CallbackReducer, {
+  CallbackInitialState,
+  callbackInitialState,
+} from './callback';
 import ColumnReducer, {
   ColumnInitialState,
   columnInitialState,
@@ -12,6 +16,7 @@ import FilterReducer, {
 
 export interface InitialStateType
   extends BaseInitialState,
+    CallbackInitialState,
     ColumnInitialState,
     FilterInitialState,
     RowInitialState,
@@ -19,10 +24,18 @@ export interface InitialStateType
 
 export const initialState = {
   ...baseInitialState,
+  ...callbackInitialState,
   ...columnInitialState,
   ...filterInitialState,
   ...rowInitialState,
   ...sortInitialState,
 };
 
-export { BaseReducer, ColumnReducer, FilterReducer, RowReducer, SortReducer };
+export {
+  BaseReducer,
+  CallbackReducer,
+  ColumnReducer,
+  FilterReducer,
+  RowReducer,
+  SortReducer,
+};
