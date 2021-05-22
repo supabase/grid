@@ -21,6 +21,7 @@ export const Grid: React.FC<GridProps> = memo(
       () => new Set<React.Key>()
     );
     const { show: showContextMenu } = useContextMenu();
+    const { onError: onErrorFunc } = state;
 
     function rowKeyGetter(row: SupaRow) {
       return row.idx;
@@ -46,7 +47,7 @@ export const Grid: React.FC<GridProps> = memo(
       if (hasChange) {
         const { error } = state.rowService!.update(rowData);
         if (error) {
-          // TODO: show a toast error message
+          if (onErrorFunc) onErrorFunc(error);
         } else {
           dispatch({
             type: 'SET_ROWS',

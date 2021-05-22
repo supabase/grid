@@ -78,6 +78,9 @@ const App = () => {
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={clientProps}
         gridProps={{ height: '100%' }}
+        onError={error => {
+          console.log('ERROR: ', error);
+        }}
         onAddColumn={() => {
           console.log('add new column');
         }}

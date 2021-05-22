@@ -50,7 +50,7 @@ export type SupabaseGridProps = {
   /**
    * error handler
    */
-  onError?: (message: string) => void;
+  onError?: (error: any) => void;
   /**
    * show edit column menu if available
    */

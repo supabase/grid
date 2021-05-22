@@ -167,26 +167,33 @@ function initTable(
     return json[tableName];
   }
 
-  function onInitTable(tableDef: SupaTable, props: SupabaseGridProps) {
-    const gridColumns = getGridColumns(tableDef, {
+  function onInitTable(table: SupaTable, props: SupabaseGridProps) {
+    const gridColumns = getGridColumns(table, {
       defaultWidth: props.gridProps?.defaultColumnWidth,
       onEditRow: props.editable ? props.onEditRow : undefined,
     });
 
     let savedState;
     if (props.storageRef) {
-      savedState = onLoadStorage(props.storageRef, tableDef.name);
+      savedState = onLoadStorage(props.storageRef, table.name);
       // console.log('savedState', savedState);
     }
+
+    const errorHandler =
+      props.onError ??
+      ((error: any) => {
+        console.log('Default error handler: ', error);
+      });
 
     dispatch({
       type: 'INIT_TABLE',
       payload: {
-        table: tableDef,
+        table,
         gridProps: props.gridProps,
         gridColumns,
         savedState,
         editable: props.editable,
+        onError: errorHandler,
       },
     });
   }
@@ -199,7 +206,9 @@ function initTable(
     fetchMethod.then(res => {
       if (res) onInitTable(res, props);
       else {
-        // TODO: handle error
+        if (props.onError) {
+          props.onError({ message: 'fetch table info failed' });
+        }
       }
     });
   } else {

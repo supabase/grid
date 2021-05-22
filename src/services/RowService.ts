@@ -3,7 +3,11 @@ import { SupabaseGridQueue } from '../constants';
 import { Filter, Sort, SupaRow, SupaTable } from '../types';
 
 class RowService {
-  constructor(protected table: SupaTable, protected client: SupabaseClient) {}
+  constructor(
+    protected table: SupaTable,
+    protected client: SupabaseClient,
+    protected onError: (error: any) => void
+  ) {}
 
   fetchAll() {
     return this.client.from(this.table.name).select();
@@ -71,16 +75,15 @@ class RowService {
     const { idx, ...value } = row;
     SupabaseGridQueue.add(async () => {
       const res = await this.client.from(this.table.name).insert(value);
-      console.log('insert row', res);
-      // TODO: how to handle error
-      // if (res.error)
+      if (res.error) throw res.error;
+    }).catch(error => {
+      this.onError(error);
     });
   }
 
   update(row: SupaRow): { error?: string } {
     const { primaryKey, error } = this._getPrimaryKey();
     if (error) {
-      console.log('update error', error);
       return { error };
     }
 
@@ -90,9 +93,9 @@ class RowService {
         .from(this.table.name)
         .update(value)
         .match({ [primaryKey!]: value[primaryKey!] });
-      console.log('update row', res);
-      // TODO: how to handle error
-      // if (res.error)
+      if (res.error) throw res.error;
+    }).catch(error => {
+      this.onError(error);
     });
 
     return {};
@@ -107,9 +110,9 @@ class RowService {
         .from(this.table.name)
         .delete()
         .in(primaryKey!, primaryKeyValues);
-      console.log('delete row', res);
-      // TODO: how to handle error
-      // if (res.error)
+      if (res.error) throw res.error;
+    }).catch(error => {
+      this.onError(error);
     });
 
     return {};

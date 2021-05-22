@@ -3,7 +3,7 @@ import { SupaRow } from '../../types';
 export interface CallbackInitialState {
   onAddColumn: (() => void) | null;
   onAddRow: (() => void) | null;
-  onError: ((message: string) => void) | null;
+  onError: ((error: any) => void) | null;
   onEditRow: ((row: SupaRow) => void) | null;
   onEditColumn: ((columnName: string) => void) | null;
   onDeleteColumn: ((columnName: string) => void) | null;
@@ -23,7 +23,7 @@ type CALLBACK_ACTIONTYPE = {
   payload: {
     onAddColumn: (() => void) | null;
     onAddRow: (() => void) | null;
-    onError: ((message: string) => void) | null;
+    onError: ((error: any) => void) | null;
     onEditRow: ((row: SupaRow) => void) | null;
     onEditColumn: ((columnName: string) => void) | null;
     onDeleteColumn: ((columnName: string) => void) | null;

@@ -46,6 +46,7 @@ export type INIT_ACTIONTYPE =
         gridProps?: GridProps;
         savedState?: SavedState;
         editable?: boolean;
+        onError: (error: any) => void;
       };
     };
 
@@ -71,7 +72,11 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
       return {
         ...state,
         table: action.payload.table,
-        rowService: new RowService(action.payload.table, state.client!),
+        rowService: new RowService(
+          action.payload.table,
+          state.client!,
+          action.payload.onError
+        ),
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
         isInitialComplete: true,
         editable: action.payload.editable || false,
