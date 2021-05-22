@@ -40,14 +40,19 @@ export const Grid: React.FC<GridProps> = memo(
       data: RowsChangeData<SupaRow, unknown>
     ) {
       const rowData = rows[data.indexes[0]];
-      const { error } = state.rowService!.update(rowData);
-      if (error) {
-        // TODO: show a toast error message
-      } else {
-        dispatch({
-          type: 'SET_ROWS',
-          payload: { rows, totalRows: state.totalRows },
-        });
+      const originRowData = state.rows.find(x => x.idx == rowData.idx);
+      const hasChange =
+        JSON.stringify(rowData) !== JSON.stringify(originRowData);
+      if (hasChange) {
+        const { error } = state.rowService!.update(rowData);
+        if (error) {
+          // TODO: show a toast error message
+        } else {
+          dispatch({
+            type: 'SET_ROWS',
+            payload: { rows, totalRows: state.totalRows },
+          });
+        }
       }
     }
 
