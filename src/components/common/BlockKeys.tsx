@@ -32,5 +32,14 @@ export const BlockKeys: React.FC<BlockKeysProps> = ({
     },
     [value]
   );
-  return <div onKeyDown={handleKeyDown}>{children}</div>;
+
+  function onBlur() {
+    if (onEscape) onEscape(value);
+  }
+
+  return (
+    <div onKeyDown={handleKeyDown} onBlur={onBlur}>
+      {children}
+    </div>
+  );
 };

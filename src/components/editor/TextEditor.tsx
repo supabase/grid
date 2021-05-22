@@ -21,6 +21,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
   }, []);
 
   function handleEditorDidMount(editor: any) {
+    // editor.onDidBlurEditorText(() => onBlur());
     setTimeout(() => {
       editor?.focus();
     }, 0);
@@ -31,15 +32,9 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     else setValue(_value);
   }
 
-  const onBlur = () => {
-    onRowChange({ ...row, [column.key]: value }, true);
-    setIsPopoverOpen(false);
-  };
-
   return (
     <Popover
       isOpen={isPopoverOpen}
-      onClickOutside={onBlur}
       padding={-35}
       containerClassName=""
       positions={['bottom', 'top', 'left']}

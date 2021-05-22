@@ -33,11 +33,6 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
     else setValue(_value);
   }
 
-  function onBlur() {
-    commitChange(value);
-    setIsPopoverOpen(false);
-  }
-
   function commitChange(newValue: string | null) {
     if (!newValue) {
       onRowChange({ ...row, [column.key]: null }, true);
@@ -50,7 +45,6 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
   return (
     <Popover
       isOpen={isPopoverOpen}
-      onClickOutside={onBlur}
       padding={-35}
       containerClassName=""
       positions={['bottom', 'top', 'left']}
