@@ -35,8 +35,8 @@ export function ForeignKeyEditor<TRow, TSummaryRow = unknown>({
   }
 
   return (
-    <div className="flex items-center px-2 overflow-hidden">
-      <p className="m-0 flex-grow text-sm overflow-ellipsis">
+    <div className="flex items-center px-2">
+      <p className="m-0 flex-grow text-sm overflow-hidden overflow-ellipsis">
         {value ? value : <NullValue />}
       </p>
       {value && (
