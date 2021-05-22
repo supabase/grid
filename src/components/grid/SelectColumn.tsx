@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column } from '@supabase/react-data-grid';
+import { Column, useRowSelection } from '@supabase/react-data-grid';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { Button, IconEdit, IconChevronDown } from '@supabase/ui';
 import { SupaRow } from '../../types';
@@ -26,14 +26,21 @@ export function SelectColumn(
       );
     },
     formatter(props) {
+      const [isRowSelected, onRowSelectionChange] = useRowSelection();
       return (
         <SelectCellFormatter
           aria-label="Select"
           tabIndex={-1}
           isCellSelected={props.isCellSelected}
-          value={props.isRowSelected}
+          value={isRowSelected}
           row={props.row}
-          onChange={props.onRowSelectionChange}
+          onChange={(checked, isShiftClick) => {
+            onRowSelectionChange({
+              rowIdx: props.rowIdx,
+              checked,
+              isShiftClick,
+            });
+          }}
           onEditRow={onEditRow}
           // Stop propagation to prevent row selection
           onClick={stopPropagation}
@@ -41,13 +48,20 @@ export function SelectColumn(
       );
     },
     groupFormatter(props) {
+      const [isRowSelected, onRowSelectionChange] = useRowSelection();
       return (
         <SelectCellFormatter
           aria-label="Select Group"
           tabIndex={-1}
           isCellSelected={props.isCellSelected}
-          value={props.isRowSelected}
-          onChange={props.onRowSelectionChange}
+          value={isRowSelected}
+          onChange={checked => {
+            onRowSelectionChange({
+              checked,
+              isShiftClick: false,
+              rowIdx: props.rowIdx,
+            });
+          }}
           // Stop propagation to prevent row selection
           onClick={stopPropagation}
         />
