@@ -28,6 +28,7 @@ export interface DragItem {
 }
 
 export type ColumnType =
+  | 'array'
   | 'boolean'
   | 'date'
   | 'datetime'

@@ -126,6 +126,7 @@ function _setupColumnEditor(
       };
       break;
     }
+    case 'array':
     case 'json': {
       config.editor = JsonEditor;
       config.formatter = DefaultFormatter;
@@ -163,6 +164,8 @@ function _getColumnType(columnDef: SupaColumn): ColumnType {
     return 'foreign_key';
   } else if (_isNumericalColumn(columnDef.dataType)) {
     return 'number';
+  } else if (_isArrayColumn(columnDef.dataType)) {
+    return 'array';
   } else if (_isJsonColumn(columnDef.dataType)) {
     return 'json';
   } else if (_isTextColumn(columnDef.dataType)) {
@@ -216,9 +219,14 @@ function _isNumericalColumn(type: string) {
   return NUMERICAL_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-const JSON_TYPES = ['json', 'jsonb'];
+const JSON_TYPES = ['json', 'jsonb', 'array'];
 function _isJsonColumn(type: string) {
   return JSON_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+const ARRAY_TYPES = ['array'];
+function _isArrayColumn(type: string) {
+  return ARRAY_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const TEXT_TYPES = ['text', 'varchar'];
