@@ -22,12 +22,6 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
     setIsPopoverOpen(false);
   }, []);
 
-  function handleEditorDidMount(editor: any) {
-    setTimeout(() => {
-      editor?.focus();
-    }, 0);
-  }
-
   function onChange(_value: string | undefined) {
     if (!_value || _value == '') setValue(null);
     else setValue(_value);
@@ -59,7 +53,6 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
             value={value || ''}
             language="json"
             onChange={onChange}
-            onMount={handleEditorDidMount}
           />
         </BlockKeys>
       }

@@ -20,13 +20,6 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     setIsPopoverOpen(false);
   }, []);
 
-  function handleEditorDidMount(editor: any) {
-    // editor.onDidBlurEditorText(() => onBlur());
-    setTimeout(() => {
-      editor?.focus();
-    }, 0);
-  }
-
   function onChange(_value: string | undefined) {
     if (!_value || _value == '') setValue(null);
     else setValue(_value);
@@ -45,7 +38,6 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
             width={`${gridColumn?.width || column.width}px`}
             value={value || ''}
             onChange={onChange}
-            onMount={handleEditorDidMount}
           />
         </BlockKeys>
       }
