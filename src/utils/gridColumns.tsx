@@ -62,11 +62,7 @@ function _setupColumnEditor(
   columnType: ColumnType,
   config: Column<SupaRow>
 ) {
-  if (
-    columnDef.isPrimaryKey ||
-    columnDef.isIdentity ||
-    !columnDef.isUpdatable
-  ) {
+  if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
     config.formatter = DefaultFormatter;
     return;
   }
@@ -158,9 +154,7 @@ function _setupColumnEditor(
 }
 
 function _getColumnType(columnDef: SupaColumn): ColumnType {
-  if (columnDef.isIdentity) {
-    return 'primary_key';
-  } else if (_isForeignKeyColumn(columnDef)) {
+  if (_isForeignKeyColumn(columnDef)) {
     return 'foreign_key';
   } else if (_isNumericalColumn(columnDef.dataType)) {
     return 'number';
