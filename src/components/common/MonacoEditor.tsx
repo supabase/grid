@@ -28,6 +28,11 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
       });
     });
 
+    // move cursor to the end of document
+    const model = editor.getModel();
+    const position = model.getPositionAt(value?.length);
+    editor.setPosition(position);
+
     // auto focus on mount
     setTimeout(() => {
       editor?.focus();
