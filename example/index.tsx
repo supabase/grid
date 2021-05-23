@@ -1,7 +1,6 @@
 // https://github.com/parcel-bundler/parcel/issues/1762
 import 'react-app-polyfill/ie11';
 import 'regenerator-runtime/runtime';
-import 'react-contexify/dist/ReactContexify.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { SupabaseGrid, SupabaseGridRef } from '../.';

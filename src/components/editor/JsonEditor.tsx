@@ -39,6 +39,9 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
     } else if (verifyJSON(newValue)) {
       const jsonValue = JSON.parse(newValue);
       onRowChange({ ...row, [column.key]: jsonValue }, true);
+    } else {
+      const { onError } = state;
+      if (onError) onError(Error('invalid input'));
     }
   }
 

@@ -21,12 +21,6 @@ A react component to display your Postgresql table data.
   - Readonly: support both table and view
   - Editable: only for table. Required to create Postgresql functions below so that it can pull your table info.
 
-### Import css
-
-```js
-import 'react-contexify/dist/ReactContexify.css';
-```
-
 ## Postgresql Functions
 
 #### Load table info

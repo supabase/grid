@@ -140,6 +140,10 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   }
 );
 
+function defaultErrorHandler(error: any) {
+  console.log('Supabase grid error: ', error);
+}
+
 function initTable(
   props: SupabaseGridProps,
   state: InitialStateType,
@@ -165,12 +169,6 @@ function initTable(
       // console.log('savedState', savedState);
     }
 
-    const errorHandler =
-      props.onError ??
-      ((error: any) => {
-        console.log('Default error handler: ', error);
-      });
-
     dispatch({
       type: 'INIT_TABLE',
       payload: {
@@ -179,7 +177,7 @@ function initTable(
         gridColumns,
         savedState,
         editable: props.editable,
-        onError: errorHandler,
+        onError: props.onError ?? defaultErrorHandler,
       },
     });
   }
