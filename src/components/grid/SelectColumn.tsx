@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Column, useRowSelection } from '@supabase/react-data-grid';
-import { TriggerEvent, useContextMenu } from 'react-contexify';
-import { Button, IconEdit, IconChevronDown } from '@supabase/ui';
+import { Button, IconEdit } from '@supabase/ui';
 import { SupaRow } from '../../types';
-import { MENU_IDS } from '../menu';
+import { RowMenu } from '../menu';
 
 export function SelectColumn(
   onEditRow?: (row: SupaRow) => void
@@ -116,7 +115,7 @@ function SelectCellFormatter({
   }
 
   return (
-    <div className="flex items-center h-full">
+    <div className="flex justify-between items-center h-full">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
@@ -132,7 +131,6 @@ function SelectCellFormatter({
       {onEditRow && (
         <Button
           type="text"
-          className="ml-3"
           icon={<IconEdit />}
           onClick={onEditClick}
           style={{ padding: '3px' }}
@@ -156,27 +154,14 @@ function SelectCellHeader({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: SelectCellHeaderProps) {
-  const { show } = useContextMenu({
-    id: MENU_IDS.MULTI_ROWS_MENU_ID,
-  });
-  const triggerRef = React.useRef<any>(null);
   const ref = React.useRef<HTMLInputElement>(null);
-
-  function getMenuPosition() {
-    const { left, bottom } = triggerRef?.current.button.getBoundingClientRect();
-    return { x: left, y: bottom + 8 };
-  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }
 
-  function displayMenu(e: TriggerEvent) {
-    show(e, { position: getMenuPosition(), props: { allRowsSelected: true } });
-  }
-
   return (
-    <div className="flex items-center h-full">
+    <div className="flex justify-between items-center h-full">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
@@ -189,14 +174,7 @@ function SelectCellHeader({
         onChange={handleChange}
         onClick={onClick}
       />
-      <Button
-        type="text"
-        className="ml-3"
-        ref={triggerRef}
-        icon={<IconChevronDown />}
-        onClick={displayMenu}
-        style={{ padding: '3px' }}
-      />
+      <RowMenu />
     </div>
   );
 }

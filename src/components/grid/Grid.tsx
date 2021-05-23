@@ -1,14 +1,8 @@
 import * as React from 'react';
 import { memo } from 'react-tracked';
-import DataGrid, {
-  Row as GridRow,
-  RowRendererProps,
-  RowsChangeData,
-} from '@supabase/react-data-grid';
+import DataGrid, { RowsChangeData } from '@supabase/react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
-import { TriggerEvent, useContextMenu } from 'react-contexify';
 import { GridProps, SupaRow } from '../../types';
-import { MENU_IDS } from '../menu';
 import { useDispatch, useTrackedState } from '../../store';
 
 export const Grid: React.FC<GridProps> = memo(
@@ -17,10 +11,6 @@ export const Grid: React.FC<GridProps> = memo(
     const state = useTrackedState();
     // workaround to force state tracking on state.gridColumns
     const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
-    const [selectedRows, setSelectedRows] = React.useState(
-      () => new Set<React.Key>()
-    );
-    const { show: showContextMenu } = useContextMenu();
     const { onError: onErrorFunc } = state;
 
     function rowKeyGetter(row: SupaRow) {
@@ -57,27 +47,11 @@ export const Grid: React.FC<GridProps> = memo(
       }
     }
 
-    function RowRenderer(props: RowRendererProps<SupaRow>) {
-      const isSelected = selectedRows.has(props.row.idx);
-
-      function displayMenu(e: TriggerEvent) {
-        if (!isSelected) setSelectedRows(new Set<React.Key>());
-        const menuId =
-          isSelected && selectedRows.size > 1
-            ? MENU_IDS.MULTI_ROWS_MENU_ID
-            : MENU_IDS.ROW_MENU_ID;
-        showContextMenu(e, {
-          id: menuId,
-          props: { rowIdx: props.rowIdx, selectedRows },
-        });
-      }
-
-      return (
-        <GridRow
-          {...props}
-          onContextMenu={state.editable ? displayMenu : undefined}
-        />
-      );
+    function onSelectedRowsChange(selectedRows: Set<React.Key>) {
+      dispatch({
+        type: 'SELECTED_ROWS_CHANGE',
+        payload: { selectedRows },
+      });
     }
 
     if (!columnHeaders || columnHeaders.length == 0) {
@@ -103,12 +77,11 @@ export const Grid: React.FC<GridProps> = memo(
         <DataGrid
           columns={state.gridColumns}
           rows={state.rows}
-          rowRenderer={RowRenderer}
           rowKeyGetter={rowKeyGetter}
-          selectedRows={selectedRows}
+          selectedRows={state.selectedRows}
           onColumnResized={onColumnResized}
           onRowsChange={onRowsChange}
-          onSelectedRowsChange={setSelectedRows}
+          onSelectedRowsChange={onSelectedRowsChange}
           className={gridClass}
           rowClass={rowClass}
           style={{ height: '100%' }}

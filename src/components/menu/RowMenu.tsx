@@ -1,51 +1,94 @@
-import * as React from 'react';
 import {
-  Menu,
-  Item,
-  ItemParams,
-  PredicateParams,
-  theme,
-} from 'react-contexify';
+  Button,
+  Dropdown,
+  IconChevronDown,
+  Divider,
+  IconEdit,
+  IconTrash,
+} from '@supabase/ui';
+import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
-import { SupaRow } from '../../types';
+import { exportRowsToCsv } from '../../utils';
+import FileSaver from 'file-saver';
 
-export const ROW_MENU_ID = 'row-menu-id';
+type RowMenuProps = {};
 
-type RowMenuProps = {
-  onEditRow?: (row: SupaRow) => void;
-};
-
-const RowMenu: React.FC<RowMenuProps> = ({ onEditRow }) => {
-  const dispatch = useDispatch();
+const RowMenu: React.FC<RowMenuProps> = ({}) => {
   const state = useTrackedState();
+  const dispatch = useDispatch();
+  const { selectedRows } = state;
 
-  function onDeleteRow(p: ItemParams) {
-    const { props } = p;
-    const { rowIdx } = props;
-    const row = state.rows[rowIdx];
-    state.rowService!.delete([row]);
-    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [rowIdx] } });
+  function onRowsDelete() {
+    const rowIdxs = Array.from(selectedRows) as number[];
+    const rows = state.rows.filter(x => rowIdxs.includes(x.idx));
+    state.rowService!.delete(rows);
+    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
+    dispatch({
+      type: 'SELECTED_ROWS_CHANGE',
+      payload: { selectedRows: new Set<React.Key>() },
+    });
   }
 
-  function onEditRowClick(p: ItemParams) {
-    const { props } = p;
-    const { rowIdx } = props;
-    const row = state.rows[rowIdx];
-    if (onEditRow) onEditRow(row);
+  function onRowsExportCsv() {
+    const rows = state.rows.filter(x => selectedRows.has(x.idx));
+    const csv = exportRowsToCsv(state.table!.columns, rows);
+    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    FileSaver.saveAs(csvData, `${state.table!.name}_rows.csv`);
   }
 
-  function isItemHidden({ data }: PredicateParams) {
-    if (data === 'edit') return onEditRowClick == undefined;
-    return false;
+  function onAllRowsExportCsv() {
+    const csv = exportRowsToCsv(state.table!.columns, state.rows);
+    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    FileSaver.saveAs(csvData, `${state.table!.name}_allRows.csv`);
+  }
+
+  function renderMenu() {
+    return (
+      <>
+        {state.selectedRows.size == 0 && (
+          <Dropdown.Item
+            onClick={onAllRowsExportCsv}
+            icon={<IconEdit size="tiny" />}
+          >
+            Export all rows to csv
+          </Dropdown.Item>
+        )}
+
+        {state.selectedRows.size > 0 && (
+          <Dropdown.Item
+            onClick={onRowsExportCsv}
+            icon={<IconEdit size="tiny" />}
+          >
+            Export selected rows to Csv
+          </Dropdown.Item>
+        )}
+
+        {state.editable && state.selectedRows.size > 0 && (
+          <>
+            <Divider light />
+            <Dropdown.Item
+              onClick={onRowsDelete}
+              icon={<IconTrash size="tiny" />}
+            >
+              Delete selected rows
+            </Dropdown.Item>
+          </>
+        )}
+      </>
+    );
   }
 
   return (
-    <Menu id={ROW_MENU_ID} animation={false} theme={theme.dark}>
-      <Item onClick={onEditRowClick} hidden={isItemHidden} data="edit">
-        Edit row
-      </Item>
-      <Item onClick={onDeleteRow}>Delete row</Item>
-    </Menu>
+    <>
+      <Dropdown align="end" side="bottom" overlay={renderMenu()}>
+        <Button
+          as={'span'}
+          type="text"
+          icon={<IconChevronDown />}
+          style={{ padding: '3px' }}
+        />
+      </Dropdown>
+    </>
   );
 };
 export default RowMenu;

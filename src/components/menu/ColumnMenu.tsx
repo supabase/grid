@@ -1,5 +1,6 @@
 import { CalculatedColumn } from '@supabase/react-data-grid';
 import {
+  Button,
   Dropdown,
   IconChevronDown,
   Divider,
@@ -7,12 +8,9 @@ import {
   IconTrash,
   IconLock,
   IconUnlock,
-  Typography,
 } from '@supabase/ui';
 import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
-
-export const COLUMN_MENU_ID = 'column-menu-id';
 
 type ColumnMenuProps = {
   column: CalculatedColumn<any, unknown>;
@@ -82,9 +80,12 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({ column }) => {
   return (
     <>
       <Dropdown align="end" side="bottom" overlay={renderMenu()}>
-        <Typography.Text className="flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer ">
-          <IconChevronDown size="tiny" />
-        </Typography.Text>
+        <Button
+          as={'span'}
+          type="text"
+          icon={<IconChevronDown />}
+          style={{ padding: '3px' }}
+        />
       </Dropdown>
     </>
   );

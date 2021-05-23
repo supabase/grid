@@ -2,7 +2,6 @@ import './style.css';
 import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { useMonaco } from '@monaco-editor/react';
-import { createPortal } from 'react-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {
@@ -15,7 +14,6 @@ import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
-import { RowMenu, MultiRowsMenu } from './components/menu';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
@@ -61,14 +59,7 @@ export const SupabaseGrid = React.forwardRef<
 
 const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   (props, ref) => {
-    const {
-      editable,
-      schema,
-      storageRef,
-      clientProps,
-      gridProps,
-      onEditRow,
-    } = props;
+    const { editable, schema, storageRef, clientProps, gridProps } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
 
@@ -144,11 +135,6 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         />
         <Grid {...gridProps} />
         <Footer />
-        {createPortal(
-          <RowMenu onEditRow={editable ? onEditRow : undefined} />,
-          document.body
-        )}
-        {createPortal(<MultiRowsMenu />, document.body)}
       </div>
     );
   }

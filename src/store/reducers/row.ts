@@ -5,6 +5,7 @@ import { INIT_ACTIONTYPE } from './base';
 
 export interface RowInitialState {
   rows: SupaRow[];
+  selectedRows: Set<React.Key>;
   page: number;
   rowsPerPage: number;
   totalRows: number;
@@ -12,6 +13,7 @@ export interface RowInitialState {
 
 export const rowInitialState: RowInitialState = {
   rows: [],
+  selectedRows: new Set<React.Key>(),
   page: 1,
   rowsPerPage: 100,
   totalRows: 0,
@@ -19,6 +21,10 @@ export const rowInitialState: RowInitialState = {
 
 type ROW_ACTIONTYPE =
   | INIT_ACTIONTYPE
+  | {
+      type: 'SELECTED_ROWS_CHANGE';
+      payload: { selectedRows: Set<React.Key> };
+    }
   | { type: 'SET_PAGE'; payload: number }
   | { type: 'SET_ROWS_PER_PAGE'; payload: number }
   | {
@@ -36,6 +42,13 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       return {
         ...state,
         page: 1,
+        selectedRows: new Set<React.Key>(),
+      };
+    }
+    case 'SELECTED_ROWS_CHANGE': {
+      return {
+        ...state,
+        selectedRows: action.payload.selectedRows,
       };
     }
     case 'SET_PAGE': {
