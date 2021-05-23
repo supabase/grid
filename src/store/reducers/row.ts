@@ -61,6 +61,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
     case 'SET_ROWS_PER_PAGE': {
       return {
         ...state,
+        page: 1,
         rowsPerPage: action.payload,
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
       };
