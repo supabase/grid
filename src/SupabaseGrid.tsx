@@ -161,7 +161,7 @@ function initTable(
     const gridColumns = getGridColumns(table, {
       defaultWidth: props.gridProps?.defaultColumnWidth,
       onEditRow: props.editable ? props.onEditRow : undefined,
-      onAddRow: props.editable ? props.onAddRow : undefined,
+      onAddColumn: props.editable ? props.onAddColumn : undefined,
     });
 
     let savedState;
