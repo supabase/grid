@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { SupabaseGrid, SupabaseGridRef } from '../.';
+import './style.css';
 // import countries from './countries'
 
 const clientProps = {
