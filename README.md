@@ -25,7 +25,7 @@ A react component to display your Postgresql table data.
 
 - `table` database table swagger or table name.
 - `clientProps` props to create Supabase client.
-- `gridProps` props to config grid view
+- `gridProps` props to config grid view.
 - `schema` table schema. Defaults to 'public'.
 - `storageRef` storageRef is used to save state on localstorage.
 - `editable` enable table editor.
