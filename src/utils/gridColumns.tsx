@@ -12,13 +12,14 @@ import {
   TextEditor,
   TimeEditor,
 } from '../components/editor';
-import { ColumnHeader, SelectColumn } from '../components/grid';
+import { AddRowColumn, ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
 
 export function getGridColumns(
   table: SupaTable,
   options?: {
     onEditRow?: (row: SupaRow) => void;
+    onAddRow?: () => void;
     defaultWidth?: string | number;
   }
 ): any[] {
@@ -41,9 +42,17 @@ export function getGridColumns(
     _setupColumnEditor(x, columnType, columnDef);
     return columnDef;
   });
+
   // console.log('table', table);
   // console.log('columns', columns);
-  return [selectColumn, ...columns];
+
+  const gridColumns = [selectColumn, ...columns];
+  if (options?.onAddRow) {
+    const addRowColumn = AddRowColumn(options?.onAddRow);
+    gridColumns.push(addRowColumn);
+  }
+
+  return gridColumns;
 }
 
 const DefaultFormatter = (
