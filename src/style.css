@@ -59,6 +59,10 @@
   outline: 0;
 }
 
+/* 
+  Row header 
+*/
+
 .rdg-header-row {
   @apply bg-table-header-light dark:bg-table-header-dark border-none select-none;
 }
@@ -98,32 +102,48 @@
   font-weight: 400;
 }
 
+/* 
+  Row 
+*/
+
 .rdg-row {
   @apply bg-table-body-light dark:bg-table-body-dark transition-colors;
+  @apply hover:bg-table-header-light dark:hover:bg-table-header-dark;
 }
+
+/* edit button */
+.rdg-row__select-column__edit-action {
+  @apply text-typography-body-light dark:text-typography-body-dark;
+  opacity: 0;
+}
+.rdg-row:hover .rdg-row__select-column__edit-action {
+  opacity: 0.5;
+}
+.rdg-row__select-column__edit-action:hover {
+  opacity: 1;
+}
+
+/* select row */
+.rdg-row[aria-selected='true'] {
+  @apply bg-bg-secondary-light dark:bg-bg-secondary-dark;
+  @apply hover:bg-bg-secondary-light dark:hover:bg-bg-secondary-dark;
+}
+
 .rdg-row .rdg-cell span,
 .rdg-row .rdg-cell svg,
 .rdg-row .rdg-cell div {
   @apply text-typography-body-light dark:text-typography-body-dark;
 }
 
-.rdg-row:hover {
-  @apply bg-table-header-light dark:bg-table-header-dark;
-}
-
-.rdg-row-selected {
-  @apply bg-bg-secondary-light dark:bg-bg-secondary-dark;
-}
-
-.rdg-row-selected:hover {
-  @apply bg-bg-alt-light dark:bg-bg-alt-dark;
-}
-
 .tab-cursor {
   cursor: pointer !important;
 }
 
-/* clear native styling */
+/* 
+  Checkbox 
+*/
+
+/* reset styles */
 [type='checkbox'] {
   webkit-appearance: none;
   -moz-appearance: none;
