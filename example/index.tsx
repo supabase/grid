@@ -5,22 +5,20 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { SupabaseGrid, SupabaseGridRef } from '../.';
 import './style.css';
-// import countries from './countries'
 
 const clientProps = {
-  supabaseUrl: 'https://elwnyzeispughydvblgw.supabase.co',
-  supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic3VwYWJhc2VfYWRtaW4iLCJpYXQiOjE2MjAwMDE4NDUsImV4cCI6MTkzNTU3Nzg0NX0.PYPs2TWfinXgcv3OGtoq2i1SEJs_iz6FlwcRcNoYxtk',
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY || '',
 };
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [tableName, setName] = React.useState('test-table');
+  const [tableName, setName] = React.useState('test_table');
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
   function showTestTable() {
-    setName('test-table');
+    setName('test_table');
   }
 
   function showCountriesTable() {
