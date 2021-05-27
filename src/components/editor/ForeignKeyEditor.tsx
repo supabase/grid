@@ -9,6 +9,8 @@ import {
   Typography,
   IconExternalLink,
   IconX,
+  IconChevronDown,
+  IconSearch,
 } from '@supabase/ui';
 import { useTrackedState } from '../../store';
 import { DropdownControl, ModalPortal, NullValue } from '../common';
@@ -155,7 +157,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     const temp = rows.map((x, i) => {
       return <RowItem key={`menu-${i}`} item={x} onSelect={onItemSelect} />;
     });
-    return <Menu>{temp}</Menu>;
+    return <Menu className="space-y-2">{temp}</Menu>;
   }
 
   function onFilterChange(value: {
@@ -177,17 +179,27 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
       />
       {visible && (
         <ModalPortal>
-          <Modal visible={visible} onCancel={toggle} closable hideFooter>
+          <Modal
+            visible={visible}
+            onCancel={toggle}
+            closable
+            hideFooter
+            contentStyle={{ padding: 0 }}
+          >
             <Filter
               foreignColumnNames={foreignColumnNames}
               onChange={onFilterChange}
             />
-            <Divider />
-            <div
-              className="w-full overflow-scroll"
-              style={{ minHeight: '20rem', maxHeight: '20rem' }}
-            >
-              {renderRows()}
+            <div className="w-full">
+              <Divider light />
+              <div className="px-6">
+                <div
+                  className="w-full overflow-scroll"
+                  style={{ minHeight: '20rem', maxHeight: '20rem' }}
+                >
+                  {renderRows()}
+                </div>
+              </div>
             </div>
             <Divider />
           </Modal>
@@ -264,34 +276,57 @@ export const Filter: React.FC<FilterProps> = ({
   }
 
   return (
-    <div className="flex items-center w-full space-x-2">
-      <DropdownControl
-        side="bottom"
-        align="start"
-        options={columnOptions}
-        onSelect={onColumnChange}
-      >
-        <Button as="span" type="outline">
-          {columnName}
-        </Button>
-      </DropdownControl>
-      <DropdownControl
-        side="bottom"
-        align="start"
-        options={FilterConditionOptions}
-        onSelect={onConditionChange}
-      >
-        <Button as="span" type="outline">
-          {condition}
-        </Button>
-      </DropdownControl>
-      <Input
-        size="tiny"
-        className="flex-grow"
-        placeholder="Find a record"
-        value={filterText}
-        onChange={onFilterChange}
-      />
+    <div className="px-6">
+      {/* <div>
+        <Typography.Title level={3}>
+          Connect to an existing record
+        </Typography.Title>
+      </div> */}
+      <div className="flex items-center w-full space-x-2">
+        <DropdownControl
+          side="bottom"
+          align="start"
+          options={columnOptions}
+          onSelect={onColumnChange}
+        >
+          <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+            <span className="space-x-2">
+              <span className="text-typography-body-light dark:text-typography-body-dark">
+                Column
+              </span>
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
+                {columnName}
+              </span>
+            </span>
+          </Button>
+        </DropdownControl>
+        <DropdownControl
+          side="bottom"
+          align="start"
+          options={FilterConditionOptions}
+          onSelect={onConditionChange}
+        >
+          <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+            <span className="space-x-2">
+              <span className="text-typography-body-light dark:text-typography-body-dark">
+                Filter
+              </span>
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
+                {condition}
+              </span>
+            </span>
+          </Button>
+        </DropdownControl>
+        <Input
+          size="tiny"
+          className="flex-grow"
+          // style={{ width: '100%' }}
+          placeholder="Find a record"
+          value={filterText}
+          onChange={onFilterChange}
+          icon={<IconSearch size="small" />}
+        />
+      </div>
     </div>
   );
 };
@@ -304,17 +339,25 @@ type RowItemProps = {
 export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
   const keys = Object.keys(item);
   return (
-    <Menu.Item onClick={() => onSelect(item)}>
-      <div className="flex space-x-4">
-        {keys.map((key, j) => {
-          return (
-            <div className="flex flex-col flex-initial" key={`item-${j}`}>
-              <Typography.Text strong>{key}</Typography.Text>
-              <Typography.Text>{item[key] || '[null]'}</Typography.Text>
-            </div>
-          );
-        })}
-      </div>
-    </Menu.Item>
+    <div className="border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden">
+      <Menu.Item onClick={() => onSelect(item)}>
+        <div className="flex space-x-4">
+          {keys.map((key, j) => {
+            // limit to 5
+            if (j > 5) return null;
+            return (
+              <div className="flex flex-col flex-initial" key={`item-${j}`}>
+                <Typography.Text type="secondary" className="font-mono">
+                  {key}
+                </Typography.Text>
+                <Typography.Text strong>
+                  {item[key] || '[null]'}
+                </Typography.Text>
+              </div>
+            );
+          })}
+        </div>
+      </Menu.Item>
+    </div>
   );
 };
