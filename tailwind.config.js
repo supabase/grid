@@ -54,10 +54,6 @@ module.exports = {
   darkMode: 'class',
   purge: ['./src/**/*.tsx'],
   theme: {
-    // borderColor: theme => ({
-    //   ...theme('colors'),
-    //   dark: theme('colors.gray.600', 'currentColor'),
-    // }),
     borderColor: theme => ({
       ...theme('colors'),
       DEFAULT: '#f0f2f5',
@@ -90,6 +86,18 @@ module.exports = {
           dark: gray[100],
         },
         'typography-body-secondary': {
+          light: coolGray[400],
+          dark: gray[300],
+        },
+        'typography-body-secondary': {
+          light: coolGray[500],
+          dark: gray[100],
+        },
+        'typography-body-strong': {
+          light: coolGray[800],
+          dark: 'white',
+        },
+        'typography-body-faded': {
           light: coolGray[400],
           dark: gray[300],
         },
