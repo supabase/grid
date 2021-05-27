@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Column, useRowSelection } from '@supabase/react-data-grid';
-import { Button, IconEdit } from '@supabase/ui';
+import { Button, IconMaximize2 } from '@supabase/ui';
 import { SupaRow } from '../../types';
 import { RowMenu } from '../menu';
 
@@ -122,7 +122,8 @@ function SelectCellFormatter({
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:ring-brand-500 border-gray-300"
+        className="rdg-row__select-column__select-action"
+        // className="focus:ring-brand-500 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}
@@ -131,9 +132,11 @@ function SelectCellFormatter({
       {onEditRow && (
         <Button
           type="text"
-          icon={<IconEdit />}
+          size="tiny"
+          className="rdg-row__select-column__edit-action"
+          icon={<IconMaximize2 size="tiny" />}
           onClick={onEditClick}
-          style={{ padding: '3px' }}
+          style={{ padding: '2px' }}
         />
       )}
     </div>

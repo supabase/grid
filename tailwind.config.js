@@ -10,6 +10,7 @@ const gray = {
   '800': '#181818',
   '900': '#0f0f0f',
 };
+
 const green = {
   '100': '#c5f1dd',
   '200': '#c5f1dd',
@@ -53,8 +54,13 @@ module.exports = {
   darkMode: 'class',
   purge: ['./src/**/*.tsx'],
   theme: {
+    // borderColor: theme => ({
+    //   ...theme('colors'),
+    //   dark: theme('colors.gray.600', 'currentColor'),
+    // }),
     borderColor: theme => ({
       ...theme('colors'),
+      DEFAULT: '#f0f2f5',
       dark: theme('colors.gray.600', 'currentColor'),
     }),
     extend: {
