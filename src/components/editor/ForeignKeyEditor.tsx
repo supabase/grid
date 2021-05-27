@@ -276,11 +276,6 @@ export const Filter: React.FC<FilterProps> = ({
 
   return (
     <div className="px-6">
-      {/* <div>
-        <Typography.Title level={3}>
-          Connect to an existing record
-        </Typography.Title>
-      </div> */}
       <div className="flex items-center w-full space-x-2">
         <DropdownControl
           side="bottom"
@@ -319,7 +314,6 @@ export const Filter: React.FC<FilterProps> = ({
         <Input
           size="tiny"
           className="flex-grow"
-          // style={{ width: '100%' }}
           placeholder="Find a record"
           value={filterText}
           onChange={onFilterChange}
@@ -342,8 +336,13 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
       <Menu.Item onClick={() => onSelect(item)}>
         <div className="flex space-x-4">
           {keys.map((key, j) => {
-            // limit to 5
+            //
+            // limit to 5 attributes
+            //
+            // this could be improved so the user could pick which attributes to display
+            // @mildtomato
             if (j > 5) return null;
+
             return (
               <div className="flex flex-col flex-initial" key={`item-${j}`}>
                 <Typography.Text small type="secondary" className="font-mono">
