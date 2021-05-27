@@ -110,8 +110,6 @@ export function ColumnHeader<R>({
   const cursor = column.frozen ? 'cursor-default' : '';
   drag(drop(ref));
 
-  console.log(column.name, columnType);
-
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>

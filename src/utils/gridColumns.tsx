@@ -35,8 +35,6 @@ export function getGridColumns(
     };
     const columnType = _getColumnType(x);
 
-    console.log(x);
-
     columnDef.headerRenderer = props => {
       return (
         <ColumnHeader
