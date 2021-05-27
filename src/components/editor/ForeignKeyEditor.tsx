@@ -201,7 +201,6 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
                 </div>
               </div>
             </div>
-            <Divider />
           </Modal>
         </ModalPortal>
       )}
@@ -294,7 +293,7 @@ export const Filter: React.FC<FilterProps> = ({
               <span className="text-typography-body-light dark:text-typography-body-dark">
                 Column
               </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-normal">
                 {columnName}
               </span>
             </span>
@@ -311,7 +310,7 @@ export const Filter: React.FC<FilterProps> = ({
               <span className="text-typography-body-light dark:text-typography-body-dark">
                 Filter
               </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-normal">
                 {condition}
               </span>
             </span>
@@ -347,7 +346,7 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
             if (j > 5) return null;
             return (
               <div className="flex flex-col flex-initial" key={`item-${j}`}>
-                <Typography.Text type="secondary" className="font-mono">
+                <Typography.Text small type="secondary" className="font-mono">
                   {key}
                 </Typography.Text>
                 <Typography.Text strong>
