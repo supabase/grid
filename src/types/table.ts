@@ -27,4 +27,5 @@ export interface SupaTable {
 
 export interface SupaRow extends Dictionary<any> {
   readonly idx: number;
+  readonly isPrimaryKey?: boolean;
 }

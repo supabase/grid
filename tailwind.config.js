@@ -87,7 +87,11 @@ module.exports = {
         */
         'typography-body': {
           light: coolGray[600],
-          dark: gray[200],
+          dark: gray[100],
+        },
+        'typography-body-secondary': {
+          light: coolGray[400],
+          dark: gray[300],
         },
 
         /*
