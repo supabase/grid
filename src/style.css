@@ -72,12 +72,30 @@
   line-height: var(--header-row-height);
   top: 0;
 }
-.rdg-header-row .rdg-cell {
-  @apply bg-table-header-light dark:bg-table-header-dark border-b dark:border-dark;
+
+.rdg-header-row__content__name {
+  @apply overflow-hidden overflow-ellipsis text-sm;
   @apply text-typography-body-light dark:text-typography-body-dark;
 }
+
+.rdg-header-row__content__format {
+  @apply text-xs;
+  @apply font-normal overflow-hidden overflow-ellipsis;
+  @apply text-typography-body-secondary-light dark:text-typography-body-secondary-dark;
+}
+
+.rdg-header-row__content svg {
+  @apply mr-1;
+  @apply text-green-500 border-green-500 dark:text-green-500 dark:border-green-500;
+}
+
+.rdg-header-row .rdg-cell {
+  @apply bg-table-header-light dark:bg-table-header-dark border-b dark:border-dark;
+  /* @apply text-typography-body-light dark:text-typography-body-dark; */
+}
 .rdg-header-row .rdg-cell p,
-.rdg-header-row .rdg-cell svg {
+/* .rdg-cell svg  */
+ {
   @apply text-typography-body-light dark:text-typography-body-dark;
 }
 .rdg-header-row .rdg-cell .react-contextmenu-wrapper {
@@ -130,7 +148,7 @@
 }
 
 .rdg-row .rdg-cell span,
-.rdg-row .rdg-cell svg,
+/* .rdg-row .rdg-cell svg, */
 .rdg-row .rdg-cell div {
   @apply text-typography-body-light dark:text-typography-body-dark;
 }

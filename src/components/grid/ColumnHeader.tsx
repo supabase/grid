@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {
-  IconBox,
-  IconClock,
+  // IconBox,
+  // IconClock,
   IconKey,
-  IconType,
+  // IconType,
+  // IconHash,
+  // IconCheckCircle,
+  // IconList,
+  // IconCalendar,
   IconLink,
-  IconHash,
-  IconCheckCircle,
-  IconList,
-  IconCalendar,
 } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
@@ -17,7 +17,12 @@ import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 import { ColumnMenu } from '../menu';
 
-export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
+export function ColumnHeader<R>({
+  column,
+  columnType,
+  isPrimaryKey,
+  format,
+}: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
   // const triggerRef = React.useRef<any>(null);
   const dispatch = useDispatch();
@@ -105,14 +110,22 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
   const cursor = column.frozen ? 'cursor-default' : '';
   drag(drop(ref));
 
+  console.log(column.name, columnType);
+
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
-        <div className={`flex items-center ${cursor}`}>
-          {renderColumnIcon(columnType)}
-          <span className="inline-block ml-2 flex-grow overflow-hidden overflow-ellipsis text-sm">
-            {column.name}
-          </span>
+        <div className={`flex items-center ${cursor} justify-between`}>
+          <div className="flex items-center space-x-2 rdg-header-row__content">
+            {renderColumnIcon(columnType)}
+            {isPrimaryKey && (
+              <div className="transform rotate-45 flex items-center">
+                <IconKey size="tiny" strokeWidth={2} />
+              </div>
+            )}
+            <span className="rdg-header-row__content__name">{column.name}</span>
+            <span className="rdg-header-row__content__format">{format}</span>
+          </div>
           <ColumnMenu column={column} />
         </div>
       </SortableHeaderCell>
@@ -122,26 +135,26 @@ export function ColumnHeader<R>({ column, columnType }: ColumnHeaderProps<R>) {
 
 function renderColumnIcon(type: ColumnType) {
   switch (type) {
-    case 'boolean':
-      return <IconCheckCircle size="tiny" />;
-    case 'date':
-      return <IconCalendar size="tiny" />;
-    case 'datetime':
-      return <IconClock size="tiny" />;
-    case 'time':
-      return <IconClock size="tiny" />;
-    case 'enum':
-      return <IconList size="tiny" />;
+    // case 'primary_key':
+    //   return <IconKey size="tiny" />;
+    // case 'boolean':
+    //   return <IconCheckCircle size="tiny" />;
+    // case 'date':
+    //   return <IconCalendar size="tiny" />;
+    // case 'datetime':
+    //   return <IconClock size="tiny" />;
+    // case 'time':
+    //   return <IconClock size="tiny" />;
+    // case 'enum':
+    //   return <IconList size="tiny" />;
     case 'foreign_key':
-      return <IconLink size="tiny" />;
-    case 'json':
-      return <IconBox size="tiny" />;
-    case 'number':
-      return <IconHash size="tiny" />;
-    case 'primary_key':
-      return <IconKey size="tiny" />;
-    case 'text':
-      return <IconType size="tiny" />;
+      return <IconLink size="tiny" strokeWidth={2} />;
+    // case 'json':
+    //   return <IconBox size="tiny" />;
+    // case 'number':
+    //   return <IconHash size="tiny" />;
+    // case 'text':
+    //   return <IconType size="tiny" />;
     default:
       return null;
   }
