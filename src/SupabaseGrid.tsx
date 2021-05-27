@@ -65,7 +65,14 @@ export const SupabaseGrid = React.forwardRef<
 
 const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   (props, ref) => {
-    const { editable, schema, storageRef, clientProps, gridProps } = props;
+    const {
+      editable,
+      schema,
+      storageRef,
+      clientProps,
+      gridProps,
+      headerActions,
+    } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
 
@@ -138,6 +145,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         <Header
           onAddRow={editable ? props.onAddRow : undefined}
           onAddColumn={editable ? props.onAddColumn : undefined}
+          headerActions={headerActions}
         />
         <Grid {...gridProps} />
         <Footer />

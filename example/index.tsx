@@ -95,6 +95,10 @@ const App = () => {
         onEditRow={rowIdx => {
           console.log('edit row: ', rowIdx);
         }}
+        headerActions={[
+          <span>{`'{headerActions}' can be used to insert`}</span>,
+          <button>react nodes here</button>,
+        ]}
       />
     );
   }

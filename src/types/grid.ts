@@ -1,3 +1,4 @@
+import React from 'react';
 import { Dictionary } from './base';
 import { SupaRow, SupaTable } from './table';
 
@@ -39,6 +40,10 @@ export type SupabaseGridProps = {
    * enable table editor
    */
   editable?: boolean;
+  /**
+   * Optional react node to display in grid header
+   */
+  headerActions?: React.ReactNode;
   /**
    * show create new column button if available
    */

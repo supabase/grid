@@ -7,9 +7,14 @@ import StatusLabel from './StatusLabel';
 type HeaderProps = {
   onAddColumn?: () => void;
   onAddRow?: () => void;
+  headerActions?: React.ReactNode;
 };
 
-const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
+const Header: React.FC<HeaderProps> = ({
+  onAddColumn,
+  onAddRow,
+  headerActions,
+}) => {
   const renderNewColumn = (onAddColumn?: () => void) => {
     if (!onAddColumn) return null;
     return (
@@ -42,7 +47,8 @@ const Header: React.FC<HeaderProps> = ({ onAddColumn, onAddRow }) => {
         {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
+        {headerActions}
         <StatusLabel />
       </div>
     </div>
