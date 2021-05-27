@@ -264,22 +264,24 @@ export const Filter: React.FC<FilterProps> = ({
   }
 
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full space-x-2">
       <DropdownControl
-        className="z-20"
+        side="bottom"
+        align="start"
         options={columnOptions}
         onSelect={onColumnChange}
       >
-        <Button as="span" className="mr-2" type="outline">
+        <Button as="span" type="outline">
           {columnName}
         </Button>
       </DropdownControl>
       <DropdownControl
-        className="z-20"
+        side="bottom"
+        align="start"
         options={FilterConditionOptions}
         onSelect={onConditionChange}
       >
-        <Button as="span" className="mr-2" type="outline">
+        <Button as="span" type="outline">
           {condition}
         </Button>
       </DropdownControl>
