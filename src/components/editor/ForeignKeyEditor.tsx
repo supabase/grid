@@ -195,7 +195,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
               <div className="px-6">
                 <div
                   className="w-full overflow-scroll"
-                  style={{ minHeight: '20rem', maxHeight: '20rem' }}
+                  style={{ minHeight: '21rem', maxHeight: '20rem' }}
                 >
                   {renderRows()}
                 </div>
@@ -293,7 +293,7 @@ export const Filter: React.FC<FilterProps> = ({
               <span className="text-typography-body-light dark:text-typography-body-dark">
                 Column
               </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-normal">
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
                 {columnName}
               </span>
             </span>
@@ -310,7 +310,7 @@ export const Filter: React.FC<FilterProps> = ({
               <span className="text-typography-body-light dark:text-typography-body-dark">
                 Filter
               </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-normal">
+              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
                 {condition}
               </span>
             </span>
@@ -349,7 +349,7 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
                 <Typography.Text small type="secondary" className="font-mono">
                   {key}
                 </Typography.Text>
-                <Typography.Text strong>
+                <Typography.Text small strong>
                   {item[key] || '[null]'}
                 </Typography.Text>
               </div>
