@@ -82,17 +82,22 @@ class RowService {
   }
 
   update(row: SupaRow): { error?: string } {
-    const { primaryKey, error } = this._getPrimaryKey();
+    const { primaryKeys, error } = this._getPrimaryKeys();
     if (error) {
       return { error };
     }
 
     const { idx, ...value } = row;
+    const matchValues: any = {};
+    primaryKeys!.forEach(key => {
+      matchValues[key] = row[key];
+    });
+
     SupabaseGridQueue.add(async () => {
       const res = await this.client
         .from(this.table.name)
         .update(value)
-        .match({ [primaryKey!]: value[primaryKey!] });
+        .match(matchValues);
       if (res.error) throw res.error;
     }).catch(error => {
       this.onError(error);
@@ -100,16 +105,19 @@ class RowService {
 
     return {};
   }
+
   delete(rows: SupaRow[]): { error?: string } {
-    const { primaryKey, error } = this._getPrimaryKey();
-    if (error || !primaryKey) return { error };
+    const { primaryKeys, error } = this._getPrimaryKeys();
+    if (error) return { error };
 
-    const primaryKeyValues = rows.map(x => x[primaryKey]);
     SupabaseGridQueue.add(async () => {
-      const res = await this.client
-        .from(this.table.name)
-        .delete()
-        .in(primaryKey!, primaryKeyValues);
+      const request = this.client.from(this.table.name).delete();
+      primaryKeys!.forEach(key => {
+        const primaryKeyValues = rows.map(x => x[key]);
+        request.in(key, primaryKeyValues);
+      });
+
+      const res = await request;
       if (res.error) throw res.error;
     }).catch(error => {
       this.onError(error);
@@ -118,14 +126,12 @@ class RowService {
     return {};
   }
 
-  _getPrimaryKey(): { primaryKey?: string; error?: string } {
-    // find primary key
-    const primaryKeys = this.table.columns.filter(x => x.isPrimaryKey);
-    if (!primaryKeys || primaryKeys.length == 0)
+  _getPrimaryKeys(): { primaryKeys?: string[]; error?: string } {
+    const pkColumns = this.table.columns.filter(x => x.isPrimaryKey);
+    if (!pkColumns || pkColumns.length == 0) {
       return { error: "Can't find primary key" };
-    else if (primaryKeys.length > 1)
-      return { error: 'Not support multiple primary keys' };
-    return { primaryKey: primaryKeys[0].name };
+    }
+    return { primaryKeys: pkColumns.map(x => x.name) };
   }
 }
 export default RowService;

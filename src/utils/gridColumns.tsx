@@ -219,6 +219,7 @@ const NUMERICAL_TYPES = [
   'float4',
   'float8',
   'real',
+  'numeric',
   'smallint',
   'smallserial',
   'serial2',
