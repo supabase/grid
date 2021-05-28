@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-  // IconBox,
-  // IconClock,
-  IconKey,
-  // IconType,
-  // IconHash,
-  // IconCheckCircle,
-  // IconList,
-  // IconCalendar,
-  IconLink,
-} from '@supabase/ui';
+import { IconKey, IconLink } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { SortableHeaderCell } from '@supabase/react-data-grid';
@@ -24,7 +14,6 @@ export function ColumnHeader<R>({
   format,
 }: ColumnHeaderProps<R>) {
   const ref = React.useRef<HTMLDivElement>(null);
-  // const triggerRef = React.useRef<any>(null);
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
@@ -114,7 +103,7 @@ export function ColumnHeader<R>({
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <SortableHeaderCell column={column}>
         <div className={`flex items-center ${cursor} justify-between`}>
-          <div className="flex items-center space-x-2 rdg-header-row__content">
+          <div className="flex items-center space-x-2 rdg-header-row__content overflow-hidden overflow-ellipsis">
             {renderColumnIcon(columnType)}
             {isPrimaryKey && (
               <div className="transform rotate-45 flex items-center">
@@ -133,26 +122,8 @@ export function ColumnHeader<R>({
 
 function renderColumnIcon(type: ColumnType) {
   switch (type) {
-    // case 'primary_key':
-    //   return <IconKey size="tiny" />;
-    // case 'boolean':
-    //   return <IconCheckCircle size="tiny" />;
-    // case 'date':
-    //   return <IconCalendar size="tiny" />;
-    // case 'datetime':
-    //   return <IconClock size="tiny" />;
-    // case 'time':
-    //   return <IconClock size="tiny" />;
-    // case 'enum':
-    //   return <IconList size="tiny" />;
     case 'foreign_key':
       return <IconLink size="tiny" strokeWidth={2} />;
-    // case 'json':
-    //   return <IconBox size="tiny" />;
-    // case 'number':
-    //   return <IconHash size="tiny" />;
-    // case 'text':
-    //   return <IconType size="tiny" />;
     default:
       return null;
   }
