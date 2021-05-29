@@ -13,7 +13,7 @@ const clientProps = {
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [tableName, setName] = React.useState('po_items');
+  const [tableName, setName] = React.useState('test_table');
   const [uiMode, setUiMode] = React.useState('');
   const isReadonly = tableName == 'countries_view';
 
