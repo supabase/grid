@@ -10,7 +10,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
   onRowChange,
 }: EditorProps<TRow, TSummaryRow>) {
   const state = useTrackedState();
-  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = React.useState(true);
   const gridColumn = state.gridColumns.find(x => x.name == column.key);
   const initialValue = row[column.key as keyof TRow] as unknown;
   const jsonString = initialValue ? JSON.stringify(initialValue) : '';
