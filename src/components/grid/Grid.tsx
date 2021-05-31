@@ -1,17 +1,100 @@
 import * as React from 'react';
 import { memo } from 'react-tracked';
-import DataGrid, { RowsChangeData } from '@supabase/react-data-grid';
+import DataGrid, {
+  DataGridHandle,
+  RowsChangeData,
+} from '@supabase/react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
+import { useKeyboardShortcuts } from '../common';
+import { METAKEY } from '../../utils';
 
 export const Grid: React.FC<GridProps> = memo(
   ({ width, height, containerClass, gridClass, rowClass }) => {
+    const gridRef = React.useRef<DataGridHandle>(null);
     const dispatch = useDispatch();
     const state = useTrackedState();
     // workaround to force state tracking on state.gridColumns
     const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
-    const { onError: onErrorFunc } = state;
+    const {
+      gridColumns,
+      rows,
+      onError: onErrorFunc,
+      onEditRow,
+      selectedCellPosition,
+    } = state;
+
+    useKeyboardShortcuts(
+      {
+        [`${METAKEY}+e`]: event => {
+          event.stopPropagation();
+          if (onEditRow && selectedCellPosition) {
+            const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
+            if (row) onEditRow(row);
+          }
+        },
+        [`${METAKEY}+Backspace`]: event => {
+          event.stopPropagation();
+          if (selectedCellPosition) {
+            const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
+            if (row) {
+              state.rowService!.delete([row]);
+              dispatch({
+                type: 'REMOVE_ROWS',
+                payload: { rowIdxs: [row.idx] },
+              });
+              dispatch({
+                type: 'SELECTED_CELL_CHANGE',
+                payload: { position: null },
+              });
+            }
+          }
+        },
+        [`${METAKEY}+ArrowUp`]: event => {
+          event.stopPropagation();
+          if (selectedCellPosition) {
+            const position = {
+              idx: selectedCellPosition?.idx ?? 0,
+              rowIdx: 0,
+            };
+            gridRef.current!.selectCell(position);
+          } else {
+            gridRef.current!.scrollToRow(Number(0));
+          }
+        },
+        [`${METAKEY}+ArrowDown`]: event => {
+          event.stopPropagation();
+          if (selectedCellPosition) {
+            const position = {
+              idx: selectedCellPosition?.idx ?? 0,
+              rowIdx: rows.length > 1 ? rows.length - 1 : 0,
+            };
+            gridRef.current!.selectCell(position);
+          } else {
+            gridRef.current!.scrollToRow(Number(rows.length));
+          }
+        },
+        [`${METAKEY}+ArrowLeft`]: event => {
+          event.stopPropagation();
+          const fronzenColumns = gridColumns.filter(x => x.frozen);
+          const position = {
+            idx: fronzenColumns.length,
+            rowIdx: selectedCellPosition?.rowIdx ?? 0,
+          };
+          gridRef.current!.selectCell(position);
+        },
+        [`${METAKEY}+ArrowRight`]: event => {
+          event.stopPropagation();
+          gridRef.current!.selectCell({
+            idx: gridColumns.length - 1,
+            rowIdx: selectedCellPosition?.rowIdx ?? 0,
+          });
+        },
+      },
+      ['INPUT', 'TEXTAREA'],
+      ['rdg-editor-container']
+    );
 
     function rowKeyGetter(row: SupaRow) {
       return row.idx;
@@ -54,6 +137,13 @@ export const Grid: React.FC<GridProps> = memo(
       });
     }
 
+    function onSelectedCellChange(position: { idx: number; rowIdx: number }) {
+      dispatch({
+        type: 'SELECTED_CELL_CHANGE',
+        payload: { position },
+      });
+    }
+
     if (!columnHeaders || columnHeaders.length == 0) {
       return (
         <div
@@ -75,12 +165,14 @@ export const Grid: React.FC<GridProps> = memo(
         style={{ width: width || '100%', height: height || '50vh' }}
       >
         <DataGrid
-          columns={state.gridColumns}
-          rows={state.rows}
+          ref={gridRef}
+          columns={gridColumns}
+          rows={rows}
           rowKeyGetter={rowKeyGetter}
           selectedRows={state.selectedRows}
           onColumnResized={onColumnResized}
           onRowsChange={onRowsChange}
+          onSelectedCellChange={onSelectedCellChange}
           onSelectedRowsChange={onSelectedRowsChange}
           className={gridClass}
           rowClass={rowClass}

@@ -14,6 +14,7 @@ import {
 } from '../components/editor';
 import { AddColumn, ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
+import { NullValue } from '../components/common';
 
 export function getGridColumns(
   table: SupaTable,
@@ -66,7 +67,7 @@ const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
 ) => {
   let value = p.row[p.column.key];
-  if (!value) return <></>;
+  if (!value) return <NullValue />;
   if (typeof value == 'object' || Array.isArray(value)) {
     value = JSON.stringify(value);
   }
@@ -78,8 +79,8 @@ function _setupColumnEditor(
   columnType: ColumnType,
   config: Column<SupaRow>
 ) {
+  config.formatter = DefaultFormatter;
   if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
-    config.formatter = DefaultFormatter;
     return;
   }
 
@@ -90,80 +91,69 @@ function _setupColumnEditor(
         const value = p.row[p.column.key] as boolean;
         return <>{value ? 'true' : 'false'}</>;
       };
-      config.editorOptions = {
-        editOnClick: true,
-      };
       break;
     }
     case 'date': {
       config.editor = DateEditor;
-      config.formatter = DefaultFormatter;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'datetime': {
       config.editor = DateTimeEditor;
-      config.formatter = DefaultFormatter;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'time': {
       config.editor = TimeEditor;
-      config.formatter = DefaultFormatter;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'enum': {
       const options = columnDef.enum!.map(x => {
         return { label: x, value: x };
       });
-      config.formatter = DefaultFormatter;
       config.editor = p => <SelectEditor {...p} options={options} />;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'foreign_key': {
       config.editor = ForeignKeyEditor;
-      config.formatter = DefaultFormatter;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'array':
     case 'json': {
       config.editor = JsonEditor;
-      config.formatter = DefaultFormatter;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'number': {
       config.editor = NumberEditor;
-      config.editorOptions = {
-        editOnClick: true,
-      };
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     case 'text': {
       config.editor = TextEditor;
-      config.editorOptions = {
-        editOnClick: true,
-      };
-      config.formatter = DefaultFormatter;
+      // config.editorOptions = {
+      //   editOnClick: true,
+      // };
       break;
     }
     default: {
-      config.formatter = DefaultFormatter;
       break;
     }
   }
@@ -195,7 +185,7 @@ function _getColumnType(columnDef: SupaColumn): ColumnType {
 
 function _getColumnWidth(columnDef: SupaColumn): string | number | undefined {
   if (_isNumericalColumn(columnDef.dataType)) {
-    return 100;
+    return 120;
   } else if (
     _isDateTimeColumn(columnDef.format) ||
     _isDateColumn(columnDef.format) ||
@@ -203,24 +193,27 @@ function _getColumnWidth(columnDef: SupaColumn): string | number | undefined {
   ) {
     return 150;
   } else if (_isBoolColumn(columnDef.dataType)) {
-    return 100;
+    return 120;
   } else if (_isEnumColumn(columnDef.dataType)) {
     return 150;
   } else return 250;
 }
 
 const NUMERICAL_TYPES = [
+  'smallint',
+  'integer',
   'bigint',
+  'decimal',
+  'numeric',
+  'real',
+  'double precision',
+  'serial',
   'bigserial',
   'int2',
   'int4',
   'int8',
-  'integer',
   'float4',
   'float8',
-  'real',
-  'numeric',
-  'smallint',
   'smallserial',
   'serial2',
   'serial4',

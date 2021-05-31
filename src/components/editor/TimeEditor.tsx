@@ -46,7 +46,6 @@ export function TimeEditor<TRow, TSummaryRow = unknown>({
       className="w-full h-full px-2"
       ref={autoFocusAndSelect}
       value={timeValue || ''}
-      placeholder={value ? '' : '[null]'}
       onChange={onChange}
       onBlur={() => onClose(true)}
       type="time"

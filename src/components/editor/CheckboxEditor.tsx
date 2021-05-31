@@ -18,11 +18,12 @@ export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   return (
     <div className="flex w-full h-full">
       <input
-        className="m-auto w-4 h-4"
+        className="w-4 h-4"
         checked={(row[column.key as keyof TRow] as unknown) as boolean}
         onChange={onChange}
         onBlur={onBlur}
         type="checkbox"
+        style={{ margin: 'auto' }}
       />
     </div>
   );

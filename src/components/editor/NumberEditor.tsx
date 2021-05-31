@@ -20,14 +20,17 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
     else onRowChange({ ...row, [column.key]: _value });
   }
 
+  function onBlur() {
+    onClose(true);
+  }
+
   return (
     <input
       className="w-full h-full px-2"
       ref={autoFocusAndSelect}
       value={value || ''}
-      placeholder={value ? '' : '[null]'}
       onChange={onChange}
-      onBlur={() => onClose(true)}
+      onBlur={onBlur}
       type="number"
     />
   );
