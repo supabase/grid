@@ -1,9 +1,9 @@
 import { SupaColumn, SupaRow } from '../types';
 
 const clientOS =
-  navigator.appVersion.indexOf('Win') !== -1
+  navigator?.appVersion.indexOf('Win') !== -1
     ? 'windows'
-    : navigator.appVersion.indexOf('Mac') !== -1
+    : navigator?.appVersion.indexOf('Mac') !== -1
     ? 'macos'
     : 'unknown';
 export const METAKEY = clientOS === 'windows' ? 'Control' : 'Command';
