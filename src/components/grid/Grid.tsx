@@ -21,7 +21,6 @@ export const Grid: React.FC<GridProps> = memo(
       gridColumns,
       rows,
       onError: onErrorFunc,
-      onEditRow,
       selectedCellPosition,
     } = state;
 
@@ -39,30 +38,6 @@ export const Grid: React.FC<GridProps> = memo(
 
     useKeyboardShortcuts(
       {
-        [`${metaKey}+e`]: event => {
-          event.stopPropagation();
-          if (onEditRow && selectedCellPosition) {
-            const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
-            if (row) onEditRow(row);
-          }
-        },
-        [`${metaKey}+Backspace`]: event => {
-          event.stopPropagation();
-          if (selectedCellPosition) {
-            const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
-            if (row) {
-              state.rowService!.delete([row]);
-              dispatch({
-                type: 'REMOVE_ROWS',
-                payload: { rowIdxs: [row.idx] },
-              });
-              dispatch({
-                type: 'SELECTED_CELL_CHANGE',
-                payload: { position: null },
-              });
-            }
-          }
-        },
         [`${metaKey}+ArrowUp`]: event => {
           event.stopPropagation();
           if (selectedCellPosition) {
