@@ -95,23 +95,14 @@ function _setupColumnEditor(
     }
     case 'date': {
       config.editor = DateEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'datetime': {
       config.editor = DateTimeEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'time': {
       config.editor = TimeEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'enum': {
@@ -119,38 +110,23 @@ function _setupColumnEditor(
         return { label: x, value: x };
       });
       config.editor = p => <SelectEditor {...p} options={options} />;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'foreign_key': {
       config.editor = ForeignKeyEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'array':
     case 'json': {
       config.editor = JsonEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'number': {
       config.editor = NumberEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     case 'text': {
       config.editor = TextEditor;
-      // config.editorOptions = {
-      //   editOnClick: true,
-      // };
       break;
     }
     default: {
@@ -233,7 +209,7 @@ function _isArrayColumn(type: string) {
   return ARRAY_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-const TEXT_TYPES = ['text', 'varchar'];
+const TEXT_TYPES = ['text', 'character varying'];
 function _isTextColumn(type: string) {
   return TEXT_TYPES.indexOf(type.toLowerCase()) > -1;
 }
