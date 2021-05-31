@@ -8,11 +8,11 @@ import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
 import { useKeyboardShortcuts } from '../common';
-import { METAKEY } from '../../utils';
 
 export const Grid: React.FC<GridProps> = memo(
   ({ width, height, containerClass, gridClass, rowClass }) => {
     const gridRef = React.useRef<DataGridHandle>(null);
+    const [metaKey, setMetaKey] = React.useState('Command');
     const dispatch = useDispatch();
     const state = useTrackedState();
     // workaround to force state tracking on state.gridColumns
@@ -25,16 +25,28 @@ export const Grid: React.FC<GridProps> = memo(
       selectedCellPosition,
     } = state;
 
+    React.useEffect(() => {
+      function getClientOS() {
+        return navigator?.appVersion.indexOf('Win') !== -1
+          ? 'windows'
+          : navigator?.appVersion.indexOf('Mac') !== -1
+          ? 'macos'
+          : 'unknown';
+      }
+      const metakey = getClientOS() === 'windows' ? 'Control' : 'Command';
+      setMetaKey(metakey);
+    }, []);
+
     useKeyboardShortcuts(
       {
-        [`${METAKEY}+e`]: event => {
+        [`${metaKey}+e`]: event => {
           event.stopPropagation();
           if (onEditRow && selectedCellPosition) {
             const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
             if (row) onEditRow(row);
           }
         },
-        [`${METAKEY}+Backspace`]: event => {
+        [`${metaKey}+Backspace`]: event => {
           event.stopPropagation();
           if (selectedCellPosition) {
             const row = rows.find(x => x.idx == selectedCellPosition.rowIdx);
@@ -51,7 +63,7 @@ export const Grid: React.FC<GridProps> = memo(
             }
           }
         },
-        [`${METAKEY}+ArrowUp`]: event => {
+        [`${metaKey}+ArrowUp`]: event => {
           event.stopPropagation();
           if (selectedCellPosition) {
             const position = {
@@ -63,7 +75,7 @@ export const Grid: React.FC<GridProps> = memo(
             gridRef.current!.scrollToRow(Number(0));
           }
         },
-        [`${METAKEY}+ArrowDown`]: event => {
+        [`${metaKey}+ArrowDown`]: event => {
           event.stopPropagation();
           if (selectedCellPosition) {
             const position = {
@@ -75,7 +87,7 @@ export const Grid: React.FC<GridProps> = memo(
             gridRef.current!.scrollToRow(Number(rows.length));
           }
         },
-        [`${METAKEY}+ArrowLeft`]: event => {
+        [`${metaKey}+ArrowLeft`]: event => {
           event.stopPropagation();
           const fronzenColumns = gridColumns.filter(x => x.frozen);
           const position = {
@@ -84,7 +96,7 @@ export const Grid: React.FC<GridProps> = memo(
           };
           gridRef.current!.selectCell(position);
         },
-        [`${METAKEY}+ArrowRight`]: event => {
+        [`${metaKey}+ArrowRight`]: event => {
           event.stopPropagation();
           gridRef.current!.selectCell({
             idx: gridColumns.length - 1,
