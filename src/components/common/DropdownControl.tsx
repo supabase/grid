@@ -16,19 +16,19 @@ export const DropdownControl: React.FC<DropdownControlProps> = p => {
       className={className}
       side={side}
       align={align}
-      overlay={<DropdownItem {...p} />}
+      overlay={<DropdownItems {...p} />}
     >
       {children}
     </Dropdown>
   );
 };
 
-const DropdownItem: React.FC<DropdownControlProps> = ({
+const DropdownItems: React.FC<DropdownControlProps> = ({
   options,
   onSelect,
 }) => {
   return (
-    <>
+    <div className="overflow-scroll" style={{ maxHeight: '30vh' }}>
       {options.length == 0 && (
         <Typography.Text className="block px-2 py-4">
           No more items
@@ -41,6 +41,6 @@ const DropdownItem: React.FC<DropdownControlProps> = ({
           </Dropdown.Item>
         );
       })}
-    </>
+    </div>
   );
 };
