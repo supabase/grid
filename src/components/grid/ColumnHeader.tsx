@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IconKey, IconLink } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
-import { SortableHeaderCell } from '@supabase/react-data-grid';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 import { ColumnMenu } from '../menu';
@@ -101,21 +100,19 @@ export function ColumnHeader<R>({
 
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
-      <SortableHeaderCell column={column}>
-        <div className={`flex items-center ${cursor} justify-between`}>
-          <div className="flex items-center space-x-2 rdg-header-row__content overflow-hidden overflow-ellipsis">
-            {renderColumnIcon(columnType)}
-            {isPrimaryKey && (
-              <div className="transform rotate-45 flex items-center">
-                <IconKey size="tiny" strokeWidth={2} />
-              </div>
-            )}
-            <span className="rdg-header-row__content__name">{column.name}</span>
-            <span className="rdg-header-row__content__format">{format}</span>
-          </div>
-          <ColumnMenu column={column} />
+      <div className={`flex items-center ${cursor} justify-between`}>
+        <div className="flex items-center space-x-2 rdg-header-row__content overflow-hidden overflow-ellipsis">
+          {renderColumnIcon(columnType)}
+          {isPrimaryKey && (
+            <div className="transform rotate-45 flex items-center">
+              <IconKey size="tiny" strokeWidth={2} />
+            </div>
+          )}
+          <span className="rdg-header-row__content__name">{column.name}</span>
+          <span className="rdg-header-row__content__format">{format}</span>
         </div>
-      </SortableHeaderCell>
+        <ColumnMenu column={column} />
+      </div>
     </div>
   );
 }
