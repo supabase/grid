@@ -11,6 +11,7 @@ import {
   SupabaseGridRef,
   SupaTable,
 } from './types';
+import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
 import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
@@ -19,6 +20,7 @@ import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
+import { Shortcuts } from './components/common';
 import Header from './components/header';
 import Footer from './components/footer';
 
@@ -77,6 +79,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
+    const gridRef = React.useRef<DataGridHandle>(null);
 
     React.useImperativeHandle(ref, () => ({
       rowAdded(row: Dictionary<any>) {
@@ -149,8 +152,9 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
           onAddColumn={editable ? props.onAddColumn : undefined}
           headerActions={headerActions}
         />
-        <Grid {...gridProps} />
+        <Grid ref={gridRef} {...gridProps} />
         <Footer />
+        <Shortcuts gridRef={gridRef} />
         {createPortal(<RowContextMenu />, document.body)}
       </div>
     );

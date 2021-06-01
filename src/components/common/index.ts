@@ -5,3 +5,4 @@ export * from './MonacoEditor';
 export * from './NullValue';
 export * from './SegmentedControl';
 export * from './Hooks';
+export * from './Shortcuts';

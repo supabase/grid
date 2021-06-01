@@ -71,11 +71,11 @@ export function useKeyboardShortcuts(
   }
 
   React.useEffect(() => {
-    document.body.addEventListener('keydown', handleKeydown);
-    document.body.addEventListener('keyup', handleKeyup);
+    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keyup', handleKeyup);
     return () => {
-      document.body.removeEventListener('keydown', handleKeydown);
-      document.body.removeEventListener('keyup', handleKeyup);
+      window.removeEventListener('keydown', handleKeydown);
+      window.removeEventListener('keyup', handleKeyup);
     };
   });
 }
