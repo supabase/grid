@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { memo } from 'react-tracked';
+import { TriggerEvent, useContextMenu } from 'react-contexify';
 import DataGrid, {
+  Row as GridRow,
+  RowRendererProps,
   DataGridHandle,
   RowsChangeData,
 } from '@supabase/react-data-grid';
@@ -8,6 +11,7 @@ import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
 import { useKeyboardShortcuts } from '../common';
+import { MENU_IDS } from '../menu';
 
 export const Grid: React.FC<GridProps> = memo(
   ({ width, height, containerClass, gridClass, rowClass }) => {
@@ -17,6 +21,7 @@ export const Grid: React.FC<GridProps> = memo(
     const state = useTrackedState();
     // workaround to force state tracking on state.gridColumns
     const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
+    const { show: showContextMenu } = useContextMenu();
     const {
       gridColumns,
       rows,
@@ -131,6 +136,23 @@ export const Grid: React.FC<GridProps> = memo(
       });
     }
 
+    function RowRenderer(props: RowRendererProps<SupaRow>) {
+      function displayMenu(e: TriggerEvent) {
+        const menuId = MENU_IDS.ROW_CONTEXT_MENU_ID;
+        showContextMenu(e, {
+          id: menuId,
+          props: { rowIdx: props.rowIdx },
+        });
+      }
+
+      return (
+        <GridRow
+          {...props}
+          onContextMenu={state.editable ? displayMenu : undefined}
+        />
+      );
+    }
+
     if (!columnHeaders || columnHeaders.length == 0) {
       return (
         <div
@@ -155,6 +177,7 @@ export const Grid: React.FC<GridProps> = memo(
           ref={gridRef}
           columns={gridColumns}
           rows={rows}
+          rowRenderer={RowRenderer}
           rowKeyGetter={rowKeyGetter}
           selectedRows={state.selectedRows}
           onColumnResized={onColumnResized}

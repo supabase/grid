@@ -1,6 +1,7 @@
 import './style.css';
 import * as React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import { createPortal } from 'react-dom';
 import { useMonaco } from '@monaco-editor/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -10,6 +11,7 @@ import {
   SupabaseGridRef,
   SupaTable,
 } from './types';
+import { RowContextMenu } from './components/menu';
 import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
@@ -149,6 +151,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         />
         <Grid {...gridProps} />
         <Footer />
+        {createPortal(<RowContextMenu />, document.body)}
       </div>
     );
   }
