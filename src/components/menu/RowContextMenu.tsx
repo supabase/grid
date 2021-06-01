@@ -15,7 +15,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
     const { rowIdx } = props;
     const row = state.rows[rowIdx];
     state.rowService!.delete([row]);
-    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [rowIdx] } });
+    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [row.idx] } });
   }
 
   function onEditRowClick(p: ItemParams) {
