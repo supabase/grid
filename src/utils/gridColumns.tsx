@@ -67,7 +67,7 @@ const DefaultFormatter = (
   p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
 ) => {
   let value = p.row[p.column.key];
-  if (!value) return <NullValue />;
+  if (value === null) return <NullValue />;
   if (typeof value == 'object' || Array.isArray(value)) {
     value = JSON.stringify(value);
   }

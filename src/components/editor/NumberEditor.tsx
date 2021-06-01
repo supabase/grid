@@ -28,7 +28,7 @@ export function NumberEditor<TRow, TSummaryRow = unknown>({
     <input
       className="w-full h-full px-2"
       ref={autoFocusAndSelect}
-      value={value || ''}
+      value={value ?? ''}
       onChange={onChange}
       onBlur={onBlur}
       type="number"

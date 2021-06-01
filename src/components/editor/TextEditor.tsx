@@ -36,7 +36,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
         <BlockKeys value={value} onEscape={onEscape}>
           <MonacoEditor
             width={`${gridColumn?.width || column.width}px`}
-            value={value || ''}
+            value={value ?? ''}
             onChange={onChange}
           />
         </BlockKeys>
@@ -48,7 +48,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
         } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value ? value : <NullValue />}
+        {value === null ? <NullValue /> : value}
       </div>
     </Popover>
   );

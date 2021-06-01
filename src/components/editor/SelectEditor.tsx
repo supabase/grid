@@ -31,7 +31,7 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
   return (
     <select
       className="w-full h-full"
-      value={value || ''}
+      value={value ?? ''}
       onChange={onChange}
       onBlur={onBlur}
       autoFocus

@@ -24,7 +24,7 @@ export function DateEditor<TRow, TSummaryRow = unknown>({
     <input
       className="w-full h-full px-2"
       ref={autoFocusAndSelect}
-      value={value || ''}
+      value={value ?? ''}
       onChange={onChange}
       onBlur={() => onClose(true)}
       type="date"

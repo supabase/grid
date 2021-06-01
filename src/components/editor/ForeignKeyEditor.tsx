@@ -39,7 +39,7 @@ export function ForeignKeyEditor<TRow, TSummaryRow = unknown>({
   return (
     <div className="flex items-center px-2">
       <p className="m-0 flex-grow text-sm overflow-hidden overflow-ellipsis">
-        {value ? value : <NullValue />}
+        {value === null ? <NullValue /> : value}
       </p>
       {value && (
         <Button

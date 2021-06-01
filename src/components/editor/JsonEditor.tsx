@@ -50,7 +50,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
         <BlockKeys value={value} onEscape={onEscape}>
           <MonacoEditor
             width={`${gridColumn?.width || column.width}px`}
-            value={value || ''}
+            value={value ?? ''}
             language="json"
             onChange={onChange}
           />
@@ -63,7 +63,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
         } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value ? jsonString : <NullValue />}
+        {value === null ? <NullValue /> : jsonString}
       </div>
     </Popover>
   );

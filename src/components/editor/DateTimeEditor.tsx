@@ -40,7 +40,7 @@ export function DateTimeEditor<TRow, TSummaryRow = unknown>({
     <input
       className="w-full h-full px-2"
       ref={autoFocusAndSelect}
-      value={timeValue || ''}
+      value={timeValue ?? ''}
       onChange={onChange}
       onBlur={() => onClose(true)}
       type="datetime-local"
