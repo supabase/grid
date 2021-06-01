@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { EditorProps } from '@supabase/react-data-grid';
 import {
   Button,
   Divider,
@@ -8,51 +7,14 @@ import {
   Input,
   Typography,
   IconExternalLink,
-  IconX,
   IconChevronDown,
   IconSearch,
 } from '@supabase/ui';
 import { useTrackedState } from '../../store';
-import { DropdownControl, ModalPortal, NullValue } from '../common';
+import { DropdownControl, ModalPortal } from '../common';
 import { Dictionary } from '../../types';
 import { FilterConditionOptions } from '../../components/header/filter/FilterRow';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
-
-export function ForeignKeyEditor<TRow, TSummaryRow = unknown>({
-  row,
-  column,
-  onRowChange,
-}: EditorProps<TRow, TSummaryRow>) {
-  const rawValue = row[column.key as keyof TRow] as unknown;
-  const value = rawValue ? rawValue + '' : null;
-
-  function onChange(_value: any | null) {
-    if (!_value || _value == '')
-      onRowChange({ ...row, [column.key]: null }, true);
-    else onRowChange({ ...row, [column.key]: _value }, true);
-  }
-
-  function onClearValue() {
-    onRowChange({ ...row, [column.key]: null }, true);
-  }
-
-  return (
-    <div className="flex items-center px-2">
-      <p className="m-0 flex-grow text-sm overflow-hidden overflow-ellipsis">
-        {value === null ? <NullValue /> : value}
-      </p>
-      {value && (
-        <Button
-          type="text"
-          onClick={onClearValue}
-          icon={<IconX />}
-          style={{ padding: '3px' }}
-        />
-      )}
-      <ForeignTableModal columnName={column.key} onChange={onChange} />
-    </div>
-  );
-}
 
 type ForeignTableModalProps = {
   columnName: string | undefined;

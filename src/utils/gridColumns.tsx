@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Column, FormatterProps } from '@supabase/react-data-grid';
+import { Column } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   CheckboxEditor,
   DateEditor,
   DateTimeEditor,
   JsonEditor,
-  ForeignKeyEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
@@ -14,7 +13,11 @@ import {
 } from '../components/editor';
 import { AddColumn, ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
-import { NullValue } from '../components/common';
+import {
+  BooleanFormatter,
+  DefaultFormatter,
+  ForeignKeyFormatter,
+} from '../components/formatter';
 
 export function getGridColumns(
   table: SupaTable,
@@ -63,17 +66,6 @@ export function getGridColumns(
   return gridColumns;
 }
 
-const DefaultFormatter = (
-  p: React.PropsWithChildren<FormatterProps<SupaRow, unknown>>
-) => {
-  let value = p.row[p.column.key];
-  if (value === null) return <NullValue />;
-  if (typeof value == 'object' || Array.isArray(value)) {
-    value = JSON.stringify(value);
-  }
-  return <>{value}</>;
-};
-
 function _setupColumnEditor(
   columnDef: SupaColumn,
   columnType: ColumnType,
@@ -87,10 +79,7 @@ function _setupColumnEditor(
   switch (columnType) {
     case 'boolean': {
       config.editor = CheckboxEditor;
-      config.formatter = p => {
-        const value = p.row[p.column.key] as boolean;
-        return <>{value ? 'true' : 'false'}</>;
-      };
+      config.formatter = BooleanFormatter;
       break;
     }
     case 'date': {
@@ -113,7 +102,7 @@ function _setupColumnEditor(
       break;
     }
     case 'foreign_key': {
-      config.editor = ForeignKeyEditor;
+      config.formatter = ForeignKeyFormatter;
       break;
     }
     case 'array':
