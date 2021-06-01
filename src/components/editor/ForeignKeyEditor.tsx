@@ -85,11 +85,13 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
       return;
 
     const { data, error } = await state.openApiService.fetchDescription();
-    if (!error && data) {
+    if (!error && data && data.definitions) {
       const tableInfo = data.definitions[columnDefinition?.targetTableName];
-      const columns = tableInfo.properties as Dictionary<any>;
-      const columnNames = Object.keys(columns) as string[];
-      setForeignColumnNames(columnNames);
+      if (tableInfo) {
+        const columns = tableInfo.properties as Dictionary<any>;
+        const columnNames = Object.keys(columns) as string[];
+        setForeignColumnNames(columnNames);
+      }
     }
   }
 
