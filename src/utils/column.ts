@@ -19,14 +19,14 @@ export function getInitialGridColumns(
     result = [];
     for (let i = 0; i < savedState.gridColumns.length; i++) {
       const state = savedState.gridColumns[i];
-      const found = gridColumns.find(y => y.key === state.name);
+      const found = gridColumns.find(y => y.key === state.key);
       // merge with savedState item props: width
       if (found)
         result.push({ ...found, width: state.width, frozen: state.frozen });
     }
     // check for newly created columns
     const newGridColumns = gridColumns.filter(x => {
-      const found = savedState.gridColumns.find(state => state.name === x.key);
+      const found = savedState.gridColumns.find(state => state.key === x.key);
       return !found;
     });
     result = result.concat(newGridColumns);
