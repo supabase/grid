@@ -40,6 +40,10 @@ export function ColumnHeader<R>({
         return;
       }
 
+      if (column.frozen) {
+        return;
+      }
+
       const dragIndex = item.index;
       const dragKey = item.key;
       const hoverIndex = columnIdx;
