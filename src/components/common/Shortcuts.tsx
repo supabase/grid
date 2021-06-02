@@ -66,6 +66,18 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
           rowIdx: selectedCellPosition?.rowIdx ?? 0,
         });
       },
+      [`${metaKey}+c`]: event => {
+        event.stopPropagation();
+        if (selectedCellPosition) {
+          const { idx, rowIdx } = selectedCellPosition;
+          const colKey = gridColumns[idx].key;
+          if (colKey === 'select-row' || colKey === 'add-column') {
+            return;
+          }
+          const cellValue = rows[rowIdx][colKey];
+          navigator.clipboard.writeText(cellValue);
+        }
+      },
     },
     ['INPUT', 'TEXTAREA', 'SELECT']
   );
