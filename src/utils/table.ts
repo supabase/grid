@@ -84,17 +84,23 @@ export async function fetchReadonlyTableInfo(
   tableName: string
 ): Promise<SupaTable | null> {
   const { data, error } = await service.fetchDescription();
-  if (error || !data) return null;
+  if (error || !data || !data.definitions) return null;
 
   const tableInfo = data.definitions[tableName];
-  const supaTable = parseReadonlySupaTable(tableInfo, tableName);
-  return supaTable;
+  if (tableInfo) {
+    const supaTable = parseReadonlySupaTable(tableInfo, tableName);
+    return supaTable;
+  } else {
+    return null;
+  }
 }
 
 export function parseReadonlySupaTable(
   table: Dictionary<any>,
   tableName: string
-): SupaTable {
+): SupaTable | null {
+  if (!table || !table.properties) return null;
+
   const columns = table.properties as Dictionary<any>;
   const columnNames = Object.keys(columns) as string[];
   const supaColumns: SupaColumn[] = columnNames.map((x, index) => {
