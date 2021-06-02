@@ -11,37 +11,45 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   value,
   onToggle,
 }) => {
-  const borderOverride = 'border-gray-600';
-  const buttonStyle = `absolute top-0 z-1 text-xs inline-flex h-full items-center justify-center font-medium
-    hover:text-white focus:z-10 focus:outline-none active:bg-gray-100 transition ease-in-out duration-150`;
-
+  let labelStyles = ['rdg__segmented-control__label'];
+  if (value === options[1]) {
+    labelStyles.push('rdg__segmented-control__label--left');
+  } else {
+    labelStyles.push('rdg__segmented-control__label--right');
+  }
   return (
     <div
-      className={`relative mx-2 border ${borderOverride} rounded-md h-8`}
+      className={`rdg__segmented-control`}
       style={{ padding: 1, width: 102 }}
     >
       <span
         style={{ width: 50 }}
         aria-hidden="true"
-        className={`${
-          value === options[1] ? 'translate-x-0' : 'translate-x-12'
-        } z-0 inline-block rounded h-full bg-gray-600 shadow transform transition ease-in-out duration-200 border border-gray-600`}
+        className={labelStyles.join(' ')}
       ></span>
-      {options.map((option, index) => (
-        <span
-          key={`toggle_${index}`}
-          style={{ width: 51 }}
-          className={`
-              ${value === option ? 'text-gray-200' : 'text-gray-400'} 
-              ${index === 0 ? 'right-0' : 'left-0'} 
-              ${buttonStyle}
-              cursor-pointer
-            `}
-          onClick={() => onToggle(option)}
-        >
-          <span className="text-color-inherit uppercase">{option}</span>
-        </span>
-      ))}
+      {options.map((option, index) => {
+        let buttonStyles = ['rdg__segmented-control__button'];
+        if (value === option) {
+          buttonStyles.push('rdg__segmented-control__button--option');
+        }
+        if (index === 0) {
+          buttonStyles.push('rdg__segmented-control__button--right');
+        } else {
+          buttonStyles.push('rdg__segmented-control__button--left');
+        }
+        return (
+          <span
+            key={`toggle_${index}`}
+            style={{ width: 51 }}
+            className={buttonStyles.join(' ')}
+            onClick={() => onToggle(option)}
+          >
+            <span className="rdg__segmented-control__options-label">
+              {option}
+            </span>
+          </span>
+        );
+      })}
     </div>
   );
 };
