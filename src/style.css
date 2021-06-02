@@ -84,6 +84,10 @@
   @apply text-typography-body-secondary-light dark:text-typography-body-secondary-dark;
 }
 
+.rdg-header-row__content__primary-key {
+  @apply transform rotate-45 flex items-center;
+}
+
 .rdg-header-row__content svg {
   @apply mr-1;
   @apply text-green-500 border-green-500 dark:text-green-500 dark:border-green-500;

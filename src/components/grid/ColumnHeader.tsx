@@ -104,7 +104,7 @@ export function ColumnHeader<R>({
         <div className="flex items-center space-x-2 rdg-header-row__content overflow-hidden overflow-ellipsis">
           {renderColumnIcon(columnType)}
           {isPrimaryKey && (
-            <div className="transform rotate-45 flex items-center">
+            <div className="rdg-header-row__content__primary-key">
               <IconKey size="tiny" strokeWidth={2} />
             </div>
           )}
