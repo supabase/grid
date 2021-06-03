@@ -13,20 +13,20 @@ const clientProps = {
 
 const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
+  const [inputValue, setInputValue] = React.useState('test_table');
   const [tableName, setName] = React.useState('test_table');
   const [uiMode, setUiMode] = React.useState('');
-  const isReadonly = tableName == 'countries_view';
+  const [isReadonly, setReadonly] = React.useState(false);
+  const [reload, setReload] = React.useState(false);
 
-  function showTestTable() {
-    setName('test_table');
+  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value);
   }
 
-  function showCountriesTable() {
-    setName('countries');
-  }
-
-  function showCountriesView() {
-    setName('countries_view');
+  function onReadonlyInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setReadonly(e.target.checked);
+    // force reload grid
+    reloadGrid();
   }
 
   function onRowAdded() {
@@ -39,6 +39,17 @@ const App = () => {
 
     setUiMode(mode);
     document.body.className = mode;
+  }
+
+  function reloadGrid() {
+    if (inputValue !== tableName) {
+      setName(inputValue);
+    } else {
+      setReload(true);
+      setTimeout(() => {
+        setReload(false);
+      }, 300);
+    }
   }
 
   React.useEffect(() => {
@@ -108,9 +119,19 @@ const App = () => {
   return (
     <div>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
-        <button onClick={showTestTable}>Test Table</button>
-        <button onClick={showCountriesTable}>Countries Table</button>
-        <button onClick={showCountriesView}>Countries View</button>
+        <input value={inputValue} onChange={onInputChange} />
+        <button onClick={reloadGrid} style={{ marginLeft: '10px' }}>
+          Reload Data Grid
+        </button>
+        <label style={{ marginLeft: '10px' }}>
+          readonly:
+          <input
+            name="readonly"
+            type="checkbox"
+            checked={isReadonly}
+            onChange={onReadonlyInputChange}
+          />
+        </label>
         <button onClick={onRowAdded} style={{ marginLeft: '1rem' }}>
           Trigger Row Added
         </button>
@@ -118,9 +139,11 @@ const App = () => {
           Dark Mode Toggle
         </button>
       </div>
-      <div style={{ height: '95vh' }}>
-        {isReadonly ? renderReadonlyTable() : renderTable()}
-      </div>
+      {!reload && (
+        <div style={{ height: '95vh' }}>
+          {isReadonly ? renderReadonlyTable() : renderTable()}
+        </div>
+      )}
     </div>
   );
 };
