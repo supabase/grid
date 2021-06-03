@@ -3,12 +3,13 @@ import { Column, useRowSelection } from '@supabase/react-data-grid';
 import { Button, IconMaximize2 } from '@supabase/ui';
 import { SupaRow } from '../../types';
 import { RowMenu } from '../menu';
+import { SELECT_COLUMN_KEY } from '../../constants';
 
 export function SelectColumn(
   onEditRow?: (row: SupaRow) => void
 ): Column<any, any> {
   return {
-    key: 'select-row',
+    key: SELECT_COLUMN_KEY,
     name: '',
     width: 65,
     maxWidth: 65,

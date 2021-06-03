@@ -63,6 +63,8 @@ export function getGridColumns(
     gridColumns.push(addColumn);
   }
 
+  console.log('gridColumns', gridColumns);
+
   return gridColumns;
 }
 

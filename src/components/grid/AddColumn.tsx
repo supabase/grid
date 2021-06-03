@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Column } from '@supabase/react-data-grid';
 import { Button, IconPlus } from '@supabase/ui';
+import { ADD_COLUMN_KEY } from '../../constants';
 
 export function AddColumn(onAddColumn?: () => void): Column<any, any> {
   return {
-    key: 'add-column',
+    key: ADD_COLUMN_KEY,
     name: '',
     width: 100,
     maxWidth: 100,
