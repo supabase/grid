@@ -26,11 +26,9 @@ export const Grid = memo(
       }
 
       function onColumnResized(index: number, width: number) {
-        // selectColumn is considered as the first col
-        const _index = index - 1;
         dispatch({
           type: 'UPDATE_COLUMN_SIZE',
-          payload: { index: _index, width: Math.round(width) },
+          payload: { index, width: Math.round(width) },
         });
       }
 
