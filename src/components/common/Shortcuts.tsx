@@ -73,7 +73,8 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
           if (idx > 0) {
             const colKey = gridColumns[idx].key;
             const cellValue = rows[rowIdx][colKey] ?? '';
-            navigator.clipboard.writeText(cellValue);
+            const value = formatClipboardValue(cellValue);
+            navigator.clipboard.writeText(value);
           }
         }
       },
@@ -82,4 +83,12 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
   );
 
   return null;
+}
+
+function formatClipboardValue(value: any) {
+  if (value === null) return '';
+  if (typeof value == 'object' || Array.isArray(value)) {
+    return JSON.stringify(value);
+  }
+  return value;
 }
