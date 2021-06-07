@@ -21,12 +21,16 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
   function onRowsDelete() {
     const rowIdxs = Array.from(selectedRows) as number[];
     const rows = state.rows.filter(x => rowIdxs.includes(x.idx));
-    state.rowService!.delete(rows);
-    dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
-    dispatch({
-      type: 'SELECTED_ROWS_CHANGE',
-      payload: { selectedRows: new Set<React.Key>() },
-    });
+    const { error } = state.rowService!.delete(rows);
+    if (error) {
+      if (state.onError) state.onError(error);
+    } else {
+      dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
+      dispatch({
+        type: 'SELECTED_ROWS_CHANGE',
+        payload: { selectedRows: new Set<React.Key>() },
+      });
+    }
   }
 
   function onRowsExportCsv() {

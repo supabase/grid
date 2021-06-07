@@ -9,6 +9,10 @@ import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
 import RowRenderer from './RowRenderer';
 
+function rowKeyGetter(row: SupaRow) {
+  return row?.idx ?? -1;
+}
+
 export const Grid = memo(
   React.forwardRef<DataGridHandle, GridProps>(
     (
@@ -20,10 +24,6 @@ export const Grid = memo(
       // workaround to force state tracking on state.gridColumns
       const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
       const { gridColumns, rows, onError: onErrorFunc } = state;
-
-      function rowKeyGetter(row: SupaRow) {
-        return row.idx;
-      }
 
       function onColumnResized(index: number, width: number) {
         dispatch({
