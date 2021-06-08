@@ -34,6 +34,22 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
     return false;
   }
 
+  function onCopyCellContent(p: ItemParams) {
+    const { props } = p;
+    const { rowIdx } = props;
+    const row = state.rows[rowIdx];
+    const columnKey = state
+      .gridColumns[state.selectedCellPosition?.idx as number]
+      .key;
+
+    const value = row[columnKey];
+    const text = typeof value === 'object' 
+      ? JSON.stringify(value)
+      : value;
+      
+    navigator.clipboard.writeText(text);
+  }
+
   return (
     <>
       <Menu id={ROW_CONTEXT_MENU_ID} animation={false}>
@@ -41,6 +57,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
           Edit row
         </Item>
         <Item onClick={onDeleteRow}>Delete row</Item>
+        <Item onClick={onCopyCellContent}>Copy cell content</Item>
       </Menu>
     </>
   );
