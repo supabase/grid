@@ -29,6 +29,8 @@ A react component to display your Postgresql table data.
 - `schema` table schema. Defaults to 'public'.
 - `storageRef` storageRef is used to save state on localstorage.
 - `editable` enable table editor.
+- `headerActions` react node to display in grid header.
+- `theme` grid theme.
 - `onAddColumn` show create new column button if available.
 - `onAddRow` show add row button if available.
 - `onError` error handler.
