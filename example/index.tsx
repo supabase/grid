@@ -15,8 +15,10 @@ const App = () => {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [inputValue, setInputValue] = React.useState('test_table');
   const [tableName, setName] = React.useState('test_table');
-  const [uiMode, setUiMode] = React.useState('');
-  const [isReadonly, setReadonly] = React.useState(false);
+  const [uiMode, setUiMode] = React.useState<'dark' | 'light' | undefined>(
+    undefined
+  );
+  const [isReadonly, setReadonly] = React.useState(true);
   const [reload, setReload] = React.useState(false);
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -37,7 +39,7 @@ const App = () => {
     let mode = '';
     if (uiMode != 'dark') mode = 'dark';
 
-    setUiMode(mode);
+    setUiMode(mode == 'dark' ? 'dark' : undefined);
     document.body.className = mode;
   }
 
@@ -70,6 +72,7 @@ const App = () => {
         table={tableName}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={clientProps}
+        theme={uiMode}
         gridProps={{ height: '100%' }}
       />
     );
@@ -86,6 +89,7 @@ const App = () => {
         editable={true}
         storageRef="dqofwyqljsmbgrubmnzk"
         clientProps={clientProps}
+        theme={uiMode}
         gridProps={{ height: '100%' }}
         onError={error => {
           console.log('ERROR: ', error);
