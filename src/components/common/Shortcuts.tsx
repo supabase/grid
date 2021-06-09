@@ -85,7 +85,7 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
   return null;
 }
 
-function formatClipboardValue(value: any) {
+export function formatClipboardValue(value: any) {
   if (value === null) return '';
   if (typeof value == 'object' || Array.isArray(value)) {
     return JSON.stringify(value);
