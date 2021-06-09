@@ -50,8 +50,9 @@ export function getGridColumns(
       );
     };
 
-    _setupColumnEditor(x, columnType, columnDef);
+    // setup formatter needs to run before editor
     _setupColumnFormatter(columnType, columnDef);
+    _setupColumnEditor(x, columnType, columnDef);
 
     return columnDef;
   });
