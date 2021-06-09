@@ -24,7 +24,7 @@ class RowService {
     const to = (pageFromZero + 1) * rowsPerPage - 1;
     let request = this.client
       .from(this.table.name)
-      .select('*', { count: 'exact' })
+      .select('*', { count: 'estimated' })
       .range(from, to);
 
     // Filter first
