@@ -55,6 +55,7 @@ const FilterReducer = (
       return {
         ...state,
         filters: update(state.filters, { $push: [action.payload] }),
+        page: isValid ? 1 : state.page,
         refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
@@ -67,6 +68,7 @@ const FilterReducer = (
         filters: update(state.filters, {
           $splice: [[removeIdx, 1]],
         }),
+        page: isValid ? 1 : state.page,
         refreshPageFlag: isValid ? Date.now() : 0,
       };
     }
@@ -79,6 +81,7 @@ const FilterReducer = (
         filters: update(state.filters, {
           [action.payload.filterIdx]: { $set: action.payload.value },
         }),
+        page: afterIsValid ? 1 : state.page,
         refreshPageFlag: previousIsValid || afterIsValid ? Date.now() : 0,
       };
     }
