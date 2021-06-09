@@ -5,10 +5,12 @@ import {
   Modal,
   Menu,
   Input,
+  Space,
   Typography,
   IconExternalLink,
   IconChevronDown,
   IconSearch,
+  IconTrash,
 } from '@supabase/ui';
 import { useTrackedState } from '../../store';
 import { DropdownControl, ModalPortal } from '../common';
@@ -17,12 +19,14 @@ import { FilterConditionOptions } from '../../components/header/filter/FilterRow
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 
 type ForeignTableModalProps = {
-  columnName: string | undefined;
+  columnName?: string;
+  defaultValue?: string;
   onChange: (value: any | null) => void;
 };
 
 export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   columnName,
+  defaultValue,
   onChange,
 }) => {
   const [visible, setVisible] = React.useState(false);
@@ -34,9 +38,20 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   const columnDefinition = state.table?.columns.find(x => x.name == columnName);
 
   React.useEffect(() => {
+    if (!visible) return;
+
     fetchColumns();
-    fetchData();
-  }, []);
+
+    if (defaultValue && columnDefinition) {
+      fetchData({
+        columnName: columnDefinition.targetColumnName!,
+        condition: 'eq',
+        filterText: defaultValue,
+      });
+    } else {
+      fetchData();
+    }
+  }, [visible]);
 
   async function fetchColumns() {
     if (
@@ -66,7 +81,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
 
     let request = state.client.from(columnDefinition?.targetTableName).select();
 
-    if (filter) {
+    if (filter && filter.filterText) {
       const { columnName, condition, filterText } = filter;
       switch (condition) {
         case 'is':
@@ -129,8 +144,13 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     condition: string;
     filterText: string;
   }) {
-    const { columnName, condition, filterText } = value;
-    if (columnName && condition && filterText) fetchData(value);
+    const { columnName, condition } = value;
+    if (columnName && condition) fetchData(value);
+  }
+
+  function onClearValueClick() {
+    onChange(null);
+    setVisible(false);
   }
 
   return (
@@ -147,10 +167,25 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
             visible={visible}
             onCancel={toggle}
             closable
-            hideFooter
             contentStyle={{ padding: 0 }}
+            customFooter={
+              <Space style={{ width: '100%' }}>
+                <Button
+                  block
+                  danger
+                  icon={<IconTrash />}
+                  onClick={onClearValueClick}
+                >
+                  Clear value
+                </Button>
+              </Space>
+            }
           >
             <Filter
+              defaultColumnName={
+                columnDefinition?.targetColumnName ?? undefined
+              }
+              defaultValue={defaultValue}
               foreignColumnNames={foreignColumnNames}
               onChange={onFilterChange}
             />
@@ -187,6 +222,8 @@ const onFilterChange = (
 const onFilterChangeDebounced = AwesomeDebouncePromise(onFilterChange, 500);
 
 type FilterProps = {
+  defaultColumnName?: string;
+  defaultValue?: string;
   foreignColumnNames: string[];
   onChange: (value: {
     columnName: string;
@@ -196,16 +233,22 @@ type FilterProps = {
 };
 
 export const Filter: React.FC<FilterProps> = ({
+  defaultColumnName,
+  defaultValue,
   foreignColumnNames,
   onChange,
 }) => {
   const [columnName, setColumnName] = React.useState(
-    foreignColumnNames.length > 0 ? foreignColumnNames[0] : ''
+    defaultColumnName
+      ? defaultColumnName
+      : foreignColumnNames.length > 0
+      ? foreignColumnNames[0]
+      : ''
   );
   const [condition, setCondition] = React.useState(
     FilterConditionOptions[0].value
   );
-  const [filterText, setFilterText] = React.useState('');
+  const [filterText, setFilterText] = React.useState(defaultValue ?? '');
 
   const columnOptions =
     foreignColumnNames.map(x => {
