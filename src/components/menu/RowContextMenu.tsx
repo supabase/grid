@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
 import { useDispatch, useTrackedState } from '../../store';
+import { formatClipboardValue } from '../common/Shortcuts'
 
 export const ROW_CONTEXT_MENU_ID = 'row-context-menu-id';
 
@@ -34,6 +35,26 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
     return false;
   }
 
+  function onCopyCellContent(p: ItemParams) {
+    const { props } = p;
+
+    if(!state.selectedCellPosition || !props) {
+      return 
+    }
+
+    const { rowIdx } = props;
+    const row = state.rows[rowIdx];
+
+    const columnKey = state
+      .gridColumns[state.selectedCellPosition?.idx as number]
+      .key;
+
+    const value = row[columnKey];
+    const text = formatClipboardValue(value)
+      
+    navigator.clipboard.writeText(text);
+  }
+
   return (
     <>
       <Menu id={ROW_CONTEXT_MENU_ID} animation={false}>
@@ -41,6 +62,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
           Edit row
         </Item>
         <Item onClick={onDeleteRow}>Delete row</Item>
+        <Item onClick={onCopyCellContent}>Copy cell content</Item>
       </Menu>
     </>
   );
