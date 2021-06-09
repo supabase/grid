@@ -51,6 +51,8 @@ export function getGridColumns(
     };
 
     // setup formatter needs to run before editor
+    // because some columns like foreign-key use formatter to edit
+    // so _setupColumnEditor can override _setupColumnFormatter config
     _setupColumnFormatter(columnType, columnDef);
     _setupColumnEditor(x, columnType, columnDef);
 
