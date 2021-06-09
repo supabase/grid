@@ -55,7 +55,11 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
     <div className="">
       <div>
         {state.filters.map((_, index) => (
-          <FilterRow key={`filter-${index}`} filterIdx={index} />
+          <FilterRow
+            key={`filter-${index}`}
+            filterIdx={index}
+            now={Date.now()}
+          />
         ))}
         {state.filters.length == 0 && (
           <Dropdown.Misc>

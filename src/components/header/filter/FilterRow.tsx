@@ -38,11 +38,16 @@ const updateFilterText = (
 };
 const updateFilterTextDebounced = AwesomeDebouncePromise(updateFilterText, 550);
 
+/**
+ * use `now` to trigger re-render as filterIdx won't change value
+ * if not filterText state will not updated on delete filter
+ */
 type FilterRowProps = {
   filterIdx: number;
+  now: number;
 };
 
-const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
+const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const filter = state.filters[filterIdx];
@@ -52,6 +57,11 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
       return { value: x.name, label: x.name };
     }) || [];
   const [filterText, setFilterText] = React.useState(filter.filterText);
+
+  React.useEffect(() => {
+    const filter = state.filters[filterIdx];
+    setFilterText(filter.filterText);
+  }, [filterIdx, now]);
 
   function onClauseChange(clause: string | number) {
     dispatch({
@@ -140,4 +150,4 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
     </Dropdown.Misc>
   );
 };
-export default FilterRow;
+export default React.memo(FilterRow);
