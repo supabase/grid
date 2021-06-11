@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditorProps } from '@supabase/react-data-grid';
+import { EditorProps } from '@w3b6x9/react-data-grid-w3b6x9';
 
 export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   row,

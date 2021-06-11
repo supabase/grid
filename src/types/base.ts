@@ -1,4 +1,4 @@
-import { Column, HeaderRendererProps } from '@supabase/react-data-grid';
+import { Column, HeaderRendererProps } from '@w3b6x9/react-data-grid-w3b6x9';
 
 export interface Dictionary<T> {
   [Key: string]: T;

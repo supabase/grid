@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditorProps } from '@supabase/react-data-grid';
+import { EditorProps } from '@w3b6x9/react-data-grid-w3b6x9';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 

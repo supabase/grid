@@ -1,4 +1,4 @@
-import { Column } from '@supabase/react-data-grid';
+import { Column } from '@w3b6x9/react-data-grid-w3b6x9';
 import { ADD_COLUMN_KEY, SELECT_COLUMN_KEY } from '../constants';
 import { SavedState } from '../types';
 import { deepClone } from './common';

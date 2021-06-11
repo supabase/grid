@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TriggerEvent, useContextMenu } from 'react-contexify';
-import { Row, RowRendererProps } from '@supabase/react-data-grid';
+import { Row, RowRendererProps } from '@w3b6x9/react-data-grid-w3b6x9';
 import { MENU_IDS } from '../menu';
 
 export default function RowRenderer<R, SR>(props: RowRendererProps<R, SR>) {

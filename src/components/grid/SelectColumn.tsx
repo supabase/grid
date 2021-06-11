@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column, useRowSelection } from '@supabase/react-data-grid';
+import { Column, useRowSelection } from '@w3b6x9/react-data-grid-w3b6x9';
 import { Button, IconMaximize2 } from '@supabase/ui';
 import { SupaRow } from '../../types';
 import { RowMenu } from '../menu';

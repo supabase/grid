@@ -11,7 +11,7 @@ import {
   SupabaseGridRef,
   SupaTable,
 } from './types';
-import { DataGridHandle } from '@supabase/react-data-grid';
+import { DataGridHandle } from '@w3b6x9/react-data-grid-w3b6x9';
 import { RowContextMenu } from './components/menu';
 import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';

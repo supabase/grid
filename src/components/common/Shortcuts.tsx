@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTrackedState } from '../../store';
 import { useKeyboardShortcuts } from './Hooks';
-import { DataGridHandle } from '@supabase/react-data-grid';
+import { DataGridHandle } from '@w3b6x9/react-data-grid-w3b6x9';
 
 type ShortcutsProps = {
   gridRef: React.RefObject<DataGridHandle>;

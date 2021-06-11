@@ -2,6 +2,11 @@ import React from 'react';
 import { Dictionary } from './base';
 import { SupaRow, SupaTable } from './table';
 
+interface Position {
+  rowIdx: number,
+  idx: number
+}
+
 export type GridProps = {
   width?: string | number;
   height?: string | number;
@@ -9,6 +14,8 @@ export type GridProps = {
   containerClass?: string;
   gridClass?: string;
   rowClass?: ((row: SupaRow) => string | undefined) | undefined;
+  multiplayerPositions?: Map<number, Position>;
+  onCellChange?: (position: Position) => void;
 };
 
 export type SupabaseGridProps = {

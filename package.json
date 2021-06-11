@@ -1,6 +1,6 @@
 {
-  "name": "@supabase/grid",
-  "version": "0.0.1",
+  "name": "@w3b6x9/grid",
+  "version": "0.0.3",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -78,6 +78,7 @@
     "@supabase/react-data-grid": "7.1.0-canary.2",
     "@supabase/supabase-js": "^1.11.15",
     "@supabase/ui": "^0.27.2",
+    "@w3b6x9/react-data-grid-w3b6x9": "^7.1.0-canary.2",
     "awesome-debounce-promise": "^2.1.0",
     "dayjs": "^1.10.4",
     "file-saver": "^2.0.5",

@@ -3,7 +3,7 @@ import { memo } from 'react-tracked';
 import DataGrid, {
   DataGridHandle,
   RowsChangeData,
-} from '@supabase/react-data-grid';
+} from '@w3b6x9/react-data-grid-w3b6x9';
 import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
@@ -16,7 +16,7 @@ function rowKeyGetter(row: SupaRow) {
 export const Grid = memo(
   React.forwardRef<DataGridHandle, GridProps>(
     (
-      { width, height, containerClass, gridClass, rowClass },
+      { width, height, containerClass, gridClass, rowClass, multiplayerPositions, onCellChange },
       ref: React.Ref<DataGridHandle> | undefined
     ) => {
       const dispatch = useDispatch();
@@ -65,6 +65,7 @@ export const Grid = memo(
           type: 'SELECTED_CELL_CHANGE',
           payload: { position },
         });
+        onCellChange?.(position);
       }
 
       if (!columnHeaders || columnHeaders.length == 0) {
@@ -101,6 +102,7 @@ export const Grid = memo(
             className={gridClass}
             rowClass={rowClass}
             style={{ height: '100%' }}
+            multiplayerPositions={multiplayerPositions}
           />
         </div>
       );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormatterProps } from '@supabase/react-data-grid';
+import { FormatterProps } from '@w3b6x9/react-data-grid-w3b6x9';
 import { SupaRow } from '../../types';
 
 export const BooleanFormatter = (
