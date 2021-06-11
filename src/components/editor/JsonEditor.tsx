@@ -63,7 +63,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
         } px-2 text-sm overflow-hidden overflow-ellipsis`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value === null ? <NullValue /> : jsonString}
+        {value === null || value === '' ? <NullValue /> : jsonString}
       </div>
     </Popover>
   );
