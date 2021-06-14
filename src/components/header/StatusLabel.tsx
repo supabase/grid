@@ -9,7 +9,7 @@ const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
 
   React.useEffect(() => {
     let isMounted = true;
-    let timer = window.setTimeout(() => setMsg(undefined), 2000);
+    let timer: number | null;
 
     SupabaseGridQueue.on('active', () => {
       if (timer) clearTimeout(timer);
