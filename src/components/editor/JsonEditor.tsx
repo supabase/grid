@@ -59,8 +59,10 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
     >
       <div
         className={`${
-          !!value && jsonString.trim().length == 0 ? 'fillContainer' : ''
-        } px-2 text-sm overflow-hidden overflow-ellipsis`}
+          !!value && jsonString.trim().length == 0
+            ? 'sb-grid-fill-container'
+            : ''
+        } sb-grid-json-editor__trigger`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
         {value === null ? <NullValue /> : jsonString}

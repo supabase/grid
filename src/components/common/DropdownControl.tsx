@@ -28,9 +28,9 @@ const DropdownItems: React.FC<DropdownControlProps> = ({
   onSelect,
 }) => {
   return (
-    <div className="overflow-scroll" style={{ maxHeight: '30vh' }}>
+    <div className="dropdown-control" style={{ maxHeight: '30vh' }}>
       {options.length == 0 && (
-        <Typography.Text className="block px-2 py-4">
+        <Typography.Text className="dropdown-control__empty-text">
           No more items
         </Typography.Text>
       )}

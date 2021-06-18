@@ -115,35 +115,35 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   return (
     <Dropdown.Misc>
       <div
-        className="flex justify-between space-x-3"
+        className="sb-grid-sort-row"
         ref={ref}
         style={{ opacity }}
         data-handler-id={handlerId}
       >
-        <div className="flex items-center space-x-3">
+        <div className="sb-grid-sort-row__item">
           <Button
             icon={<IconX />}
-            className="p-0 bg-transparent hover:bg-transparent"
+            className="sb-grid-sort-row__item__remove"
             shadow={false}
             size="tiny"
             type="text"
             onClick={onDeleteClick}
           />
-          <div className="flex items-center space-x-2">
+          <div className="sb-grid-sort-row__item__label">
             <Typography.Text type="secondary" small>
               {index > 0 ? 'then by' : 'sort by'}
             </Typography.Text>
             <Typography.Text>{column.name}</Typography.Text>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="sb-grid-sort-row__item">
           <SegmentedControl
             options={['ASC', 'DESC']}
             value={sort.order}
             onToggle={onToogle}
           />
-          <div className="">
-            <Typography.Text className="cursor-move">
+          <div>
+            <Typography.Text className="sb-grid-sort-row__item__move">
               <IconMenu size="tiny" />
             </Typography.Text>
           </div>

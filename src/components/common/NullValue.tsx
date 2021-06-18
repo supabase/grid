@@ -3,5 +3,5 @@ import * as React from 'react';
 type NullValueProps = {};
 
 export const NullValue: React.FC<NullValueProps> = ({}) => {
-  return <span className="block">[null]</span>;
+  return <span className="null-value">[null]</span>;
 };

@@ -116,7 +116,7 @@ function SelectCellFormatter({
   }
 
   return (
-    <div className="flex justify-between items-center h-full">
+    <div className="sb-grid-select-cell__formatter">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
@@ -165,14 +165,14 @@ function SelectCellHeader({
   }
 
   return (
-    <div className="flex justify-between items-center h-full">
+    <div className="sb-grid-select-cell__header">
       <input
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
         ref={ref}
         type="checkbox"
-        className="focus:ring-brand-500 border-gray-300"
+        className="sb-grid-select-cell__header__input"
         disabled={disabled}
         checked={value}
         onChange={handleChange}

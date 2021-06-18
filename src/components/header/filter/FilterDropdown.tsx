@@ -23,7 +23,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
 
   return (
     <Dropdown
-      className="overflow-visible"
+      className="sb-grid-filter-dropdown"
       side="bottom"
       overlay={<Filter {...p} />}
     >
@@ -59,9 +59,13 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
         ))}
         {state.filters.length == 0 && (
           <Dropdown.Misc>
-            <div className="py-2">
+            <div className="sb-grid-filter-dropdown__misc">
               <Typography.Text>No filters applied to this view</Typography.Text>
-              <Typography.Text small type="secondary" className="block">
+              <Typography.Text
+                small
+                type="secondary"
+                className="sb-grid-filter-dropdown__misc__text"
+              >
                 Add a column below to filter the view
               </Typography.Text>
             </div>

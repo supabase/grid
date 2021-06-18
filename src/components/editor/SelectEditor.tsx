@@ -30,7 +30,7 @@ export function SelectEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <select
-      className="w-full h-full"
+      className="sb-grid-select-editor"
       value={value ?? ''}
       onChange={onChange}
       onBlur={onBlur}

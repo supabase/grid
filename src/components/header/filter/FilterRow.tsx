@@ -95,11 +95,11 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx }) => {
 
   return (
     <Dropdown.Misc>
-      <div className="flex items-center justify-between w-full space-x-3">
-        <div className="flex items-center space-x-3">
+      <div className="sb-grid-filter-row">
+        <div className="sb-grid-filter-row__inner">
           <Button
             icon={<IconX />}
-            className="p-0 bg-transparent hover:bg-transparent"
+            className="sb-grid-filter-row__inner__close"
             shadow={false}
             size="tiny"
             type="text"

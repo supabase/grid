@@ -27,7 +27,7 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       side="bottom"
       align="start"
       overlay={<Sort {...p} />}
-      className="w-96"
+      className="sb-grid-sort-dropdown"
     >
       <Button as={'span'} type="text" icon={<IconList />}>
         {btnText}
@@ -63,9 +63,13 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
       ))}
       {state.sorts.length == 0 && (
         <Dropdown.Misc>
-          <div className="py-2">
+          <div className="sb-grid-dropdown__empty">
             <Typography.Text>No sorts applied to this view</Typography.Text>
-            <Typography.Text small type="secondary" className="block">
+            <Typography.Text
+              small
+              type="secondary"
+              className="sb-grid-dropdown__empty__text"
+            >
               Add a column below to sort the view
             </Typography.Text>
           </div>
@@ -85,7 +89,7 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
               as="span"
               type="text"
               iconRight={<IconChevronDown />}
-              className="my-1"
+              className="sb-grid-dropdown__item-trigger"
             >
               {`Pick ${
                 state.sorts.length > 1 ? 'another' : 'a'

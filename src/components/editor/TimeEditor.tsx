@@ -43,7 +43,7 @@ export function TimeEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <input
-      className="w-full h-full px-2"
+      className="sb-grid-time-editor"
       ref={autoFocusAndSelect}
       value={timeValue ?? ''}
       onChange={onChange}

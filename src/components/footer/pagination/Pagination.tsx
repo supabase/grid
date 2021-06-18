@@ -65,7 +65,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }
 
   return (
-    <div className="flex items-center">
+    <div className="sb-grid-pagination">
       <Button
         icon={<IconArrowLeft />}
         type="outline"
@@ -73,12 +73,12 @@ const Pagination: React.FC<PaginationProps> = () => {
         onClick={onPreviousPage}
         style={{ padding: '3px 10px' }}
       />
-      <Typography.Text className="mx-2">Page</Typography.Text>
-      <div className="w-12">
+      <Typography.Text>Page</Typography.Text>
+      <div className="sb-grid-pagination-input-container">
         <InputNumber
           value={page}
           onChange={onPageChange}
-          className="block pagination-input"
+          className="sb-grid-pagination-input"
           size="tiny"
           style={{
             width: '3rem',
@@ -87,7 +87,7 @@ const Pagination: React.FC<PaginationProps> = () => {
           min={1}
         />
       </div>
-      <Typography.Text className="mx-2">{`of ${totalPages}`}</Typography.Text>
+      <Typography.Text>{`of ${totalPages}`}</Typography.Text>
       <Button
         icon={<IconArrowRight />}
         type="outline"
@@ -95,20 +95,19 @@ const Pagination: React.FC<PaginationProps> = () => {
         onClick={onNextPage}
         style={{ padding: '3px 10px' }}
       />
-      <div className="ml-2">
-        <DropdownControl
-          options={rowsPerPageOptions}
-          onSelect={onRowsPerPageChange}
-          side="top"
-          align="start"
-        >
-          <Button
-            as="span"
-            type="outline"
-            style={{ padding: '3px 10px' }}
-          >{`${state.rowsPerPage} rows`}</Button>
-        </DropdownControl>
-      </div>
+
+      <DropdownControl
+        options={rowsPerPageOptions}
+        onSelect={onRowsPerPageChange}
+        side="top"
+        align="start"
+      >
+        <Button
+          as="span"
+          type="outline"
+          style={{ padding: '3px 10px' }}
+        >{`${state.rowsPerPage} rows`}</Button>
+      </DropdownControl>
     </div>
   );
 };
