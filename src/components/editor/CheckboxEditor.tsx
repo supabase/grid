@@ -16,9 +16,9 @@ export function CheckboxEditor<TRow, TSummaryRow = unknown>({
   }
 
   return (
-    <div className="flex w-full h-full">
+    <div className="sb-grid-checkbox-editor">
       <input
-        className="w-4 h-4"
+        className="sb-grid-checkbox-editor__input"
         checked={(row[column.key as keyof TRow] as unknown) as boolean}
         onChange={onChange}
         onBlur={onBlur}

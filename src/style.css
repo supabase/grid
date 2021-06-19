@@ -2,15 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.fillContainer:after {
+.sb-grid-fill-container:after {
   content: '';
   display: inline-block;
   width: 100%;
-}
-
-.pagination-input .sbui-inputnumber {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 
 .rdg-cell {
@@ -71,26 +66,6 @@
   height: var(--header-row-height);
   line-height: var(--header-row-height);
   top: 0;
-}
-
-.rdg-header-row__content__name {
-  @apply overflow-hidden overflow-ellipsis text-sm;
-  @apply text-typography-body-light dark:text-typography-body-dark;
-}
-
-.rdg-header-row__content__format {
-  @apply text-xs;
-  @apply font-normal overflow-hidden overflow-ellipsis;
-  @apply text-typography-body-secondary-light dark:text-typography-body-secondary-dark;
-}
-
-.rdg-header-row__content__primary-key {
-  @apply transform rotate-45 flex items-center;
-}
-
-.rdg-header-row__content svg {
-  @apply mr-1;
-  @apply text-green-500 border-green-500 dark:text-green-500 dark:border-green-500;
 }
 
 .rdg-header-row .rdg-cell {
@@ -334,4 +309,381 @@
 .rdg__segmented-control__options-label {
   @apply uppercase;
   color: inherit;
+}
+
+/*
+  DropdownControl
+*/
+
+.dropdown-control {
+  @apply overflow-scroll;
+}
+
+.dropdown-control .sbui-typography {
+  @apply block px-2 py-4;
+}
+
+/*
+  ForeignTableModal
+*/
+
+.foreign-table-modal__content-container {
+  @apply w-full;
+}
+
+.foreign-table-modal__content-container__inner {
+  @apply px-6;
+}
+
+.foreign-table-modal__content-container__inner__overflow {
+  @apply w-full overflow-scroll;
+}
+
+.foreign-table-modal__filter {
+  @apply flex items-center w-full space-x-2 px-6;
+}
+
+.foreign-table-modal__filter__trigger-content {
+  @apply space-x-2;
+}
+
+.foreign-table-modal__filter__trigger-content__label {
+  @apply text-typography-body-light dark:text-typography-body-dark;
+}
+
+.foreign-table-modal__filter__trigger-content__name {
+  @apply text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold;
+}
+
+.foreign-table-modal__filter__search-input {
+  @apply flex-grow;
+}
+
+.foreign-table-modal__menu {
+  @apply space-y-2;
+}
+
+.foreign-table-modal__row-item {
+  @apply border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden;
+}
+
+.foreign-table-modal__row-item__inner {
+  @apply flex space-x-4;
+}
+
+.foreign-table-modal__row-item__inner__key-item {
+  @apply flex flex-col flex-initial;
+}
+
+.foreign-table-modal__row-item__inner__key-item__key {
+  @apply font-mono;
+}
+
+/*
+  NullValue
+*/
+
+.null-value {
+  @apply block;
+}
+
+/*
+  CheckboxEditor
+*/
+
+.sb-grid-checkbox-editor {
+  @apply flex w-full h-full;
+}
+
+.sb-grid-checkbox-editor__input {
+  @apply w-4 h-4;
+}
+
+/*
+  DateEditor
+*/
+
+.sb-grid-date-editor {
+  @apply w-full h-full px-2;
+}
+
+/*
+  DateTimeEditor
+*/
+
+.sb-grid-datetime-editor {
+  @apply w-full h-full px-2;
+}
+
+/*
+  JsonEditor
+*/
+
+.sb-grid-json-editor__trigger {
+  @apply px-2 text-sm overflow-hidden overflow-ellipsis;
+}
+
+/*
+  NumberEditor
+*/
+
+.sb-grid-number-editor {
+  @apply w-full h-full px-2;
+}
+
+/*
+  SelectEditor
+*/
+
+.sb-grid-select-editor {
+  @apply w-full h-full;
+}
+
+/*
+  TextEditor
+*/
+
+.sb-grid-text-editor__trigger {
+  @apply px-2 text-sm overflow-hidden overflow-ellipsis;
+}
+
+/*
+  TimeEditor
+*/
+
+.sb-grid-time-editor {
+  @apply w-full h-full px-2;
+}
+
+/*
+  Pagination
+*/
+
+.sb-grid-pagination {
+  @apply flex items-center space-x-2;
+}
+
+.sb-grid-pagination-input-container {
+  @apply w-12;
+}
+.sb-grid-pagination-input {
+  @apply w-12 block;
+}
+
+.sb-grid-pagination-input .sbui-inputnumber {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/*
+  Footer
+*/
+
+.sb-grid-footer {
+  @apply flex justify-between h-10 z-10 px-2 dark:bg-gray-700 items-center;
+}
+
+.sb-grid-footer__inner {
+  @apply flex items-center;
+}
+
+/*
+  ForeignKeyFormatter
+*/
+
+.sb-grid-foreign-key-formatter {
+  @apply flex items-center px-2;
+}
+
+.sb-grid-foreign-key-formatter__text {
+  @apply m-0 flex-grow text-sm overflow-hidden overflow-ellipsis;
+}
+
+/*
+  AddColumn
+*/
+
+.sb-grid-add-column {
+  @apply flex h-full;
+}
+
+/*
+  ColumnHeader
+*/
+
+.sb-grid-column-header {
+  @apply flex items-center justify-between;
+}
+
+.sb-grid-column-header--cursor {
+  @apply cursor-default;
+}
+
+.sb-grid-column-header__inner {
+  @apply flex items-center space-x-2 overflow-hidden overflow-ellipsis;
+}
+
+.sb-grid-column-header__inner__name {
+  @apply overflow-hidden overflow-ellipsis text-sm;
+  @apply text-typography-body-light dark:text-typography-body-dark;
+}
+
+.sb-grid-column-header__inner__format {
+  @apply text-xs;
+  @apply font-normal overflow-hidden overflow-ellipsis;
+  @apply text-typography-body-secondary-light dark:text-typography-body-secondary-dark;
+}
+
+.sb-grid-column-header__inner__primary-key {
+  @apply transform rotate-45 flex items-center;
+}
+
+.sb-grid-column-header__inner svg {
+  @apply mr-1;
+  @apply text-green-500 border-green-500 dark:text-green-500 dark:border-green-500;
+}
+
+/*
+  Grid
+*/
+
+.sb-grid-grid--loading {
+  @apply flex justify-center bg-gray-100 dark:bg-gray-900;
+}
+
+.sb-grid-grid--loading__inner {
+  @apply flex items-center;
+}
+
+.sb-grid-grid--loading__inner__text {
+  @apply m-8;
+}
+
+/*
+  SelectColumn
+*/
+
+.sb-grid-select-cell__formatter {
+  @apply flex justify-between items-center h-full;
+}
+
+.sb-grid-select-cell__header {
+  @apply flex justify-between items-center h-full;
+}
+
+.sb-grid-select-cell__header__input {
+  /* @apply focus:ring-brand-500; */
+  @apply border-gray-300;
+}
+
+/*
+  header/filter/FilterDropdown
+*/
+
+.sb-grid-filter-dropdown {
+  @apply overflow-visible;
+}
+
+.sb-grid-filter-dropdown__misc {
+  @apply py-2;
+}
+
+.sb-grid-filter-dropdown__misc__text {
+  @apply block;
+}
+
+/*
+  header/filter/FilterRow
+*/
+
+.sb-grid-filter-row {
+  @apply flex items-center justify-between w-full space-x-3;
+}
+
+.sb-grid-filter-row__inner {
+  @apply flex items-center space-x-3;
+}
+
+.sb-grid-filter-row__inner__close {
+  @apply p-0 bg-transparent hover:bg-transparent;
+}
+
+/*
+  header/sort/SortDropdown
+*/
+
+.sb-grid-sort-dropdown {
+  @apply w-96;
+}
+
+.sb-grid-dropdown__empty {
+  @apply py-2;
+}
+
+.sb-grid-dropdown__empty__text {
+  @apply block;
+}
+
+.sb-grid-dropdown__item-trigger {
+  @apply my-1;
+}
+
+/*
+  header/sort/SortRow
+*/
+
+.sb-grid-sort-row {
+  @apply flex justify-between space-x-3;
+}
+
+.sb-grid-sort-row__item {
+  @apply flex items-center space-x-3;
+}
+
+.sb-grid-sort-row__item__remove {
+  @apply p-0 bg-transparent hover:bg-transparent;
+}
+
+.sb-grid-sort-row__item__label {
+  @apply flex items-center space-x-2;
+}
+
+.sb-grid-sort-row__item__move {
+  @apply cursor-move;
+}
+
+/*
+  Header
+*/
+
+.sb-grid-header {
+  @apply flex justify-between h-10 z-10 px-2 dark:bg-gray-700;
+}
+
+.sb-grid-header__inner {
+  @apply flex items-center space-x-2;
+}
+
+.sb-grid-header__inner__divider {
+  @apply py-2;
+}
+
+.sb-grid-header__inner__insert-row {
+  @apply ml-2;
+}
+
+/*
+  StatusLabel
+*/
+
+.sb-grid-status-label {
+  @apply text-white text-sm;
+}
+
+.sb-grid-status-label__no-msg {
+  @apply flex w-5 h-5;
+}
+
+.sb-grid-status-label__no-msg > div {
+  @apply m-auto w-2 h-2 rounded-full bg-green-500;
 }

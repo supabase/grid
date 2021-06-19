@@ -100,13 +100,13 @@ export function ColumnHeader<R>({
   };
 
   const opacity = isDragging ? 0 : 1;
-  const cursor = column.frozen ? 'cursor-default' : '';
+  const cursor = column.frozen ? 'sb-grid-column-header--cursor' : '';
   drag(drop(ref));
 
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
-      <div className={`flex items-center ${cursor} justify-between`}>
-        <div className="flex items-center space-x-2 rdg-header-row__content overflow-hidden overflow-ellipsis">
+      <div className={`sb-grid-column-header ${cursor}`}>
+        <div className="sb-grid-column-header__inner rdg-header-row__content">
           {renderColumnIcon(columnType)}
           {isPrimaryKey && (
             <div className="rdg-header-row__content__primary-key">

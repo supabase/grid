@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({
     if (!onAddRow) return null;
     return (
       <Button
-        className="ml-2"
+        className="sb-grid-header__inner__insert-row"
         style={{ padding: '4px 8px' }}
         icon={<IconPlus size="tiny" />}
         onClick={onAddRow}
@@ -39,15 +39,15 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="flex justify-between h-10 z-10 px-2 dark:bg-gray-700">
-      <div className="flex items-center space-x-2">
+    <div className="sb-grid-header">
+      <div className="sb-grid-header__inner">
         <FilterDropdown />
         <SortDropdown />
-        <Divider type="vertical" className="py-2" />
+        <Divider type="vertical" className="sb-grid-header__inner__divider" />
         {renderNewColumn(onAddColumn)}
         {renderAddRow(onAddRow)}
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="sb-grid-header__inner">
         {headerActions}
         <StatusLabel />
       </div>

@@ -44,8 +44,8 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
     >
       <div
         className={`${
-          !!value && value.trim().length == 0 ? 'fillContainer' : ''
-        } px-2 text-sm overflow-hidden overflow-ellipsis`}
+          !!value && value.trim().length == 0 ? 'sb-grid-fill-container' : ''
+        } sb-grid-text-editor__trigger`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
         {value === null ? <NullValue /> : value === '' ? <EmptyValue /> : value}

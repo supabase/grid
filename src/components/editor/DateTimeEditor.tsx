@@ -38,7 +38,7 @@ export function DateTimeEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <input
-      className="w-full h-full px-2"
+      className="sb-grid-datetime-editor"
       ref={autoFocusAndSelect}
       value={timeValue ?? ''}
       onChange={onChange}

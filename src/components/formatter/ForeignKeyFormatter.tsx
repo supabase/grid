@@ -33,8 +33,8 @@ export const ForeignKeyFormatter = (
   }
 
   return (
-    <div className="flex items-center px-2">
-      <p className="m-0 flex-grow text-sm overflow-hidden overflow-ellipsis">
+    <div className="sb-grid-foreign-key-formatter">
+      <p className="sb-grid-foreign-key-formatter__text">
         {value === null ? <NullValue /> : value}
       </p>
       <ForeignTableModal

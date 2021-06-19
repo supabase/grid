@@ -70,14 +70,16 @@ export const Grid = memo(
       if (!columnHeaders || columnHeaders.length == 0) {
         return (
           <div
-            className="flex justify-center bg-gray-100 dark:bg-gray-900"
+            className="sb-grid-grid--loading"
             style={{ width: width || '100%', height: height || '50vh' }}
           >
-            <div className="flex items-center">
+            <div className="sb-grid-grid--loading__inner">
               <Loading active>
                 <div />
               </Loading>
-              <Typography.Text className="m-8">loading ...</Typography.Text>
+              <Typography.Text className="sb-grid-grid--loading__inner__text">
+                loading ...
+              </Typography.Text>
             </div>
           </div>
         );

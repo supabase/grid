@@ -30,11 +30,11 @@ const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   }, []);
 
   return (
-    <div className="text-white text-sm">
+    <div className="sb-grid-status-label">
       {msg && <Typography.Text>{msg}</Typography.Text>}
       {!msg && (
-        <div className="flex w-5 h-5">
-          <div className="m-auto w-2 h-2 rounded-full bg-green-500" />
+        <div className="sb-grid-status-label__no-msg">
+          <div></div>
         </div>
       )}
     </div>

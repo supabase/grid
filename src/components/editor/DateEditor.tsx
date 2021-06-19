@@ -22,7 +22,7 @@ export function DateEditor<TRow, TSummaryRow = unknown>({
 
   return (
     <input
-      className="w-full h-full px-2"
+      className="sb-grid-date-editor"
       ref={autoFocusAndSelect}
       value={value ?? ''}
       onChange={onChange}

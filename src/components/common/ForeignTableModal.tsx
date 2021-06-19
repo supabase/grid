@@ -136,7 +136,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     const temp = rows.map((x, i) => {
       return <RowItem key={`menu-${i}`} item={x} onSelect={onItemSelect} />;
     });
-    return <Menu className="space-y-2">{temp}</Menu>;
+    return <Menu className="foreign-table-modal__menu">{temp}</Menu>;
   }
 
   function onFilterChange(value: {
@@ -189,11 +189,11 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
               foreignColumnNames={foreignColumnNames}
               onChange={onFilterChange}
             />
-            <div className="w-full">
+            <div className="foreign-table-modal__content-container">
               <Divider light />
-              <div className="px-6">
+              <div className="foreign-table-modal__content-container__inner">
                 <div
-                  className="w-full overflow-scroll"
+                  className="foreign-table-modal__content-container__inner__overflow"
                   style={{ minHeight: '21rem', maxHeight: '20rem' }}
                 >
                   {renderRows()}
@@ -282,51 +282,49 @@ export const Filter: React.FC<FilterProps> = ({
   }
 
   return (
-    <div className="px-6">
-      <div className="flex items-center w-full space-x-2">
-        <DropdownControl
-          side="bottom"
-          align="start"
-          options={columnOptions}
-          onSelect={onColumnChange}
-        >
-          <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-            <span className="space-x-2">
-              <span className="text-typography-body-light dark:text-typography-body-dark">
-                Column
-              </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
-                {columnName}
-              </span>
+    <div className="foreign-table-modal__filter">
+      <DropdownControl
+        side="bottom"
+        align="start"
+        options={columnOptions}
+        onSelect={onColumnChange}
+      >
+        <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+          <span className="foreign-table-modal__filter__trigger-content">
+            <span className="foreign-table-modal__filter__trigger-content__label">
+              Column
             </span>
-          </Button>
-        </DropdownControl>
-        <DropdownControl
-          side="bottom"
-          align="start"
-          options={FilterConditionOptions}
-          onSelect={onConditionChange}
-        >
-          <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-            <span className="space-x-2">
-              <span className="text-typography-body-light dark:text-typography-body-dark">
-                Filter
-              </span>
-              <span className="text-typography-body-strong-light dark:text-typography-body-strong-dark font-bold">
-                {condition}
-              </span>
+            <span className="foreign-table-modal__filter__trigger-content__name">
+              {columnName}
             </span>
-          </Button>
-        </DropdownControl>
-        <Input
-          size="tiny"
-          className="flex-grow"
-          placeholder="Find a record"
-          value={filterText}
-          onChange={onFilterChange}
-          icon={<IconSearch size="small" />}
-        />
-      </div>
+          </span>
+        </Button>
+      </DropdownControl>
+      <DropdownControl
+        side="bottom"
+        align="start"
+        options={FilterConditionOptions}
+        onSelect={onConditionChange}
+      >
+        <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+          <span className="foreign-table-modal__filter__trigger-content">
+            <span className="foreign-table-modal__filter__trigger-content__label">
+              Filter
+            </span>
+            <span className="foreign-table-modal__filter__trigger-content__name">
+              {condition}
+            </span>
+          </span>
+        </Button>
+      </DropdownControl>
+      <Input
+        size="tiny"
+        className="foreign-table-modal__filter__search-input"
+        placeholder="Find a record"
+        value={filterText}
+        onChange={onFilterChange}
+        icon={<IconSearch size="small" />}
+      />
     </div>
   );
 };
@@ -339,9 +337,9 @@ type RowItemProps = {
 export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
   const keys = Object.keys(item);
   return (
-    <div className="border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden">
+    <div className="foreign-table-modal__row-item">
       <Menu.Item onClick={() => onSelect(item)}>
-        <div className="flex space-x-4">
+        <div className="foreign-table-modal__row-item__inner">
           {keys.map((key, j) => {
             //
             // limit to 5 attributes
@@ -351,8 +349,15 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
             if (j > 5) return null;
 
             return (
-              <div className="flex flex-col flex-initial" key={`item-${j}`}>
-                <Typography.Text small type="secondary" className="font-mono">
+              <div
+                className="foreign-table-modal__row-item__inner__key-item"
+                key={`item-${j}`}
+              >
+                <Typography.Text
+                  small
+                  type="secondary"
+                  className="foreign-table-modal__row-item__inner__key-item__key"
+                >
                   {key}
                 </Typography.Text>
                 <Typography.Text small strong>
