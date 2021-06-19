@@ -6,16 +6,28 @@ type StatusLabelProps = {};
 
 const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
   const [msg, setMsg] = React.useState<string | undefined>(undefined);
-  let timer = React.useRef<number | null>(null);
 
-  SupabaseGridQueue.on('active', () => {
-    if (timer && timer.current) clearTimeout(timer.current!);
-    setMsg('Saving...');
-  });
-  SupabaseGridQueue.on('idle', () => {
-    setMsg('All changes saved');
-    timer.current = window.setTimeout(() => setMsg(undefined), 2000);
-  });
+  React.useEffect(() => {
+    let isMounted = true;
+    let timer: number | null;
+
+    SupabaseGridQueue.on('active', () => {
+      if (timer) clearTimeout(timer);
+
+      if (isMounted) setMsg('Saving...');
+    });
+    SupabaseGridQueue.on('idle', () => {
+      if (timer) clearTimeout(timer);
+      timer = window.setTimeout(() => setMsg(undefined), 2000);
+
+      if (isMounted) setMsg('All changes saved');
+    });
+
+    return () => {
+      isMounted = false;
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className="sb-grid-status-label">

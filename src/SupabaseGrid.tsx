@@ -34,13 +34,11 @@ export const SupabaseGrid = React.forwardRef<
   SupabaseGridProps
 >((props, ref) => {
   const monaco = useMonaco();
-
-  // get theme from localstorage
-  const [theme] = React.useState(localStorage.getItem('theme'));
+  const { theme } = props;
 
   React.useEffect(() => {
     if (monaco) {
-      const darkTheme = theme ? (theme === 'dark' ? true : false) : true;
+      const darkTheme = theme && theme === 'dark' ? true : false;
 
       monaco.editor.defineTheme('supabase', {
         base: 'vs-dark', // can also be vs-dark or hc-black
@@ -56,7 +54,7 @@ export const SupabaseGrid = React.forwardRef<
         },
       });
     }
-  }, [monaco, theme]);
+  }, [monaco]);
 
   return (
     <StoreProvider>

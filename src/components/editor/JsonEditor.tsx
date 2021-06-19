@@ -65,7 +65,7 @@ export function JsonEditor<TRow, TSummaryRow = unknown>({
         } sb-grid-json-editor__trigger`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value === null ? <NullValue /> : jsonString}
+        {value === null || value === '' ? <NullValue /> : jsonString}
       </div>
     </Popover>
   );

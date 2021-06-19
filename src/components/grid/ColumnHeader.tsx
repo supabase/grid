@@ -16,6 +16,7 @@ export function ColumnHeader<R>({
   const dispatch = useDispatch();
   const columnIdx = column.idx;
   const columnKey = column.key;
+  const columnFormat = getColumnFormat(columnType, format);
 
   const [{ isDragging }, drag] = useDrag({
     type: 'column-header',
@@ -113,7 +114,9 @@ export function ColumnHeader<R>({
             </div>
           )}
           <span className="rdg-header-row__content__name">{column.name}</span>
-          <span className="rdg-header-row__content__format">{format}</span>
+          <span className="rdg-header-row__content__format">
+            {columnFormat}
+          </span>
         </div>
         <ColumnMenu column={column} />
       </div>
@@ -128,4 +131,10 @@ function renderColumnIcon(type: ColumnType) {
     default:
       return null;
   }
+}
+
+function getColumnFormat(type: ColumnType, format: string) {
+  if (type == 'array') {
+    return `${format.replace('_', '')}[]`;
+  } else return format;
 }

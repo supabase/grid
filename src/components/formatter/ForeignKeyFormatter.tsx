@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Button, IconX } from '@supabase/ui';
 import { FormatterProps } from '@supabase/react-data-grid';
 import { SupaRow } from '../../types';
 import { NullValue } from '../common';
@@ -29,10 +28,6 @@ export const ForeignKeyFormatter = (
     }
   }
 
-  function onClearValue() {
-    onRowChange(null);
-  }
-
   function onChange(_value: any | null) {
     onRowChange(_value);
   }
@@ -42,15 +37,11 @@ export const ForeignKeyFormatter = (
       <p className="sb-grid-foreign-key-formatter__text">
         {value === null ? <NullValue /> : value}
       </p>
-      {value && (
-        <Button
-          type="text"
-          onClick={onClearValue}
-          icon={<IconX />}
-          style={{ padding: '3px' }}
-        />
-      )}
-      <ForeignTableModal columnName={p.column.key} onChange={onChange} />
+      <ForeignTableModal
+        columnName={p.column.key}
+        defaultValue={value}
+        onChange={onChange}
+      />
     </div>
   );
 };

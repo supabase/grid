@@ -16,11 +16,11 @@ type RowMenuProps = {};
 const RowMenu: React.FC<RowMenuProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const { selectedRows } = state;
+  const { selectedRows, rows: allRows } = state;
 
   function onRowsDelete() {
     const rowIdxs = Array.from(selectedRows) as number[];
-    const rows = state.rows.filter(x => rowIdxs.includes(x.idx));
+    const rows = allRows.filter(x => rowIdxs.includes(x.idx));
     const { error } = state.rowService!.delete(rows);
     if (error) {
       if (state.onError) state.onError(error);
@@ -34,14 +34,14 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
   }
 
   function onRowsExportCsv() {
-    const rows = state.rows.filter(x => selectedRows.has(x.idx));
+    const rows = allRows.filter(x => selectedRows.has(x.idx));
     const csv = exportRowsToCsv(state.table!.columns, rows);
     const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     FileSaver.saveAs(csvData, `${state.table!.name}_rows.csv`);
   }
 
   function onAllRowsExportCsv() {
-    const csv = exportRowsToCsv(state.table!.columns, state.rows);
+    const csv = exportRowsToCsv(state.table!.columns, allRows);
     const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     FileSaver.saveAs(csvData, `${state.table!.name}_allRows.csv`);
   }

@@ -45,6 +45,10 @@ export type SupabaseGridProps = {
    */
   headerActions?: React.ReactNode;
   /**
+   * Optional grid theme
+   */
+  theme?: 'dark' | 'light';
+  /**
    * show create new column button if available
    */
   onAddColumn?: () => void;

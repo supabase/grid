@@ -52,35 +52,47 @@ const FilterReducer = (
       };
     case 'ADD_FILTER': {
       const isValid = isValidFilter(action.payload);
-      return {
+      const result: any = {
         ...state,
         filters: update(state.filters, { $push: [action.payload] }),
-        refreshPageFlag: isValid ? Date.now() : 0,
       };
+      if (isValid) {
+        result.refreshPageFlag = Date.now();
+        result.page = 1;
+      }
+      return result;
     }
     case 'REMOVE_FILTER': {
       const removeIdx = action.payload.index;
       const removeFilter = state.filters[removeIdx];
       const isValid = isValidFilter(removeFilter);
-      return {
+      const result: any = {
         ...state,
         filters: update(state.filters, {
           $splice: [[removeIdx, 1]],
         }),
-        refreshPageFlag: isValid ? Date.now() : 0,
       };
+      if (isValid) {
+        result.refreshPageFlag = Date.now();
+        result.page = 1;
+      }
+      return result;
     }
     case 'UPDATE_FILTER': {
       const updatedFilter = state.filters[action.payload.filterIdx];
       const previousIsValid = isValidFilter(updatedFilter);
       const afterIsValid = isValidFilter(action.payload.value);
-      return {
+      const result: any = {
         ...state,
         filters: update(state.filters, {
           [action.payload.filterIdx]: { $set: action.payload.value },
         }),
-        refreshPageFlag: previousIsValid || afterIsValid ? Date.now() : 0,
       };
+      if (previousIsValid || afterIsValid) {
+        result.refreshPageFlag = Date.now();
+        result.page = 1;
+      }
+      return result;
     }
     default:
       return state;

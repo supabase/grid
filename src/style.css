@@ -259,6 +259,7 @@
   opacity: 0.5;
 }
 .react-contexify__item__content {
+  font-size: 13px;
   padding: 6px 12px;
   display: flex;
   align-items: center;

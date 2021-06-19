@@ -29,7 +29,7 @@ export function getGridColumns(
 ): any[] {
   const selectColumn = SelectColumn(options?.onEditRow);
   const columns = table.columns.map(x => {
-    let columnDef: Column<SupaRow> = {
+    const columnDef: Column<SupaRow> = {
       key: x.name,
       name: x.name,
       resizable: true,
@@ -50,7 +50,12 @@ export function getGridColumns(
       );
     };
 
+    // setup formatter needs to run before editor
+    // because some columns like foreign-key use formatter to edit
+    // so _setupColumnEditor can override _setupColumnFormatter config
+    _setupColumnFormatter(columnType, columnDef);
     _setupColumnEditor(x, columnType, columnDef);
+
     return columnDef;
   });
 
@@ -73,7 +78,6 @@ function _setupColumnEditor(
   columnType: ColumnType,
   config: Column<SupaRow>
 ) {
-  config.formatter = DefaultFormatter;
   if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
     return;
   }
@@ -81,7 +85,6 @@ function _setupColumnEditor(
   switch (columnType) {
     case 'boolean': {
       config.editor = CheckboxEditor;
-      config.formatter = BooleanFormatter;
       break;
     }
     case 'date': {
@@ -104,6 +107,7 @@ function _setupColumnEditor(
       break;
     }
     case 'foreign_key': {
+      // foreign_key col doesnt have editor, it uses formatter
       config.formatter = ForeignKeyFormatter;
       break;
     }
@@ -122,6 +126,21 @@ function _setupColumnEditor(
     }
     default: {
       break;
+    }
+  }
+}
+
+function _setupColumnFormatter(
+  columnType: ColumnType,
+  config: Column<SupaRow>
+) {
+  switch (columnType) {
+    case 'boolean': {
+      config.formatter = BooleanFormatter;
+      break;
+    }
+    default: {
+      config.formatter = DefaultFormatter;
     }
   }
 }

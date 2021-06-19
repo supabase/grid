@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
 import { EditorProps } from '@supabase/react-data-grid';
 import { useTrackedState } from '../../store';
-import { BlockKeys, MonacoEditor, NullValue } from '../common';
+import { BlockKeys, MonacoEditor, NullValue, EmptyValue } from '../common';
 
 export function TextEditor<TRow, TSummaryRow = unknown>({
   row,
@@ -21,7 +21,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
   }, []);
 
   function onChange(_value: string | undefined) {
-    if (!_value || _value == '') setValue(null);
+    if (!_value) setValue('');
     else setValue(_value);
   }
 
@@ -48,7 +48,7 @@ export function TextEditor<TRow, TSummaryRow = unknown>({
         } sb-grid-text-editor__trigger`}
         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
       >
-        {value === null ? <NullValue /> : value}
+        {value === null ? <NullValue /> : value === '' ? <EmptyValue /> : value}
       </div>
     </Popover>
   );
