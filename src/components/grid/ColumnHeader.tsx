@@ -106,15 +106,17 @@ export function ColumnHeader<R>({
   return (
     <div ref={ref} data-handler-id={handlerId} style={{ opacity }}>
       <div className={`sb-grid-column-header ${cursor}`}>
-        <div className="sb-grid-column-header__inner rdg-header-row__content">
+        <div className="sb-grid-column-header__inner">
           {renderColumnIcon(columnType)}
           {isPrimaryKey && (
-            <div className="rdg-header-row__content__primary-key">
+            <div className="sb-grid-column-header__inner__primary-key">
               <IconKey size="tiny" strokeWidth={2} />
             </div>
           )}
-          <span className="rdg-header-row__content__name">{column.name}</span>
-          <span className="rdg-header-row__content__format">
+          <span className="sb-grid-column-header__inner__name">
+            {column.name}
+          </span>
+          <span className="sb-grid-column-header__inner__format">
             {columnFormat}
           </span>
         </div>
