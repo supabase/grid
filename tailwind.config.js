@@ -52,7 +52,7 @@ const coolGray = {
 module.exports = {
   mode: 'jit',
   darkMode: 'class',
-  purge: ['./src/**/*.tsx'],
+  // purge: ['./src/**/*.tsx'],
   theme: {
     borderColor: theme => ({
       ...theme('colors'),
@@ -140,4 +140,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  corePlugins: {
+    preflight: false,
+  },
 };
