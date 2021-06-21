@@ -340,7 +340,7 @@
 }
 
 .foreign-table-modal__filter {
-  @apply flex items-center w-full space-x-2 px-6;
+  @apply flex items-center space-x-2 px-6;
 }
 
 .foreign-table-modal__filter__trigger-content {
