@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.sb-grid {
+  @apply flex flex-col h-full;
+}
+
 .sb-grid-fill-container:after {
   content: '';
   display: inline-block;
@@ -686,4 +690,20 @@
 
 .sb-grid-status-label__no-msg > div {
   @apply m-auto w-2 h-2 rounded-full bg-green-500;
+}
+
+/*
+  Empty value
+*/
+
+.sb-grid-empty-value {
+  @apply block;
+}
+
+/*
+  RowContextMenu
+*/
+
+.sb-grid-context-menu__label {
+  @apply ml-2;
 }
