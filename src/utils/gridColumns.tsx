@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Column } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
-  CheckboxEditor,
+  BooleanEditor,
   DateEditor,
   DateTimeEditor,
   JsonEditor,
@@ -84,7 +84,7 @@ function _setupColumnEditor(
 
   switch (columnType) {
     case 'boolean': {
-      config.editor = CheckboxEditor;
+      config.editor = BooleanEditor;
       break;
     }
     case 'date': {
