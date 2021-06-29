@@ -25,6 +25,26 @@ import Header from './components/header';
 import Footer from './components/footer';
 
 /**
+ * Ensure that if editable is false, we should remove all editing actions
+ * to prevent rare-case bugs with the UI
+ */
+function cleanupProps(props: SupabaseGridProps) {
+  const { editable } = props;
+  if (!editable) {
+    return {
+      ...props,
+      onAddColumn: undefined,
+      onAddRow: undefined,
+      onEditColumn: undefined,
+      onDeleteColumn: undefined,
+      onEditRow: undefined,
+    };
+  } else {
+    return props;
+  }
+}
+
+/**
  * Supabase Grid.
  *
  * React component to render database table.
@@ -34,7 +54,9 @@ export const SupabaseGrid = React.forwardRef<
   SupabaseGridProps
 >((props, ref) => {
   const monaco = useMonaco();
-  const { theme } = props;
+
+  const _props = cleanupProps(props);
+  const { theme } = _props;
 
   React.useEffect(() => {
     if (monaco) {
@@ -59,7 +81,7 @@ export const SupabaseGrid = React.forwardRef<
   return (
     <StoreProvider>
       <DndProvider backend={HTML5Backend}>
-        <SupabaseGridLayout ref={ref} {...props} />
+        <SupabaseGridLayout ref={ref} {..._props} />
       </DndProvider>
     </StoreProvider>
   );
@@ -240,4 +262,4 @@ function saveStorage(state: InitialStateType, storageRef: string) {
   }
   localStorage.setItem(key, JSON.stringify(savedJson));
 }
-export const saveStorageDebounced = AwesomeDebouncePromise(saveStorage, 500);
+const saveStorageDebounced = AwesomeDebouncePromise(saveStorage, 500);

@@ -62,64 +62,6 @@ const App = () => {
     }
   }, [uiMode]);
 
-  // READONLY
-  // using postgrest OpenApi description to retrieve table, column definition
-  // so it supports both table, view
-  function renderReadonlyTable() {
-    return (
-      <SupabaseGrid
-        ref={gridRef}
-        table={tableName}
-        storageRef="dqofwyqljsmbgrubmnzk"
-        clientProps={clientProps}
-        theme={uiMode}
-        gridProps={{ height: '100%' }}
-      />
-    );
-  }
-
-  // EDITABLE
-  // using stored procedure to retrieve table, column definition
-  // so it ONLY support table
-  function renderTable() {
-    return (
-      <SupabaseGrid
-        ref={gridRef}
-        table={tableName}
-        editable={true}
-        storageRef="dqofwyqljsmbgrubmnzk"
-        clientProps={clientProps}
-        theme={uiMode}
-        gridProps={{ height: '100%' }}
-        onError={error => {
-          console.log('ERROR: ', error);
-        }}
-        onAddColumn={() => {
-          console.log('add new column');
-        }}
-        onEditColumn={columnName => {
-          console.log('edit column: ', columnName);
-        }}
-        onDeleteColumn={columnName => {
-          console.log('delete column: ', columnName);
-        }}
-        onAddRow={() => {
-          console.log('add new row');
-          return {};
-        }}
-        onEditRow={rowIdx => {
-          console.log('edit row: ', rowIdx);
-        }}
-        headerActions={
-          <>
-            <span>{`'{headerActions}' can be used to insert`}</span>,
-            <button>react nodes here</button>,
-          </>
-        }
-      />
-    );
-  }
-
   return (
     <div>
       <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
@@ -145,7 +87,40 @@ const App = () => {
       </div>
       {!reload && (
         <div style={{ height: '95vh' }}>
-          {isReadonly ? renderReadonlyTable() : renderTable()}
+          <SupabaseGrid
+            ref={gridRef}
+            table={tableName}
+            editable={!isReadonly}
+            storageRef="dqofwyqljsmbgrubmnzk"
+            clientProps={clientProps}
+            theme={uiMode}
+            gridProps={{ height: '100%' }}
+            onError={error => {
+              console.log('ERROR: ', error);
+            }}
+            onAddColumn={() => {
+              console.log('add new column');
+            }}
+            onEditColumn={columnName => {
+              console.log('edit column: ', columnName);
+            }}
+            onDeleteColumn={columnName => {
+              console.log('delete column: ', columnName);
+            }}
+            onAddRow={() => {
+              console.log('add new row');
+              return {};
+            }}
+            onEditRow={rowIdx => {
+              console.log('edit row: ', rowIdx);
+            }}
+            headerActions={
+              <>
+                <span>{`'{headerActions}' can be used to insert`}</span>,
+                <button>react nodes here</button>,
+              </>
+            }
+          />
         </div>
       )}
     </div>
