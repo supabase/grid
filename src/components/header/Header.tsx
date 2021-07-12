@@ -3,6 +3,7 @@ import { Button, Divider, IconPlus } from '@supabase/ui';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
+import RefreshButton from './RefreshButton';
 
 type HeaderProps = {
   onAddColumn?: () => void;
@@ -41,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div className="sb-grid-header">
       <div className="sb-grid-header__inner">
+        <RefreshButton />
         <FilterDropdown />
         <SortDropdown />
         <Divider type="vertical" className="sb-grid-header__inner__divider" />

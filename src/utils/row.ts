@@ -13,13 +13,14 @@ export async function fetchPage(
   );
   if (res.error) {
     // TODO: handle fetch rows data error
+  } else {
+    const rows = res.data?.map((x, index) => {
+      return { idx: index, ...x };
+    });
+    dispatch({
+      type: 'SET_ROWS',
+      payload: { rows: rows || [], totalRows: res.count },
+    });
   }
-  const rows = res.data?.map((x, index) => {
-    return { idx: index, ...x };
-  });
-  dispatch({
-    type: 'SET_ROWS',
-    payload: { rows: rows || [], totalRows: res.count },
-  });
 }
 export const refreshPageDebounced = AwesomeDebouncePromise(fetchPage, 500);
