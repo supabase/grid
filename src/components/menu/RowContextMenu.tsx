@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
 import { IconTrash, IconClipboard, IconEdit } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../store';
-import { formatClipboardValue } from '../common/Shortcuts';
+import { formatClipboardValue } from '../../utils';
 
 export const ROW_CONTEXT_MENU_ID = 'row-context-menu-id';
 
