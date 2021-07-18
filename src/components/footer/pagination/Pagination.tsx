@@ -108,6 +108,7 @@ const Pagination: React.FC<PaginationProps> = () => {
           style={{ padding: '3px 10px' }}
         >{`${state.rowsPerPage} rows`}</Button>
       </DropdownControl>
+      <Typography.Text>{state.totalRows.toLocaleString()} records</Typography.Text>
     </div>
   );
 };
