@@ -10,7 +10,7 @@ import { useDispatch, useTrackedState } from '../../store';
 import RowRenderer from './RowRenderer';
 
 function rowKeyGetter(row: SupaRow) {
-  return row?.idx ?? -1;
+  return row.idx;
 }
 
 export const Grid = memo(
@@ -53,7 +53,7 @@ export const Grid = memo(
         }
       }
 
-      function onSelectedRowsChange(selectedRows: Set<React.Key>) {
+      function onSelectedRowsChange(selectedRows: ReadonlySet<number>) {
         dispatch({
           type: 'SELECTED_ROWS_CHANGE',
           payload: { selectedRows },
@@ -92,8 +92,8 @@ export const Grid = memo(
           <DataGrid
             ref={ref}
             columns={gridColumns}
-            rows={rows}
-            rowRenderer={p => <RowRenderer {...p} />}
+            rows={rows ?? []}
+            rowRenderer={RowRenderer}
             rowKeyGetter={rowKeyGetter}
             selectedRows={state.selectedRows}
             onColumnResized={onColumnResized}

@@ -23,7 +23,7 @@ export const ForeignKeyFormatter = (
     } else {
       dispatch({
         type: 'EDIT_ROW',
-        payload: { row: rowData, idx: p.rowIdx },
+        payload: { row: rowData, idx: p.row.idx },
       });
     }
   }

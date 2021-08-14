@@ -5,7 +5,7 @@ import { INIT_ACTIONTYPE } from './base';
 
 export interface RowInitialState {
   rows: SupaRow[];
-  selectedRows: Set<React.Key>;
+  selectedRows: ReadonlySet<number>;
   selectedCellPosition: { idx: number; rowIdx: number } | null;
   page: number;
   rowsPerPage: number;
@@ -14,7 +14,7 @@ export interface RowInitialState {
 
 export const rowInitialState: RowInitialState = {
   rows: [],
-  selectedRows: new Set<React.Key>(),
+  selectedRows: new Set(),
   selectedCellPosition: null,
   page: 1,
   rowsPerPage: 100,
@@ -29,7 +29,7 @@ type ROW_ACTIONTYPE =
     }
   | {
       type: 'SELECTED_ROWS_CHANGE';
-      payload: { selectedRows: Set<React.Key> };
+      payload: { selectedRows: ReadonlySet<number> };
     }
   | { type: 'SET_PAGE'; payload: number }
   | { type: 'SET_ROWS_PER_PAGE'; payload: number }

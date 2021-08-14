@@ -16,7 +16,7 @@ type RowMenuProps = {};
 const RowMenu: React.FC<RowMenuProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const { selectedRows, rows: allRows } = state;
+  const { selectedRows, rows: allRows, editable } = state;
 
   function onRowsDelete() {
     const rowIdxs = Array.from(selectedRows) as number[];
@@ -46,45 +46,45 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
     FileSaver.saveAs(csvData, `${state.table!.name}_allRows.csv`);
   }
 
-  function renderMenu() {
-    return (
-      <>
-        {state.selectedRows.size == 0 && (
-          <Dropdown.Item
-            onClick={onAllRowsExportCsv}
-            icon={<IconEdit size="tiny" />}
-          >
-            Export all rows to csv
-          </Dropdown.Item>
-        )}
-
-        {state.selectedRows.size > 0 && (
-          <Dropdown.Item
-            onClick={onRowsExportCsv}
-            icon={<IconEdit size="tiny" />}
-          >
-            Export selected rows to Csv
-          </Dropdown.Item>
-        )}
-
-        {state.editable && state.selectedRows.size > 0 && (
-          <>
-            <Divider light />
-            <Dropdown.Item
-              onClick={onRowsDelete}
-              icon={<IconTrash size="tiny" />}
-            >
-              Delete selected rows
-            </Dropdown.Item>
-          </>
-        )}
-      </>
-    );
-  }
-
   return (
     <>
-      <Dropdown align="end" side="bottom" overlay={renderMenu()}>
+      <Dropdown
+        align="end"
+        side="bottom"
+        overlay={
+          <>
+            {selectedRows.size == 0 && (
+              <Dropdown.Item
+                onClick={onAllRowsExportCsv}
+                icon={<IconEdit size="tiny" />}
+              >
+                Export all rows to csv
+              </Dropdown.Item>
+            )}
+
+            {selectedRows.size > 0 && (
+              <Dropdown.Item
+                onClick={onRowsExportCsv}
+                icon={<IconEdit size="tiny" />}
+              >
+                Export selected rows to Csv
+              </Dropdown.Item>
+            )}
+
+            {editable && selectedRows.size > 0 && (
+              <>
+                <Divider light />
+                <Dropdown.Item
+                  onClick={onRowsDelete}
+                  icon={<IconTrash size="tiny" />}
+                >
+                  Delete selected rows
+                </Dropdown.Item>
+              </>
+            )}
+          </>
+        }
+      >
         <Button
           as={'span'}
           type="text"
