@@ -112,34 +112,12 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
     }
   };
 
-  const renderDeleteRow = (
-    selectedRowsLength: number,
-    renderDeleteButton: boolean | undefined
-  ) => {
-    if (!renderDeleteButton) return null;
-    if (selectedRowsLength < 1) return null;
-    return (
-      <Button
-        danger={true}
-        style={{ padding: '4px 8px' }}
-        icon={<IconTrash size="tiny" />}
-        onClick={() => setVisible(true)}
-      >
-        Delete{' '}
-        {selectedRowsLength > 1
-          ? `${selectedRowsLength} rows`
-          : `${selectedRowsLength} row`}
-      </Button>
-    );
-  };
-
   return (
     <>
       <Typography.Text small>
         {selectedRows.size > 1
           ? `${selectedRows.size} rows selected`
           : `${selectedRows.size} row selected`}
-        {renderDeleteRow(selectedRows.size, editable)}
       </Typography.Text>
       <Button
         type="text"
@@ -149,15 +127,17 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
       >
         Export to csv
       </Button>
-      <Button
-        type="text"
-        danger={true}
-        style={{ padding: '4px 8px' }}
-        icon={<IconTrash size="tiny" />}
-        onClick={() => setVisible(true)}
-      >
-        Delete
-      </Button>
+      {editable && (
+        <Button
+          type="text"
+          danger={true}
+          style={{ padding: '4px 8px' }}
+          icon={<IconTrash size="tiny" />}
+          onClick={() => setVisible(true)}
+        >
+          Delete
+        </Button>
+      )}
       <Modal
         closable
         title={`Are you sure you want to delete ${
