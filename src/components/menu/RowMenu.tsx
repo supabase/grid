@@ -10,6 +10,7 @@ import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
 import { exportRowsToCsv } from '../../utils';
 import FileSaver from 'file-saver';
+import { showConfirmAlert } from '../common';
 
 type RowMenuProps = {};
 
@@ -19,18 +20,25 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
   const { selectedRows, rows: allRows, editable } = state;
 
   function onRowsDelete() {
-    const rowIdxs = Array.from(selectedRows) as number[];
-    const rows = allRows.filter(x => rowIdxs.includes(x.idx));
-    const { error } = state.rowService!.delete(rows);
-    if (error) {
-      if (state.onError) state.onError(error);
-    } else {
-      dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
-      dispatch({
-        type: 'SELECTED_ROWS_CHANGE',
-        payload: { selectedRows: new Set<React.Key>() },
-      });
-    }
+    showConfirmAlert({
+      title: 'Confirm to delete',
+      message:
+        'Are you sure you want to delete the selected rows? This action cannot be undone.',
+      onConfirm: async () => {
+        const rowIdxs = Array.from(selectedRows) as number[];
+        const rows = allRows.filter(x => rowIdxs.includes(x.idx));
+        const { error } = state.rowService!.delete(rows);
+        if (error) {
+          if (state.onError) state.onError(error);
+        } else {
+          dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
+          dispatch({
+            type: 'SELECTED_ROWS_CHANGE',
+            payload: { selectedRows: new Set() },
+          });
+        }
+      },
+    });
   }
 
   function onRowsExportCsv() {
@@ -76,7 +84,7 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
                 <Divider light />
                 <Dropdown.Item
                   onClick={onRowsDelete}
-                  icon={<IconTrash size="tiny" />}
+                  icon={<IconTrash size="tiny" stroke="red" />}
                 >
                   Delete selected rows
                 </Dropdown.Item>

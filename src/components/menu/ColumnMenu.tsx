@@ -67,7 +67,7 @@ const ColumnMenu: React.FC<ColumnMenuProps> = ({ column }) => {
             <Divider light />
             <Dropdown.Item
               onClick={onDeleteColumn}
-              icon={<IconTrash size="tiny" />}
+              icon={<IconTrash size="tiny" stroke="red" />}
             >
               Delete Column
             </Dropdown.Item>

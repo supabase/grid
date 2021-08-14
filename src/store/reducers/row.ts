@@ -49,7 +49,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         ...state,
         page: 1,
         selectedCellPosition: null,
-        selectedRows: new Set<React.Key>(),
+        selectedRows: new Set(),
       };
     }
     case 'SELECTED_CELL_CHANGE': {
