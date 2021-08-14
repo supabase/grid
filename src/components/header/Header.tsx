@@ -5,16 +5,17 @@ import {
   Divider,
   IconDownload,
   IconPlus,
+  IconX,
   IconTrash,
-  Modal,
   Typography,
 } from '@supabase/ui';
+import FileSaver from 'file-saver';
 import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
 import RefreshButton from './RefreshButton';
 import { exportRowsToCsv } from '../../utils';
-import FileSaver from 'file-saver';
+import { showConfirmAlert } from '../common';
 
 type HeaderProps = {
   onAddColumn?: () => void;
@@ -95,23 +96,29 @@ type RowHeaderProps = {};
 const RowHeader: React.FC<RowHeaderProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const [visible, setVisible] = React.useState(false);
 
   const { selectedRows, rows: allRows, editable } = state;
 
   const onRowsDelete = () => {
-    const rowIdxs = Array.from(selectedRows) as number[];
-    const rows = allRows.filter(x => rowIdxs.includes(x.idx));
-    const { error } = state.rowService!.delete(rows);
-    if (error) {
-      if (state.onError) state.onError(error);
-    } else {
-      dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
-      dispatch({
-        type: 'SELECTED_ROWS_CHANGE',
-        payload: { selectedRows: new Set<React.Key>() },
-      });
-    }
+    showConfirmAlert({
+      title: 'Confirm to delete',
+      message:
+        'Are you sure you want to delete the selected rows? This action cannot be undone.',
+      onConfirm: async () => {
+        const rowIdxs = Array.from(selectedRows) as number[];
+        const rows = allRows.filter(x => rowIdxs.includes(x.idx));
+        const { error } = state.rowService!.delete(rows);
+        if (error) {
+          if (state.onError) state.onError(error);
+        } else {
+          dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
+          dispatch({
+            type: 'SELECTED_ROWS_CHANGE',
+            payload: { selectedRows: new Set() },
+          });
+        }
+      },
+    });
   };
 
   function onRowsExportCsv() {
@@ -121,44 +128,42 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
     FileSaver.saveAs(csvData, `${state.table!.name}_rows.csv`);
   }
 
+  function deselectRows() {
+    dispatch({
+      type: 'SELECTED_ROWS_CHANGE',
+      payload: { selectedRows: new Set() },
+    });
+  }
+
   return (
     <>
+      <Button
+        type="text"
+        style={{ padding: '4px', marginRight: '1rem' }}
+        icon={<IconX size="small" strokeWidth={2} />}
+        onClick={deselectRows}
+      />
       <Typography.Text small>
         {selectedRows.size > 1
           ? `${selectedRows.size} rows selected`
           : `${selectedRows.size} row selected`}
       </Typography.Text>
-      <Button
-        type="text"
-        style={{ padding: '4px 8px' }}
-        icon={<IconDownload size="tiny" />}
-        onClick={onRowsExportCsv}
-      >
+      <Button type="text" icon={<IconDownload />} onClick={onRowsExportCsv}>
         Export to csv
       </Button>
       {editable && (
-        <Button
-          type="text"
-          danger={true}
-          style={{ padding: '4px 8px' }}
-          icon={<IconTrash size="tiny" />}
-          onClick={() => setVisible(true)}
-        >
-          Delete
-        </Button>
+        <>
+          <Divider type="vertical" className="sb-grid-header__inner__divider" />
+          <Button
+            type="text"
+            danger={true}
+            icon={<IconTrash />}
+            onClick={onRowsDelete}
+          >
+            Delete
+          </Button>
+        </>
       )}
-      <Modal
-        closable
-        title={`Are you sure you want to delete ${
-          selectedRows.size > 1 ? 'these rows' : 'this row'
-        }?`}
-        visible={visible}
-        onCancel={() => setVisible(false)}
-        onConfirm={() => {
-          setVisible(false);
-          onRowsDelete();
-        }}
-      />
     </>
   );
 };
