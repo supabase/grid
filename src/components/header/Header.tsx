@@ -13,6 +13,8 @@ import FilterDropdown from './filter';
 import SortDropdown from './sort';
 import StatusLabel from './StatusLabel';
 import RefreshButton from './RefreshButton';
+import { exportRowsToCsv } from '../../utils';
+import FileSaver from 'file-saver';
 
 type HeaderProps = {
   onAddColumn?: () => void;
@@ -112,6 +114,13 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
     }
   };
 
+  function onRowsExportCsv() {
+    const rows = allRows.filter(x => selectedRows.has(x.idx));
+    const csv = exportRowsToCsv(state.table!.columns, rows);
+    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    FileSaver.saveAs(csvData, `${state.table!.name}_rows.csv`);
+  }
+
   return (
     <>
       <Typography.Text small>
@@ -123,7 +132,7 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
         type="text"
         style={{ padding: '4px 8px' }}
         icon={<IconDownload size="tiny" />}
-        onClick={() => {}}
+        onClick={onRowsExportCsv}
       >
         Export to csv
       </Button>
