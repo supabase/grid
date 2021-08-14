@@ -103,7 +103,8 @@ function SelectCellFormatter({
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }
 
-  function onEditClick() {
+  function onEditClick(e: React.MouseEvent) {
+    e.stopPropagation();
     if (onEditRow && row) {
       onEditRow(row);
     }
