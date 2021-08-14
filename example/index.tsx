@@ -63,8 +63,8 @@ const App = () => {
   }, [uiMode]);
 
   return (
-    <div>
-      <div style={{ display: 'flex', height: '3vh', marginBottom: '10px' }}>
+    <div className="main-container">
+      <div className="tool-bar">
         <input value={inputValue} onChange={onInputChange} />
         <button onClick={reloadGrid} style={{ marginLeft: '10px' }}>
           Reload Data Grid
@@ -86,7 +86,7 @@ const App = () => {
         </button>
       </div>
       {!reload && (
-        <div style={{ height: '95vh' }}>
+        <div className="grid-container">
           <SupabaseGrid
             ref={gridRef}
             table={tableName}
