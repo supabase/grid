@@ -75,7 +75,7 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
                 onClick={onRowsExportCsv}
                 icon={<IconEdit size="tiny" />}
               >
-                Export selected rows to Csv
+                Export to csv
               </Dropdown.Item>
             )}
 
