@@ -75,6 +75,6 @@ function createElement(props: ConfirmModalProps) {
   }
 }
 
-export function confirmAlert(props: ConfirmModalProps) {
+export default function showConfirmAlert(props: ConfirmModalProps) {
   createElement(props);
 }
