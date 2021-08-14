@@ -3,6 +3,7 @@ import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
 import { IconTrash, IconClipboard, IconEdit } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../store';
 import { formatClipboardValue } from '../../utils';
+import { showConfirmAlert } from '../common';
 
 export const ROW_CONTEXT_MENU_ID = 'row-context-menu-id';
 
@@ -13,15 +14,26 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
   const dispatch = useDispatch();
 
   function onDeleteRow(p: ItemParams) {
-    const { props } = p;
-    const { rowIdx } = props;
-    const row = state.rows[rowIdx];
-    const { error } = state.rowService!.delete([row]);
-    if (error) {
-      if (state.onError) state.onError(error);
-    } else {
-      dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [row.idx] } });
-    }
+    showConfirmAlert({
+      title: 'Confirm to delete',
+      message:
+        'Are you sure you want to delete this row? This action cannot be undone.',
+      onConfirm: async () => {
+        const { props } = p;
+        const { rowIdx } = props;
+        const row = state.rows[rowIdx];
+        const { error } = state.rowService!.delete([row]);
+        if (error) {
+          if (state.onError) state.onError(error);
+        } else {
+          dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs: [row.idx] } });
+          dispatch({
+            type: 'SELECTED_ROWS_CHANGE',
+            payload: { selectedRows: new Set() },
+          });
+        }
+      },
+    });
   }
 
   function onEditRowClick(p: ItemParams) {

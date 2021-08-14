@@ -10,27 +10,35 @@ import * as React from 'react';
 import { useDispatch, useTrackedState } from '../../store';
 import { exportRowsToCsv } from '../../utils';
 import FileSaver from 'file-saver';
+import { showConfirmAlert } from '../common';
 
 type RowMenuProps = {};
 
 const RowMenu: React.FC<RowMenuProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const { selectedRows, rows: allRows } = state;
+  const { selectedRows, rows: allRows, editable } = state;
 
   function onRowsDelete() {
-    const rowIdxs = Array.from(selectedRows) as number[];
-    const rows = allRows.filter(x => rowIdxs.includes(x.idx));
-    const { error } = state.rowService!.delete(rows);
-    if (error) {
-      if (state.onError) state.onError(error);
-    } else {
-      dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
-      dispatch({
-        type: 'SELECTED_ROWS_CHANGE',
-        payload: { selectedRows: new Set<React.Key>() },
-      });
-    }
+    showConfirmAlert({
+      title: 'Confirm to delete',
+      message:
+        'Are you sure you want to delete the selected rows? This action cannot be undone.',
+      onConfirm: async () => {
+        const rowIdxs = Array.from(selectedRows) as number[];
+        const rows = allRows.filter(x => rowIdxs.includes(x.idx));
+        const { error } = state.rowService!.delete(rows);
+        if (error) {
+          if (state.onError) state.onError(error);
+        } else {
+          dispatch({ type: 'REMOVE_ROWS', payload: { rowIdxs } });
+          dispatch({
+            type: 'SELECTED_ROWS_CHANGE',
+            payload: { selectedRows: new Set() },
+          });
+        }
+      },
+    });
   }
 
   function onRowsExportCsv() {
@@ -46,45 +54,45 @@ const RowMenu: React.FC<RowMenuProps> = ({}) => {
     FileSaver.saveAs(csvData, `${state.table!.name}_allRows.csv`);
   }
 
-  function renderMenu() {
-    return (
-      <>
-        {state.selectedRows.size == 0 && (
-          <Dropdown.Item
-            onClick={onAllRowsExportCsv}
-            icon={<IconEdit size="tiny" />}
-          >
-            Export all rows to csv
-          </Dropdown.Item>
-        )}
-
-        {state.selectedRows.size > 0 && (
-          <Dropdown.Item
-            onClick={onRowsExportCsv}
-            icon={<IconEdit size="tiny" />}
-          >
-            Export selected rows to Csv
-          </Dropdown.Item>
-        )}
-
-        {state.editable && state.selectedRows.size > 0 && (
-          <>
-            <Divider light />
-            <Dropdown.Item
-              onClick={onRowsDelete}
-              icon={<IconTrash size="tiny" />}
-            >
-              Delete selected rows
-            </Dropdown.Item>
-          </>
-        )}
-      </>
-    );
-  }
-
   return (
     <>
-      <Dropdown align="end" side="bottom" overlay={renderMenu()}>
+      <Dropdown
+        align="end"
+        side="bottom"
+        overlay={
+          <>
+            {selectedRows.size == 0 && (
+              <Dropdown.Item
+                onClick={onAllRowsExportCsv}
+                icon={<IconEdit size="tiny" />}
+              >
+                Export all rows to csv
+              </Dropdown.Item>
+            )}
+
+            {selectedRows.size > 0 && (
+              <Dropdown.Item
+                onClick={onRowsExportCsv}
+                icon={<IconEdit size="tiny" />}
+              >
+                Export to csv
+              </Dropdown.Item>
+            )}
+
+            {editable && selectedRows.size > 0 && (
+              <>
+                <Divider light />
+                <Dropdown.Item
+                  onClick={onRowsDelete}
+                  icon={<IconTrash size="tiny" stroke="red" />}
+                >
+                  Delete selected rows
+                </Dropdown.Item>
+              </>
+            )}
+          </>
+        }
+      >
         <Button
           as={'span'}
           type="text"

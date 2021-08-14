@@ -201,7 +201,6 @@ function initTable(
   function onInitTable(table: SupaTable, props: SupabaseGridProps) {
     const gridColumns = getGridColumns(table, {
       defaultWidth: props.gridProps?.defaultColumnWidth,
-      onEditRow: props.editable ? props.onEditRow : undefined,
       onAddColumn: props.editable ? props.onAddColumn : undefined,
     });
 

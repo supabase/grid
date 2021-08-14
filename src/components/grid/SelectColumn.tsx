@@ -1,74 +1,72 @@
 import * as React from 'react';
-import { Column, useRowSelection } from '@supabase/react-data-grid';
+import {
+  Column,
+  FormatterProps,
+  GroupFormatterProps,
+  useRowSelection,
+} from '@supabase/react-data-grid';
 import { Button, IconMaximize2 } from '@supabase/ui';
 import { SupaRow } from '../../types';
 import { RowMenu } from '../menu';
 import { SELECT_COLUMN_KEY } from '../../constants';
+import { useFocusRef } from '../../utils';
+import { useTrackedState } from '../../store';
 
-export function SelectColumn(
-  onEditRow?: (row: SupaRow) => void
-): Column<any, any> {
-  return {
-    key: SELECT_COLUMN_KEY,
-    name: '',
-    width: 65,
-    maxWidth: 65,
-    resizable: false,
-    sortable: false,
-    frozen: true,
-    headerRenderer(props) {
-      return (
-        <SelectCellHeader
-          aria-label="Select All"
-          value={props.allRowsSelected}
-          onChange={props.onAllRowsSelectionChange}
-        />
-      );
-    },
-    formatter(props) {
-      const [isRowSelected, onRowSelectionChange] = useRowSelection();
-      return (
-        <SelectCellFormatter
-          aria-label="Select"
-          tabIndex={-1}
-          isCellSelected={props.isCellSelected}
-          value={isRowSelected}
-          row={props.row}
-          onChange={(checked, isShiftClick) => {
-            onRowSelectionChange({
-              rowIdx: props.rowIdx,
-              checked,
-              isShiftClick,
-            });
-          }}
-          onEditRow={onEditRow}
-          // Stop propagation to prevent row selection
-          onClick={stopPropagation}
-        />
-      );
-    },
-    groupFormatter(props) {
-      const [isRowSelected, onRowSelectionChange] = useRowSelection();
-      return (
-        <SelectCellFormatter
-          aria-label="Select Group"
-          tabIndex={-1}
-          isCellSelected={props.isCellSelected}
-          value={isRowSelected}
-          onChange={checked => {
-            onRowSelectionChange({
-              checked,
-              isShiftClick: false,
-              rowIdx: props.rowIdx,
-            });
-          }}
-          // Stop propagation to prevent row selection
-          onClick={stopPropagation}
-        />
-      );
-    },
-  };
-}
+export const SelectColumn: Column<any, any> = {
+  key: SELECT_COLUMN_KEY,
+  name: '',
+  width: 65,
+  maxWidth: 65,
+  resizable: false,
+  sortable: false,
+  frozen: true,
+  headerRenderer: props => {
+    return (
+      <SelectCellHeader
+        aria-label="Select All"
+        value={props.allRowsSelected}
+        onChange={props.onAllRowsSelectionChange}
+      />
+    );
+  },
+  formatter: (props: FormatterProps<SupaRow>) => {
+    const [isRowSelected, onRowSelectionChange] = useRowSelection();
+    return (
+      <SelectCellFormatter
+        aria-label="Select"
+        tabIndex={-1}
+        isCellSelected={props.isCellSelected}
+        value={isRowSelected}
+        row={props.row}
+        onChange={(checked, isShiftClick) => {
+          onRowSelectionChange({ row: props.row, checked, isShiftClick });
+        }}
+        // Stop propagation to prevent row selection
+        onClick={stopPropagation}
+      />
+    );
+  },
+  groupFormatter: (props: GroupFormatterProps<SupaRow>) => {
+    const [isRowSelected, onRowSelectionChange] = useRowSelection();
+    return (
+      <SelectCellFormatter
+        aria-label="Select Group"
+        tabIndex={-1}
+        isCellSelected={props.isCellSelected}
+        value={isRowSelected}
+        onChange={checked => {
+          onRowSelectionChange({
+            row: props.row,
+            checked,
+            isShiftClick: false,
+          });
+        }}
+        // Stop propagation to prevent row selection
+        onClick={stopPropagation}
+      />
+    );
+  },
+};
 
 function stopPropagation(event: React.SyntheticEvent) {
   event.stopPropagation();
@@ -80,11 +78,10 @@ type SharedInputProps = Pick<
 >;
 
 interface SelectCellFormatterProps extends SharedInputProps {
-  isCellSelected?: boolean;
+  isCellSelected: boolean;
   value: boolean;
   row?: SupaRow;
   onChange: (value: boolean, isShiftClick: boolean) => void;
-  onEditRow?: (row: SupaRow) => void;
 }
 
 function SelectCellFormatter({
@@ -95,21 +92,19 @@ function SelectCellFormatter({
   disabled,
   onClick,
   onChange,
-  onEditRow,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: SelectCellFormatterProps) {
-  const ref = React.useRef<HTMLInputElement>(null);
-  React.useLayoutEffect(() => {
-    if (!isCellSelected) return;
-    ref.current?.focus({ preventScroll: true });
-  }, [isCellSelected]);
+  const state = useTrackedState();
+  const { onEditRow } = state;
+  const inputRef = useFocusRef<HTMLInputElement>(isCellSelected);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }
 
-  function onEditClick() {
+  function onEditClick(e: React.MouseEvent) {
+    e.stopPropagation();
     if (onEditRow && row) {
       onEditRow(row);
     }
@@ -121,16 +116,15 @@ function SelectCellFormatter({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
-        ref={ref}
+        ref={inputRef}
         type="checkbox"
         className="rdg-row__select-column__select-action"
-        // className="focus:ring-brand-500 border-gray-300"
         disabled={disabled}
         checked={value}
         onChange={handleChange}
         onClick={onClick}
       />
-      {onEditRow && (
+      {onEditRow && row && (
         <Button
           type="text"
           size="tiny"
@@ -158,8 +152,6 @@ function SelectCellHeader({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: SelectCellHeaderProps) {
-  const ref = React.useRef<HTMLInputElement>(null);
-
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }
@@ -170,7 +162,6 @@ function SelectCellHeader({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
-        ref={ref}
         type="checkbox"
         className="sb-grid-select-cell__header__input"
         disabled={disabled}

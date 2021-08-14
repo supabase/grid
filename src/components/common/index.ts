@@ -1,4 +1,5 @@
 export * from './BlockKeys';
+export * from './ConfirmAlert';
 export * from './DropdownControl';
 export * from './ModalPortal';
 export * from './MonacoEditor';

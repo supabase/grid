@@ -22,7 +22,7 @@ export function getInitialGridColumns(
 
     // filter utility columns select, add-column
     const stateColumnsFiltered = savedState.gridColumns.filter(
-      x => x.name !== ''
+      x => x?.name !== ''
     );
 
     for (let i = 0; i < stateColumnsFiltered.length; i++) {
