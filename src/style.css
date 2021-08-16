@@ -672,8 +672,8 @@
   @apply py-2;
 }
 
-.sb-grid-header__inner__insert-row {
-  @apply ml-2;
+.row_header__selected-rows {
+  @apply ml-2 mr-2;
 }
 
 /*

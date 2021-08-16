@@ -60,7 +60,7 @@ const DefaultHeader: React.FC<DefaultHeaderProps> = ({
   const renderNewColumn = (onAddColumn?: () => void) => {
     if (!onAddColumn) return null;
     return (
-      <Button type="text" onClick={onAddColumn}>
+      <Button type="text" onClick={onAddColumn} style={{ padding: '4px 8px' }}>
         New Column
       </Button>
     );
@@ -70,7 +70,6 @@ const DefaultHeader: React.FC<DefaultHeaderProps> = ({
     if (!onAddRow) return null;
     return (
       <Button
-        className="sb-grid-header__inner__insert-row"
         style={{ padding: '4px 8px' }}
         icon={<IconPlus size="tiny" />}
         onClick={onAddRow}
@@ -85,7 +84,11 @@ const DefaultHeader: React.FC<DefaultHeaderProps> = ({
       <RefreshButton />
       <FilterDropdown />
       <SortDropdown />
-      <Divider type="vertical" className="sb-grid-header__inner__divider" />
+      <Divider
+        light
+        type="vertical"
+        className="sb-grid-header__inner__divider"
+      />
       {renderNewColumn(onAddColumn)}
       {renderAddRow(onAddRow)}
     </>
@@ -139,28 +142,47 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
     <>
       <Button
         type="text"
-        style={{ padding: '4px', marginRight: '1rem' }}
-        icon={<IconX size="small" strokeWidth={2} />}
+        style={{ padding: '4px' }}
+        icon={<IconX size="tiny" strokeWidth={2} />}
         onClick={deselectRows}
       />
-      <Typography.Text small>
-        {selectedRows.size > 1
-          ? `${selectedRows.size} rows selected`
-          : `${selectedRows.size} row selected`}
-      </Typography.Text>
-      <Button type="text" icon={<IconDownload />} onClick={onRowsExportCsv}>
+      <div>
+        <Typography.Text
+          small
+          type="secondary"
+          className="row_header__selected-rows"
+        >
+          {selectedRows.size > 1
+            ? `${selectedRows.size} rows selected`
+            : `${selectedRows.size} row selected`}
+        </Typography.Text>
+      </div>
+      <Button
+        type="primary"
+        size="tiny"
+        style={{ padding: '4px 8px' }}
+        icon={<IconDownload />}
+        onClick={onRowsExportCsv}
+      >
         Export to csv
       </Button>
       {editable && (
         <>
-          <Divider type="vertical" className="sb-grid-header__inner__divider" />
+          <Divider
+            type="vertical"
+            className="sb-grid-header__inner__divider"
+            light
+          />
           <Button
-            type="text"
-            danger={true}
-            icon={<IconTrash />}
+            type="default"
+            size="tiny"
+            style={{ padding: '4px 8px' }}
+            icon={<IconTrash size="tiny" />}
             onClick={onRowsDelete}
           >
-            Delete
+            {selectedRows.size > 1
+              ? `Delete ${selectedRows.size} rows`
+              : `Delete ${selectedRows.size} row`}
           </Button>
         </>
       )}

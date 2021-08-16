@@ -27,7 +27,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
       side="bottom"
       overlay={<Filter {...p} />}
     >
-      <Button as={'span'} type="text" icon={<IconFilter />}>
+      <Button
+        as={'span'}
+        type="text"
+        icon={<IconFilter />}
+        style={{ padding: '4px 8px' }}
+      >
         {btnText}
       </Button>
     </Dropdown>

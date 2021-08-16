@@ -19,10 +19,10 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({}) => {
   return (
     <Button
       type="text"
+      style={{ padding: '4px 8px' }}
       icon={<IconRefreshCw />}
       onClick={onClick}
       loading={loading}
-      style={{ paddingLeft: 4, paddingRight: 4 }}
     >
       Refresh
     </Button>
