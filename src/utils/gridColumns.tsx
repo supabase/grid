@@ -22,13 +22,12 @@ import {
 export function getGridColumns(
   table: SupaTable,
   options?: {
-    onEditRow?: (row: SupaRow) => void;
     onAddColumn?: () => void;
     defaultWidth?: string | number;
   }
 ): any[] {
-  const selectColumn = SelectColumn(options?.onEditRow);
   const columns = table.columns.map(x => {
+    const columnType = _getColumnType(x);
     const columnDef: Column<SupaRow> = {
       key: x.name,
       name: x.name,
@@ -36,25 +35,17 @@ export function getGridColumns(
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
       frozen: x.isPrimaryKey,
-    };
-    const columnType = _getColumnType(x);
-
-    columnDef.headerRenderer = props => {
-      return (
+      headerRenderer: props => (
         <ColumnHeader
           {...props}
           columnType={columnType}
           isPrimaryKey={x.isPrimaryKey}
           format={x.format}
         />
-      );
+      ),
+      editor: _getColumnEditor(x, columnType),
+      formatter: _getColumnFormatter(x, columnType),
     };
-
-    // setup formatter needs to run before editor
-    // because some columns like foreign-key use formatter to edit
-    // so _setupColumnEditor can override _setupColumnFormatter config
-    _setupColumnFormatter(columnType, columnDef);
-    _setupColumnEditor(x, columnType, columnDef);
 
     return columnDef;
   });
@@ -62,10 +53,9 @@ export function getGridColumns(
   // console.log('table', table);
   // console.log('columns', columns);
 
-  const gridColumns = [selectColumn, ...columns];
+  const gridColumns = [SelectColumn, ...columns];
   if (options?.onAddColumn) {
-    const addColumn = AddColumn(options?.onAddColumn);
-    gridColumns.push(addColumn);
+    gridColumns.push(AddColumn);
   }
 
   // console.log('gridColumns', gridColumns);
@@ -73,74 +63,60 @@ export function getGridColumns(
   return gridColumns;
 }
 
-function _setupColumnEditor(
-  columnDef: SupaColumn,
-  columnType: ColumnType,
-  config: Column<SupaRow>
-) {
+function _getColumnEditor(columnDef: SupaColumn, columnType: ColumnType) {
   if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
     return;
   }
 
   switch (columnType) {
     case 'boolean': {
-      config.editor = CheckboxEditor;
-      break;
+      return CheckboxEditor;
     }
     case 'date': {
-      config.editor = DateEditor;
-      break;
+      return DateEditor;
     }
     case 'datetime': {
-      config.editor = DateTimeEditor;
-      break;
+      return DateTimeEditor;
     }
     case 'time': {
-      config.editor = TimeEditor;
-      break;
+      return TimeEditor;
     }
     case 'enum': {
       const options = columnDef.enum!.map(x => {
         return { label: x, value: x };
       });
-      config.editor = p => <SelectEditor {...p} options={options} />;
-      break;
-    }
-    case 'foreign_key': {
-      // foreign_key col doesnt have editor, it uses formatter
-      config.formatter = ForeignKeyFormatter;
-      break;
+      return (p: any) => <SelectEditor {...p} options={options} />;
     }
     case 'array':
     case 'json': {
-      config.editor = JsonEditor;
-      break;
+      return JsonEditor;
     }
     case 'number': {
-      config.editor = NumberEditor;
-      break;
+      return NumberEditor;
     }
     case 'text': {
-      config.editor = TextEditor;
-      break;
+      return TextEditor;
     }
     default: {
-      break;
+      return undefined;
     }
   }
 }
 
-function _setupColumnFormatter(
-  columnType: ColumnType,
-  config: Column<SupaRow>
-) {
+function _getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
   switch (columnType) {
     case 'boolean': {
-      config.formatter = BooleanFormatter;
-      break;
+      return BooleanFormatter;
+    }
+    case 'foreign_key': {
+      if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
+        return DefaultFormatter;
+      } else {
+        return ForeignKeyFormatter;
+      }
     }
     default: {
-      config.formatter = DefaultFormatter;
+      return DefaultFormatter;
     }
   }
 }

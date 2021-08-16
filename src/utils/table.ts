@@ -99,9 +99,9 @@ export function parseReadonlySupaTable(
   table: Dictionary<any>,
   tableName: string
 ): SupaTable | null {
-  if (!table || !table.properties) return null;
+  if (!table) return null;
 
-  const columns = table.properties as Dictionary<any>;
+  const columns = table.properties ? (table.properties as Dictionary<any>) : {};
   const columnNames = Object.keys(columns) as string[];
   const supaColumns: SupaColumn[] = columnNames.map((x, index) => {
     const col = columns[x];
