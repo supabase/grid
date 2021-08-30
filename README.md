@@ -46,6 +46,14 @@ A react component to display your Postgresql table data.
 4. Update **example/.env** file with your Supabase project URL and key
 5. Run example app: `npm start`
 
+## Enable table editor
+
+1. Create the [helper functions](https://github.com/supabase/grid/blob/develop/FUNCTIONS.md) in your Postgres database's **public** schema
+   > You can set the schema to public either with the `set search_path to public` statement above the
+   > `create function` statements in your SQL console or
+   > by prepending each function name with `public` e.g. `CREATE FUNCTION public.load_table_info`
+2. Add the `editable` prop to the `SupabaseGrid` component
+
 ## Contributing
 
 - Fork the repo on [GitHub](https://github.com/supabase/grid)
