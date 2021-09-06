@@ -79,13 +79,14 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
       };
     }
-    case 'SET_ROWS':
+    case 'SET_ROWS': {
       return {
         ...state,
         rows: action.payload.rows,
         totalRows: action.payload.totalRows,
         refreshPageFlag: 0,
       };
+    }
     case 'ADD_ROWS': {
       const totalRows = state.totalRows + action.payload.length;
       return {

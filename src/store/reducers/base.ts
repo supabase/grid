@@ -2,7 +2,8 @@ import { Column } from '@supabase/react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import RowService from '../../services/RowService';
+import { IRowService, PostgrestRowService } from '../../services/row';
+
 import TableService from '../../services/TableService';
 import OpenApiService from '../../services/OpenApiService';
 
@@ -11,7 +12,7 @@ export interface BaseInitialState {
   openApiService: OpenApiService | null;
   table: SupaTable | null;
   tableService: TableService | null;
-  rowService: RowService | null;
+  rowService: IRowService | null;
   refreshPageFlag: number;
   isInitialComplete: boolean;
   editable: boolean;
@@ -72,7 +73,7 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
       return {
         ...state,
         table: action.payload.table,
-        rowService: new RowService(
+        rowService: new PostgrestRowService(
           action.payload.table,
           state.client!,
           action.payload.onError

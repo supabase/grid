@@ -1,19 +1,16 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { SupabaseGridQueue } from '../constants';
-import { Filter, Sort, SupaRow, SupaTable } from '../types';
+import { IRowService } from '.';
+import { SupabaseGridQueue } from '../../constants';
+import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 
-class RowService {
+export class PostgrestRowService implements IRowService {
   constructor(
     protected table: SupaTable,
     protected client: SupabaseClient,
     protected onError: (error: any) => void
   ) {}
 
-  fetchAll() {
-    return this.client.from(this.table.name).select();
-  }
-
-  fetchPage(
+  async fetchPage(
     page: number,
     rowsPerPage: number,
     filters: Filter[],
@@ -68,20 +65,35 @@ class RowService {
       request = request.order(columnName, { ascending: sortAsc });
     }
 
-    return request;
+    const { count, data, error } = await request;
+    if (!data || error) {
+      return {
+        error: { message: error?.message ?? 'rows data is undefined' },
+      };
+    } else {
+      const rows = data?.map((x, index) => {
+        return { idx: index, ...x } as SupaRow;
+      });
+      return { data: { rows, count: count ?? undefined } };
+    }
   }
 
-  create(row: SupaRow) {
+  async create(row: SupaRow) {
     const { idx, ...value } = row;
-    SupabaseGridQueue.add(async () => {
-      const res = await this.client.from(this.table.name).insert(value);
-      if (res.error) throw res.error;
-    }).catch(error => {
-      this.onError(error);
-    });
+    const { data: newRow, error } = await this.client
+      .from(this.table.name)
+      .insert(value);
+    if (!newRow || error) {
+      return {
+        error: { message: error?.message ?? 'new row data is undefined' },
+      };
+    } else {
+      const temp = { idx, ...newRow } as SupaRow;
+      return { data: temp };
+    }
   }
 
-  update(row: SupaRow): { error?: string } {
+  update(row: SupaRow) {
     const { primaryKeys, error } = this._getPrimaryKeys();
     if (error) {
       return { error };
@@ -106,7 +118,7 @@ class RowService {
     return {};
   }
 
-  delete(rows: SupaRow[]): { error?: string } {
+  delete(rows: SupaRow[]) {
     const { primaryKeys, error } = this._getPrimaryKeys();
     if (error) return { error };
 
@@ -116,7 +128,6 @@ class RowService {
         const primaryKeyValues = rows.map(x => x[key]);
         request.in(key, primaryKeyValues);
       });
-
       const res = await request;
       if (res.error) throw res.error;
     }).catch(error => {
@@ -126,12 +137,11 @@ class RowService {
     return {};
   }
 
-  _getPrimaryKeys(): { primaryKeys?: string[]; error?: string } {
+  _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
     const pkColumns = this.table.columns.filter(x => x.isPrimaryKey);
     if (!pkColumns || pkColumns.length == 0) {
-      return { error: "Can't find primary key" };
+      return { error: { message: "Can't find primary key" } };
     }
     return { primaryKeys: pkColumns.map(x => x.name) };
   }
 }
-export default RowService;
