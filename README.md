@@ -2,6 +2,9 @@
 
 A react component to display your Postgresql table data.
 
+[![release](https://img.shields.io/github/release/supabase/grid.svg)](https://github.com/supabase/grid/releases/)
+[![CI](https://github.com/supabase/grid/workflows/CI/badge.svg)](https://github.com/supabase/grid/actions?query=workflow%3ACI)
+
 ## Usage
 
 ```js
