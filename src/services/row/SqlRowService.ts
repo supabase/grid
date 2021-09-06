@@ -1,26 +1,60 @@
-// import { IRowService } from '.';
-// import { Filter, Sort, SupaRow } from '../../types';
+// import { IRowService } from ".";
+// import { Filter, ServiceError, Sort, SupaRow, SupaTable } from "../../types";
+// import Knex from "knex";
 
 // export class SqlRowService implements IRowService {
-//   fetchPage(
+//   knex = Knex({ client: "pg" });
+
+//   constructor(
+//     protected table: SupaTable,
+//     protected onError: (error: any) => void
+//   ) {}
+
+//   async fetchPage(
 //     page: number,
 //     rowsPerPage: number,
 //     filters: Filter[],
 //     sorts: Sort[]
 //   ) {
+//     console.log("12323123123213");
+//     let query = this.knex(this.table.name).select("*");
+//     console.log("select query: ", query.toSQL());
 //     console.log(page, rowsPerPage, filters, sorts);
-//     return { data: [] };
+//     return { error: { message: "Test" } };
 //   }
 
-//   create(row: SupaRow) {
-//     return { data: row };
+//   async create(row: SupaRow) {
+//     console.log("create: ", row);
+//     return { error: { message: "Test" } };
 //   }
 
 //   update(row: SupaRow) {
-//     return { data: row };
+//     console.log("update: ", row);
+//     return { error: { message: "Test" } };
 //   }
 
 //   delete(rows: SupaRow[]) {
-//     return { data: rows };
+//     console.log("delete: ", rows);
+
+//     const { primaryKeys, error } = this._getPrimaryKeys();
+//     if (error) return { error };
+
+//     let query = this.knex(this.table.name);
+//     primaryKeys!.forEach((key) => {
+//       const primaryKeyValues = rows.map((x) => x[key]);
+//       query.whereIn(key, primaryKeyValues);
+//     });
+//     query.del();
+//     console.log("delete query: ", query.toSQL());
+
+//     return { error: { message: "Test" } };
+//   }
+
+//   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
+//     const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
+//     if (!pkColumns || pkColumns.length == 0) {
+//       return { error: { message: "Can't find primary key" } };
+//     }
+//     return { primaryKeys: pkColumns.map((x) => x.name) };
 //   }
 // }
