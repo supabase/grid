@@ -47,6 +47,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
+    "@scaleleap/pg-format": "^1.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "dayjs": "^1.10.4",
     "file-saver": "^2.0.5",
