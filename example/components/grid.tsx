@@ -1,17 +1,12 @@
-// https://github.com/parcel-bundler/parcel/issues/1762
-import 'react-app-polyfill/ie11';
-import 'regenerator-runtime/runtime';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { SupabaseGrid, SupabaseGridRef } from '../.';
-import './style.css';
+import React from 'react';
+import { SupabaseGrid, SupabaseGridRef, SupaRow } from '@supabase/grid';
 
 const clientProps = {
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY || '',
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY ?? '',
 };
 
-const App = () => {
+export default function Grid() {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [inputValue, setInputValue] = React.useState('test_table');
   const [tableName, setName] = React.useState('test_table');
@@ -95,24 +90,24 @@ const App = () => {
             clientProps={clientProps}
             theme={uiMode}
             gridProps={{ height: '100%' }}
-            onError={error => {
+            onError={(error) => {
               console.log('ERROR: ', error);
             }}
             onAddColumn={() => {
               console.log('add new column');
             }}
-            onEditColumn={columnName => {
+            onEditColumn={(columnName) => {
               console.log('edit column: ', columnName);
             }}
-            onDeleteColumn={columnName => {
+            onDeleteColumn={(columnName) => {
               console.log('delete column: ', columnName);
             }}
             onAddRow={() => {
               console.log('add new row');
               return {};
             }}
-            onEditRow={rowIdx => {
-              console.log('edit row: ', rowIdx);
+            onEditRow={(row: SupaRow) => {
+              console.log('edit row: ', row.idx);
             }}
             headerActions={
               <>
@@ -125,6 +120,4 @@ const App = () => {
       )}
     </div>
   );
-};
-
-ReactDOM.render(<App />, document.getElementById('root'));
+}

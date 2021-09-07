@@ -3,7 +3,20 @@
 A react component to display your Postgresql table data.
 
 [![release](https://img.shields.io/github/release/supabase/grid.svg)](https://github.com/supabase/grid/releases/)
-[![CI](https://github.com/supabase/grid/workflows/CI/badge.svg)](https://github.com/supabase/grid/actions?query=workflow%3ACI)
+
+<!-- [![CI](https://github.com/supabase/grid/workflows/CI/badge.svg)](https://github.com/supabase/grid/actions?query=workflow%3ACI) -->
+
+## Install
+
+```bash
+npm i @supabase/grid
+```
+
+This package requires some peer dependencies, which you need to install by yourself.
+
+```bash
+npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/supabase-js @supabase/ui
+```
 
 ## Usage
 

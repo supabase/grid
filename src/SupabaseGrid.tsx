@@ -1,5 +1,5 @@
 import './style.css';
-import * as React from 'react';
+import React from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { createPortal } from 'react-dom';
 import { useMonaco } from '@monaco-editor/react';
@@ -54,7 +54,6 @@ export const SupabaseGrid = React.forwardRef<
   SupabaseGridProps
 >((props, ref) => {
   const monaco = useMonaco();
-
   const _props = cleanupProps(props);
   const { theme } = _props;
 
@@ -66,7 +65,6 @@ export const SupabaseGrid = React.forwardRef<
         base: 'vs-dark', // can also be vs-dark or hc-black
         inherit: true, // can also be false to completely replace the builtin rules
         rules: [
-          { background: darkTheme ? '1f1f1f' : '30313f' },
           { token: 'string.sql', foreground: '24b47e' },
           { token: 'comment', foreground: '666666' },
           { token: 'predefined.sql', foreground: 'D4D4D4' },
@@ -100,6 +98,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     const dispatch = useDispatch();
     const state = useTrackedState();
     const gridRef = React.useRef<DataGridHandle>(null);
+    const [mounted, setMount] = React.useState(false);
 
     React.useImperativeHandle(ref, () => ({
       rowAdded(row: Dictionary<any>) {
@@ -117,6 +116,10 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         console.log('rowEdited: ', row, 'at index: ', idx);
       },
     }));
+
+    React.useEffect(() => {
+      if (!mounted) setMount(true);
+    }, []);
 
     React.useEffect(() => {
       if (state.isInitialComplete && storageRef && state.table) {
@@ -175,7 +178,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         <Grid ref={gridRef} {...gridProps} />
         <Footer />
         <Shortcuts gridRef={gridRef} />
-        {createPortal(<RowContextMenu />, document.body)}
+        {mounted && createPortal(<RowContextMenu />, document.body)}
       </div>
     );
   }
@@ -228,7 +231,7 @@ function initTable(
       ? fetchTableInfo(state.tableService!, props.table, props.schema)
       : fetchReadonlyTableInfo(state.openApiService!, props.table);
 
-    fetchMethod.then(res => {
+    fetchMethod.then((res) => {
       if (res) onInitTable(res, props);
       else {
         if (props.onError) {
