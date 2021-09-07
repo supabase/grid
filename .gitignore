@@ -27,3 +27,7 @@ nala
 # editor
 .vscode
 .idea
+
+# example
+/example/node_modules
+/example/.next
