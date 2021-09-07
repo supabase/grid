@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+}
+
+body.dark {
+  background: #181818;
+}
+
+.main-container {
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.tool-bar {
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0.5rem;
+}
+
+.grid-container {
+  flex-grow: 1;
+}

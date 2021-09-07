@@ -10,7 +10,6 @@
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "phamhieu",
   "license": "MIT",
   "peerDependencies": {
     "@monaco-editor/react": "^4.2.2",
