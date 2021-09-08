@@ -72,6 +72,10 @@ export type SupabaseGridProps = {
    * show edit row button if available
    */
   onEditRow?: (row: SupaRow) => void;
+  /**
+   * run sql query
+   */
+  onSqlQuery?: (query: string) => Promise<{ data?: any; error?: any }>;
 };
 
 export type SupabaseGridRef = {

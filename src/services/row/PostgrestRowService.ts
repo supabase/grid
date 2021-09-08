@@ -28,7 +28,9 @@ export class PostgrestRowService implements IRowService {
     for (let idx in filters) {
       const filter = filters[idx];
       if (filter.filterText == '') continue;
-      const column = this.table.columns.find(x => x.name === filter.columnName);
+      const column = this.table.columns.find(
+        (x) => x.name === filter.columnName
+      );
       if (!column) continue;
 
       const columnName = column.name;
@@ -41,7 +43,9 @@ export class PostgrestRowService implements IRowService {
             request = request.is(columnName, false);
           break;
         case 'in':
-          const filterValues = filter.filterText.split(',').map(x => x.trim());
+          const filterValues = filter.filterText
+            .split(',')
+            .map((x) => x.trim());
           request = request.in(columnName, filterValues);
           break;
         default:
@@ -57,7 +61,7 @@ export class PostgrestRowService implements IRowService {
     // Then sort
     for (let idx in sorts) {
       const sort = sorts[idx];
-      const column = this.table.columns.find(x => x.name === sort.columnName);
+      const column = this.table.columns.find((x) => x.name === sort.columnName);
       if (!column) continue;
 
       const columnName = column.name;
@@ -101,7 +105,7 @@ export class PostgrestRowService implements IRowService {
 
     const { idx, ...value } = row;
     const matchValues: any = {};
-    primaryKeys!.forEach(key => {
+    primaryKeys!.forEach((key) => {
       matchValues[key] = row[key];
     });
 
@@ -111,7 +115,7 @@ export class PostgrestRowService implements IRowService {
         .update(value)
         .match(matchValues);
       if (res.error) throw res.error;
-    }).catch(error => {
+    }).catch((error) => {
       this.onError(error);
     });
 
@@ -124,13 +128,13 @@ export class PostgrestRowService implements IRowService {
 
     SupabaseGridQueue.add(async () => {
       const request = this.client.from(this.table.name).delete();
-      primaryKeys!.forEach(key => {
-        const primaryKeyValues = rows.map(x => x[key]);
+      primaryKeys!.forEach((key) => {
+        const primaryKeyValues = rows.map((x) => x[key]);
         request.in(key, primaryKeyValues);
       });
       const res = await request;
       if (res.error) throw res.error;
-    }).catch(error => {
+    }).catch((error) => {
       this.onError(error);
     });
 
@@ -138,10 +142,10 @@ export class PostgrestRowService implements IRowService {
   }
 
   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
-    const pkColumns = this.table.columns.filter(x => x.isPrimaryKey);
+    const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
     if (!pkColumns || pkColumns.length == 0) {
       return { error: { message: "Can't find primary key" } };
     }
-    return { primaryKeys: pkColumns.map(x => x.name) };
+    return { primaryKeys: pkColumns.map((x) => x.name) };
   }
 }

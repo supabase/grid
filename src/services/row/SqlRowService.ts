@@ -1,62 +1,72 @@
-// import { IRowService } from '.';
-// import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
-// import Knex from 'knex';
+import { IRowService } from '.';
+import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
+import Query from '../../query';
 
-// export class SqlRowService implements IRowService {
-//   knex?: any;
+export class SqlRowService implements IRowService {
+  protected query = new Query();
 
-//   constructor(
-//     protected table: SupaTable,
-//     protected onError: (error: any) => void
-//   ) {
-//     this.knex = Knex({ client: 'pg' });
-//   }
+  constructor(
+    protected table: SupaTable,
+    protected onSqlQuery: (
+      query: string
+    ) => Promise<{ data?: any; error?: any }>,
+    protected onError: (error: any) => void
+  ) {}
 
-//   async fetchPage(
-//     page: number,
-//     rowsPerPage: number,
-//     filters: Filter[],
-//     sorts: Sort[]
-//   ) {
-//     console.log('12323123123213');
-//     let query = this.knex(this.table.name).select('*');
-//     console.log('select query: ', query.toSQL());
-//     console.log(page, rowsPerPage, filters, sorts);
-//     return { error: { message: 'Test' } };
-//   }
+  async fetchPage(
+    page: number,
+    rowsPerPage: number,
+    filters: Filter[],
+    sorts: Sort[]
+  ) {
+    // to remove
+    console.log(page, rowsPerPage, filters, sorts);
 
-//   async create(row: SupaRow) {
-//     console.log('create: ', row);
-//     return { error: { message: 'Test' } };
-//   }
+    const query = this.query.from(this.table.name).select().toSql();
+    console.log('select query: ', query);
+    const { data, error } = await this.onSqlQuery(query);
+    if (error) {
+      return { error };
+    } else {
+      const rows = data?.map((x: any, index: number) => {
+        return { idx: index, ...x } as SupaRow;
+      });
+      return { data: { rows, count: rows.length } };
+    }
+  }
 
-//   update(row: SupaRow) {
-//     console.log('update: ', row);
-//     return { error: { message: 'Test' } };
-//   }
+  async create(row: SupaRow) {
+    console.log('create: ', row);
+    return { error: { message: 'Test' } };
+  }
 
-//   delete(rows: SupaRow[]) {
-//     console.log('delete: ', rows);
+  update(row: SupaRow) {
+    console.log('update: ', row);
+    return { error: { message: 'Test' } };
+  }
 
-//     const { primaryKeys, error } = this._getPrimaryKeys();
-//     if (error) return { error };
+  delete(rows: SupaRow[]) {
+    console.log('delete: ', rows);
 
-//     let query = this.knex(this.table.name);
-//     primaryKeys!.forEach((key) => {
-//       const primaryKeyValues = rows.map((x) => x[key]);
-//       query.whereIn(key, primaryKeyValues);
-//     });
-//     query.del();
-//     console.log('delete query: ', query.toSQL());
+    // const { primaryKeys, error } = this._getPrimaryKeys();
+    // if (error) return { error };
 
-//     return { error: { message: 'Test' } };
-//   }
+    // let query = this.knex(this.table.name);
+    // primaryKeys!.forEach((key) => {
+    //   const primaryKeyValues = rows.map((x) => x[key]);
+    //   query.whereIn(key, primaryKeyValues);
+    // });
+    // query.del();
+    // console.log('delete query: ', query.toSQL());
 
-//   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
-//     const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
-//     if (!pkColumns || pkColumns.length == 0) {
-//       return { error: { message: "Can't find primary key" } };
-//     }
-//     return { primaryKeys: pkColumns.map((x) => x.name) };
-//   }
-// }
+    return { error: { message: 'Test' } };
+  }
+
+  _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
+    const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
+    if (!pkColumns || pkColumns.length == 0) {
+      return { error: { message: "Can't find primary key" } };
+    }
+    return { primaryKeys: pkColumns.map((x) => x.name) };
+  }
+}

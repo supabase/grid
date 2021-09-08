@@ -2,7 +2,11 @@ import { Column } from '@supabase/react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import { IRowService, PostgrestRowService } from '../../services/row';
+import {
+  IRowService,
+  PostgrestRowService,
+  SqlRowService,
+} from '../../services/row';
 
 import TableService from '../../services/TableService';
 import OpenApiService from '../../services/OpenApiService';
@@ -47,6 +51,7 @@ export type INIT_ACTIONTYPE =
         gridProps?: GridProps;
         savedState?: SavedState;
         editable?: boolean;
+        onSqlQuery?: (query: string) => Promise<{ data?: any; error?: any }>;
         onError: (error: any) => void;
       };
     };
@@ -56,6 +61,9 @@ type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
   switch (action.type) {
     case 'INIT_CLIENT': {
+      /**
+       * TODO: we need openApiService to support view at least for now
+       */
       const { supabaseUrl, supabaseKey, headers, schema } = action.payload;
       const client = new SupabaseClient(supabaseUrl, supabaseKey, {
         schema: schema,
@@ -70,14 +78,25 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
       };
     }
     case 'INIT_TABLE': {
+      /**
+       * TODO: need to refactor
+       * */
+      const rowService = action.payload.onSqlQuery
+        ? new SqlRowService(
+            action.payload.table,
+            action.payload.onSqlQuery,
+            action.payload.onError
+          )
+        : new PostgrestRowService(
+            action.payload.table,
+            state.client!,
+            action.payload.onError
+          );
+
       return {
         ...state,
         table: action.payload.table,
-        rowService: new PostgrestRowService(
-          action.payload.table,
-          state.client!,
-          action.payload.onError
-        ),
+        rowService,
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
         isInitialComplete: true,
         editable: action.payload.editable || false,

@@ -221,11 +221,15 @@ function initTable(
         gridColumns,
         savedState,
         editable: props.editable,
+        onSqlQuery: props.onSqlQuery,
         onError: props.onError ?? defaultErrorHandler,
       },
     });
   }
 
+  /**
+   * TODO: we should drop support for fetch table info using rpc FUNCTIONS
+   */
   if (typeof props.table === 'string') {
     const fetchMethod = props.editable
       ? fetchTableInfo(state.tableService!, props.table, props.schema)
