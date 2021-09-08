@@ -23,6 +23,6 @@ test('select table with Capital columns', async () => {
   expect(res).toMatchSnapshot();
 });
 test('select table with pagination', async () => {
-  const res = query.from('users').select().toSql({ limit: 100, offset: 0 });
+  const res = query.from('users').select().range(0, 99).toSql();
   expect(res).toMatchSnapshot();
 });

@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`basic select table 1`] = `"select * from public.users"`;
+
 exports[`select table with Capital columns 1`] = `"select \\"Name\\",id,\\"Age\\" from public.users"`;
 
+exports[`select table with Capital name, schema 1`] = `"select * from \\"Ext\\".\\"UsErs\\""`;
+
 exports[`select table with columns 1`] = `"select name,id,age from public.users"`;
+
+exports[`select table with custom schema 1`] = `"select * from ext.users"`;
 
 exports[`select table with pagination 1`] = `"select * from public.users limit 100 offset 0"`;

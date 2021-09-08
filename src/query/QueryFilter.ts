@@ -1,13 +1,13 @@
-import { ident, literal } from '@scaleleap/pg-format';
-import { Dictionary, QueryPagination, QueryTable } from '../types';
+import { Dictionary, QueryTable, Sort } from '../types';
+import { IQueryModifier, QueryModifier } from './QueryModifier';
 
 export interface IQueryFilter {
   match: (criteria: Dictionary<any>) => IQueryFilter;
-  toSql: (pagination?: QueryPagination) => string;
 }
 
-export class QueryFilter implements IQueryFilter {
+export class QueryFilter implements IQueryFilter, IQueryModifier {
   protected filters: { clause: 'match'; value: Dictionary<any> }[] = [];
+  protected orders: Sort[] = [];
 
   constructor(
     protected table: QueryTable,
@@ -20,36 +20,19 @@ export class QueryFilter implements IQueryFilter {
     return this;
   }
 
-  toSql(pagination?: QueryPagination) {
-    switch (this.action) {
-      case 'select': {
-        return selectQuery(this.table, {
-          columns: this.actionValue as string[],
-          pagination,
-        });
-      }
-      default: {
-        return '';
-      }
-    }
+  range(from: number, to: number) {
+    return this._getQueryModifier().range(from, to);
   }
-}
 
-function selectQuery(
-  table: QueryTable,
-  options?: {
-    columns?: string[];
-    pagination?: QueryPagination;
+  toSql() {
+    return this._getQueryModifier().toSql();
   }
-) {
-  let query = '';
-  const { columns, pagination } = options ?? {};
-  query += `select ${
-    columns?.map((x) => ident(x)).join(',') ?? '*'
-  } from ${ident(table.schema)}.${ident(table.name)}`;
-  if (pagination) {
-    const { limit, offset } = pagination ?? {};
-    query += ` limit ${literal(limit)} offset ${literal(offset)}`;
+
+  _getQueryModifier() {
+    return new QueryModifier(this.table, this.action, {
+      actionValue: this.actionValue,
+      filters: this.filters,
+      orders: this.orders,
+    });
   }
-  return query;
 }
