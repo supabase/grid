@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (!req.body || !req.body.query) throw { message: 'invalid query' };
+    if (!req.body?.query) throw { message: 'invalid query' };
 
     const { query } = req.body;
     const pool = new Pool({
