@@ -1,4 +1,4 @@
-import { ident } from '@scaleleap/pg-format';
+import { ident, literal } from '@scaleleap/pg-format';
 import { Dictionary, QueryPagination, QueryTable } from '../types';
 
 export interface IQueryFilter {
@@ -20,7 +20,7 @@ export class QueryFilter implements IQueryFilter {
     return this;
   }
 
-  toSql(pagination?: { limit: number; offset: number }) {
+  toSql(pagination?: QueryPagination) {
     switch (this.action) {
       case 'select': {
         return selectQuery(this.table, {
@@ -39,7 +39,7 @@ function selectQuery(
   table: QueryTable,
   options?: {
     columns?: string[];
-    pagination?: { limit: number; offset: number };
+    pagination?: QueryPagination;
   }
 ) {
   let query = '';
@@ -49,7 +49,7 @@ function selectQuery(
   } from ${ident(table.schema)}.${ident(table.name)}`;
   if (pagination) {
     const { limit, offset } = pagination ?? {};
-    query += `limit ${limit} offset ${offset}`;
+    query += ` limit ${literal(limit)} offset ${literal(offset)}`;
   }
   return query;
 }

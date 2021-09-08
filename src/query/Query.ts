@@ -5,7 +5,14 @@ interface IQuery {
 }
 
 export class Query implements IQuery {
-  from(table: string, schema?: string) {
-    return new QueryAction({ name: table, schema: schema ?? 'public' });
+  /**
+   * @param name    the table name.
+   * @param schema  the table schema, by default set to 'public'.
+   */
+  from(name: string, schema?: string) {
+    return new QueryAction({
+      name,
+      schema: schema ?? 'public',
+    });
   }
 }

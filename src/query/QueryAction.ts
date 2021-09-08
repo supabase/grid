@@ -24,6 +24,9 @@ export class QueryAction implements IQueryAction {
     return new QueryFilter(this.table, 'insert', values);
   }
 
+  /**
+   * @param columns the query columns, by default set to '*'.
+   */
   select(columns?: string[]) {
     return new QueryFilter(this.table, 'select', columns);
   }

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`select table with Capital columns 1`] = `"select \\"Name\\",id,\\"Age\\" from public.users"`;
+
+exports[`select table with columns 1`] = `"select name,id,age from public.users"`;
+
+exports[`select table with pagination 1`] = `"select * from public.users limit 100 offset 0"`;
