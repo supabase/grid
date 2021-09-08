@@ -15,6 +15,7 @@
     "@supabase/supabase-js": "^1.11.15",
     "@supabase/ui": "0.34.4",
     "next": "^10.2.3",
+    "pg": "^8.7.1",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom"
   },

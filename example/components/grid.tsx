@@ -1,5 +1,6 @@
 import React from 'react';
 import { SupabaseGrid, SupabaseGridRef, SupaRow } from '@supabase/grid';
+import { postAndWait } from './grid.utils';
 
 const clientProps = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
@@ -108,6 +109,13 @@ export default function Grid() {
             }}
             onEditRow={(row: SupaRow) => {
               console.log('edit row: ', row.idx);
+            }}
+            onSqlQuery={async (query: string) => {
+              const res = await postAndWait('/api/sql-query', {
+                query,
+              });
+              console.log('onSqlQuery res: ', res);
+              return res;
             }}
             headerActions={
               <>
