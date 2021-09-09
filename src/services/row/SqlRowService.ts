@@ -17,10 +17,13 @@ export class SqlRowService implements IRowService {
     // to remove
     console.log('count: ', filters, sorts);
 
-    const query = this.query
+    let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
-      .count()
-      .toSql();
+      .count();
+    sorts.forEach((x) => {
+      queryChains = queryChains.order(x.columnName, x.ascending, x.nullsFirst);
+    });
+    const query = queryChains.toSql();
     console.log('count query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
@@ -68,11 +71,13 @@ export class SqlRowService implements IRowService {
     const pageFromZero = page > 0 ? page - 1 : page;
     const from = pageFromZero * rowsPerPage;
     const to = (pageFromZero + 1) * rowsPerPage - 1;
-    const query = this.query
+    let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
-      .select()
-      .range(from, to)
-      .toSql();
+      .select();
+    sorts.forEach((x) => {
+      queryChains = queryChains.order(x.columnName, x.ascending, x.nullsFirst);
+    });
+    const query = queryChains.range(from, to).toSql();
     console.log('select query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {

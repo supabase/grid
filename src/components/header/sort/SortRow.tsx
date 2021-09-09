@@ -14,8 +14,8 @@ type SortRowProps = {
 const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const column = state?.table?.columns.find(x => x.name === columnName);
-  const sort = state?.sorts.find(x => x.columnName === columnName);
+  const column = state?.table?.columns.find((x) => x.name === columnName);
+  const sort = state?.sorts.find((x) => x.columnName === columnName);
   if (!column || !sort) return null;
 
   const ref = React.useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   function onToogle(value: string) {
     dispatch({
       type: 'UPDATE_SORT',
-      payload: { columnName, order: value },
+      payload: { columnName, ascending: value === 'ASC' },
     });
   }
 
@@ -139,7 +139,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
         <div className="sb-grid-sort-row__item">
           <SegmentedControl
             options={['ASC', 'DESC']}
-            value={sort.order}
+            value={sort.ascending ? 'ASC' : 'DESC'}
             onToggle={onToogle}
           />
           <div>

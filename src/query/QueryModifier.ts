@@ -1,5 +1,11 @@
 import { ident, literal } from '@scaleleap/pg-format';
-import { Dictionary, QueryPagination, QueryTable, Sort } from '../types';
+import {
+  Dictionary,
+  Filter,
+  QueryPagination,
+  QueryTable,
+  Sort,
+} from '../types';
 
 export interface IQueryModifier {
   range: (from: number, to: number) => QueryModifier;
@@ -15,7 +21,7 @@ export class QueryModifier implements IQueryModifier {
     protected options?: {
       actionValue?: string[] | Dictionary<any> | Dictionary<any>[];
       filters?: { clause: 'match'; value: Dictionary<any> }[];
-      orders?: Sort[];
+      sorts?: Sort[];
     }
   ) {}
 
@@ -34,7 +40,7 @@ export class QueryModifier implements IQueryModifier {
    * Return SQL string for query chains
    */
   toSql() {
-    const { actionValue } = this.options ?? {};
+    const { actionValue, sorts } = this.options ?? {};
     switch (this.action) {
       case 'count': {
         return countQuery(this.table);
@@ -43,6 +49,7 @@ export class QueryModifier implements IQueryModifier {
         return selectQuery(this.table, {
           columns: actionValue as any,
           pagination: this.pagination,
+          sorts,
         });
       }
       default: {
@@ -55,7 +62,7 @@ export class QueryModifier implements IQueryModifier {
 function countQuery(
   table: QueryTable,
   options?: {
-    sorts?: Sort[];
+    filters?: Filter[];
   }
 ) {
   console.log('countQuery options: ', options);
@@ -73,13 +80,28 @@ function selectQuery(
   }
 ) {
   let query = '';
-  const { columns, pagination } = options ?? {};
+  const { columns, pagination, sorts } = options ?? {};
   query += `select ${
     columns?.map((x) => ident(x)).join(',') ?? '*'
   } from ${ident(table.schema)}.${ident(table.name)}`;
+  if (sorts) {
+    query = applySorts(query, sorts);
+  }
   if (pagination) {
     const { limit, offset } = pagination ?? {};
     query += ` limit ${literal(limit)} offset ${literal(offset)}`;
   }
+  return query;
+}
+
+function applySorts(query: string, sorts: Sort[]) {
+  query += ` order by ${sorts
+    .map(
+      (x) =>
+        `${ident(x.columnName)} ${x.ascending ? 'asc' : 'desc'} ${
+          x.nullsFirst ? 'nulls first' : 'nulls last'
+        }`
+    )
+    .join(', ')}`;
   return query;
 }

@@ -13,7 +13,7 @@ import SortRow from './SortRow';
 
 type SortDropdownProps = {};
 
-const SortDropdown: React.FC<SortDropdownProps> = p => {
+const SortDropdown: React.FC<SortDropdownProps> = (p) => {
   const state = useTrackedState();
   const btnText =
     state.sorts.length > 0
@@ -45,19 +45,19 @@ export default SortDropdown;
 const Sort: React.FC<SortDropdownProps> = ({}) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const columns = state?.table?.columns!.filter(x => {
-    const found = state.sorts.find(y => y.columnName == x.name);
+  const columns = state?.table?.columns!.filter((x) => {
+    const found = state.sorts.find((y) => y.columnName == x.name);
     return !found;
   });
   const dropdownOptions =
-    columns?.map(x => {
+    columns?.map((x) => {
       return { value: x.name, label: x.name };
     }) || [];
 
   function onAddSort(columnName: string | number) {
     dispatch({
       type: 'ADD_SORT',
-      payload: { columnName, order: 'ASC' },
+      payload: { columnName, ascending: true },
     });
   }
 

@@ -161,8 +161,10 @@ export class PostgrestRowService implements IRowService {
       if (!column) continue;
 
       const columnName = column.name;
-      const sortAsc = sort.order.toLowerCase() === 'asc';
-      request = request.order(columnName, { ascending: sortAsc });
+      request = request.order(columnName, {
+        ascending: sort.ascending,
+        nullsFirst: sort.nullsFirst,
+      });
     }
 
     return request;

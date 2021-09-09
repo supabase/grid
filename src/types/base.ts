@@ -6,7 +6,8 @@ export interface Dictionary<T> {
 
 export interface Sort {
   columnName: string;
-  order: string;
+  ascending?: boolean;
+  nullsFirst?: boolean;
 }
 
 export interface Filter {
