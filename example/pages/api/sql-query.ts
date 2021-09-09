@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-const { Pool } = require('pg');
+import { Pool } from 'pg';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   let pool;

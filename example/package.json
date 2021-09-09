@@ -20,6 +20,7 @@
     "react-dom": "file:../node_modules/react-dom"
   },
   "devDependencies": {
+    "@types/pg": "^8.6.1",
     "@types/react": "17.0.20",
     "encoding": "^0.1.13",
     "eslint": "7.32.0",
