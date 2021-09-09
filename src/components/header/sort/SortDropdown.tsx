@@ -89,6 +89,7 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
             onSelect={onAddSort}
             side="bottom"
             align="start"
+            isNested
           >
             <Button
               as="span"
