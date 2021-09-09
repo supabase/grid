@@ -15,7 +15,7 @@ export const postAndWait = async (
       body: JSON.stringify(data),
       ...options,
     });
-    console.log('postAndWait response', response);
+    // console.log('postAndWait response', response);
 
     const json = await response.json();
     return json;

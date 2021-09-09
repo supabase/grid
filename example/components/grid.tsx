@@ -110,13 +110,11 @@ export default function Grid() {
             onEditRow={(row: SupaRow) => {
               console.log('edit row: ', row.idx);
             }}
-            // onSqlQuery={async (query: string) => {
-            //   const res = await postAndWait('/api/sql-query', {
-            //     query,
-            //   });
-            //   console.log('onSqlQuery res: ', res);
-            //   return res;
-            // }}
+            onSqlQuery={async (query: string) => {
+              const res = await postAndWait('/api/sql-query', { query });
+              // console.log('onSqlQuery res: ', res);
+              return res;
+            }}
             headerActions={
               <>
                 <span>{`'{headerActions}' can be used to insert`}</span>,

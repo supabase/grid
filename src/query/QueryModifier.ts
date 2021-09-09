@@ -36,6 +36,9 @@ export class QueryModifier implements IQueryModifier {
   toSql() {
     const { actionValue } = this.options ?? {};
     switch (this.action) {
+      case 'count': {
+        return countQuery(this.table);
+      }
       case 'select': {
         return selectQuery(this.table, {
           columns: actionValue as any,
@@ -47,6 +50,18 @@ export class QueryModifier implements IQueryModifier {
       }
     }
   }
+}
+
+function countQuery(
+  table: QueryTable,
+  options?: {
+    sorts?: Sort[];
+  }
+) {
+  console.log('countQuery options: ', options);
+  let query = 'select count(*)';
+  query += ` from ${ident(table.schema)}.${ident(table.name)}`;
+  return query;
 }
 
 function selectQuery(

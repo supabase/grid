@@ -14,13 +14,24 @@ export class SqlRowService implements IRowService {
   ) {}
 
   async count(filters: Filter[], sorts: Sort[]) {
-    console.log(filters, sorts);
+    // to remove
+    console.log('count: ', filters, sorts);
+
     const query = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .count()
       .toSql();
     console.log('count query: ', query);
-    return { error: { message: 'not implemented' } };
+    const { data, error } = await this.onSqlQuery(query);
+    if (error) {
+      return { error };
+    } else {
+      if (data?.length == 1) {
+        return { data: data[0].count };
+      } else {
+        return { error: { message: 'fetch rows count failed' } };
+      }
+    }
   }
 
   async create(row: SupaRow) {
@@ -52,7 +63,7 @@ export class SqlRowService implements IRowService {
     sorts: Sort[]
   ) {
     // to remove
-    console.log(filters, sorts);
+    console.log('fetchPage', filters, sorts);
 
     const pageFromZero = page > 0 ? page - 1 : page;
     const from = pageFromZero * rowsPerPage;
