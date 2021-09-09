@@ -20,9 +20,16 @@ export class SqlRowService implements IRowService {
     sorts: Sort[]
   ) {
     // to remove
-    console.log(page, rowsPerPage, filters, sorts);
+    console.log(filters, sorts);
 
-    const query = this.query.from(this.table.name).select().toSql();
+    const pageFromZero = page > 0 ? page - 1 : page;
+    const from = pageFromZero * rowsPerPage;
+    const to = (pageFromZero + 1) * rowsPerPage - 1;
+    const query = this.query
+      .from(this.table.name)
+      .select()
+      .range(from, to)
+      .toSql();
     console.log('select query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
