@@ -1,11 +1,31 @@
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { InitialStateType } from '../store/reducers';
 
+export async function fetchCount(
+  state: InitialStateType,
+  dispatch: (value: unknown) => void
+) {
+  if (!state.rowService) return;
+  const { data, error } = await state.rowService.count(
+    state.filters,
+    state.sorts
+  );
+  if (error) {
+    // TODO: handle fetch rows count error
+  } else {
+    dispatch({
+      type: 'SET_ROWS_COUNT',
+      payload: data ?? 0,
+    });
+  }
+}
+
 export async function fetchPage(
   state: InitialStateType,
   dispatch: (value: unknown) => void
 ) {
-  const { data, error } = await state.rowService!.fetchPage(
+  if (!state.rowService) return;
+  const { data, error } = await state.rowService.fetchPage(
     state.page,
     state.rowsPerPage,
     state.filters,
@@ -16,7 +36,7 @@ export async function fetchPage(
   } else {
     dispatch({
       type: 'SET_ROWS',
-      payload: { rows: data?.rows ?? [], totalRows: data?.count },
+      payload: { rows: data?.rows ?? [] },
     });
   }
 }

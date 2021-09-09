@@ -1,3 +1,4 @@
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { IRowService } from '.';
 import { SupabaseGridQueue } from '../../constants';
@@ -10,6 +11,19 @@ export class PostgrestRowService implements IRowService {
     protected onError: (error: any) => void
   ) {}
 
+  async count(filters: Filter[], sorts: Sort[]) {
+    let request = this.client
+      .from(this.table.name)
+      .select('*', { head: true, count: 'exact' });
+    request = this._applyFiltersAndSorts(request, filters, sorts);
+    const { count, error } = await request;
+    if (error) {
+      return { error };
+    } else {
+      return { data: count ?? undefined };
+    }
+  }
+
   async fetchPage(
     page: number,
     rowsPerPage: number,
@@ -19,57 +33,9 @@ export class PostgrestRowService implements IRowService {
     const pageFromZero = page > 0 ? page - 1 : page;
     const from = pageFromZero * rowsPerPage;
     const to = (pageFromZero + 1) * rowsPerPage - 1;
-    let request = this.client
-      .from(this.table.name)
-      .select('*', { count: 'estimated' })
-      .range(from, to);
-
-    // Filter first
-    for (let idx in filters) {
-      const filter = filters[idx];
-      if (filter.filterText == '') continue;
-      const column = this.table.columns.find(
-        (x) => x.name === filter.columnName
-      );
-      if (!column) continue;
-
-      const columnName = column.name;
-      switch (filter.condition) {
-        case 'is':
-          const filterText = filter.filterText.toLowerCase();
-          if (filterText == 'null') request = request.is(columnName, null);
-          else if (filterText == 'true') request = request.is(columnName, true);
-          else if (filterText == 'false')
-            request = request.is(columnName, false);
-          break;
-        case 'in':
-          const filterValues = filter.filterText
-            .split(',')
-            .map((x) => x.trim());
-          request = request.in(columnName, filterValues);
-          break;
-        default:
-          request = request.filter(
-            columnName,
-            // @ts-ignore
-            filter.condition.toLowerCase(),
-            filter.filterText
-          );
-          break;
-      }
-    }
-    // Then sort
-    for (let idx in sorts) {
-      const sort = sorts[idx];
-      const column = this.table.columns.find((x) => x.name === sort.columnName);
-      if (!column) continue;
-
-      const columnName = column.name;
-      const sortAsc = sort.order.toLowerCase() === 'asc';
-      request = request.order(columnName, { ascending: sortAsc });
-    }
-
-    const { count, data, error } = await request;
+    let request = this.client.from(this.table.name).select('*').range(from, to);
+    request = this._applyFiltersAndSorts(request, filters, sorts);
+    const { data, error } = await request;
     if (!data || error) {
       return {
         error: { message: error?.message ?? 'rows data is undefined' },
@@ -78,7 +44,7 @@ export class PostgrestRowService implements IRowService {
       const rows = data?.map((x, index) => {
         return { idx: index, ...x } as SupaRow;
       });
-      return { data: { rows, count: count ?? undefined } };
+      return { data: { rows } };
     }
   }
 
@@ -147,5 +113,58 @@ export class PostgrestRowService implements IRowService {
       return { error: { message: "Can't find primary key" } };
     }
     return { primaryKeys: pkColumns.map((x) => x.name) };
+  }
+
+  _applyFiltersAndSorts(
+    request: PostgrestFilterBuilder<any>,
+    filters: Filter[],
+    sorts: Sort[]
+  ) {
+    // Filter first
+    for (let idx in filters) {
+      const filter = filters[idx];
+      if (filter.filterText == '') continue;
+      const column = this.table.columns.find(
+        (x) => x.name === filter.columnName
+      );
+      if (!column) continue;
+
+      const columnName = column.name;
+      switch (filter.condition) {
+        case 'is':
+          const filterText = filter.filterText.toLowerCase();
+          if (filterText == 'null') request = request.is(columnName, null);
+          else if (filterText == 'true') request = request.is(columnName, true);
+          else if (filterText == 'false')
+            request = request.is(columnName, false);
+          break;
+        case 'in':
+          const filterValues = filter.filterText
+            .split(',')
+            .map((x) => x.trim());
+          request = request.in(columnName, filterValues);
+          break;
+        default:
+          request = request.filter(
+            columnName,
+            // @ts-ignore
+            filter.condition.toLowerCase(),
+            filter.filterText
+          );
+          break;
+      }
+    }
+    // Then sort
+    for (let idx in sorts) {
+      const sort = sorts[idx];
+      const column = this.table.columns.find((x) => x.name === sort.columnName);
+      if (!column) continue;
+
+      const columnName = column.name;
+      const sortAsc = sort.order.toLowerCase() === 'asc';
+      request = request.order(columnName, { ascending: sortAsc });
+    }
+
+    return request;
   }
 }

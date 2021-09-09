@@ -1,21 +1,22 @@
 import { Filter, ServiceError, Sort, SupaRow } from '../../types';
 
 export interface IRowService {
-  /**
-   * TODO: should separate rows count into a new method
-   */
+  count: (
+    filters: Filter[],
+    sorts: Sort[]
+  ) => Promise<{ data?: number; error?: ServiceError }>;
+
+  create: (row: SupaRow) => Promise<{ data?: SupaRow; error?: ServiceError }>;
+
   fetchPage: (
     page: number,
     rowsPerPage: number,
     filters: Filter[],
     sorts: Sort[]
   ) => Promise<{
-    data?: { rows: SupaRow[]; count?: number };
+    data?: { rows: SupaRow[] };
     error?: ServiceError;
   }>;
-
-  create: (row: SupaRow) => Promise<{ data?: SupaRow; error?: ServiceError }>;
-  update: (row: SupaRow) => { error?: ServiceError };
 
   /**
    * TODO: should return a promise.
@@ -26,6 +27,8 @@ export interface IRowService {
    * and rows are already removed from the grid
    */
   delete: (rows: SupaRow[]) => { error?: ServiceError };
+
+  update: (row: SupaRow) => { error?: ServiceError };
 }
 
 export * from './PostgrestRowService';

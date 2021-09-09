@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, IconRefreshCw } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../store';
-import { fetchPage } from '../../utils';
+import { fetchCount, fetchPage } from '../../utils';
 
 type RefreshButtonProps = {};
 
@@ -12,6 +12,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({}) => {
 
   async function onClick() {
     setLoading(true);
+    await fetchCount(state, dispatch);
     await fetchPage(state, dispatch);
     setLoading(false);
   }

@@ -13,7 +13,7 @@ export class QueryAction implements IQueryAction {
   constructor(protected table: QueryTable) {}
 
   count() {
-    return new QueryFilter(this.table, 'delete');
+    return new QueryFilter(this.table, 'count');
   }
 
   delete() {

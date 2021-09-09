@@ -15,8 +15,17 @@ import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
 import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
-import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
-import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
+import {
+  fetchCount,
+  fetchPage,
+  getStorageKey,
+  refreshPageDebounced,
+} from './utils';
+import {
+  REFRESH_PAGE_IMMEDIATELY,
+  STORAGE_KEY_PREFIX,
+  TOTAL_ROWS_RESET,
+} from './constants';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
@@ -141,6 +150,12 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
         refreshPageDebounced(state, dispatch);
       }
     }, [state.refreshPageFlag]);
+
+    React.useEffect(() => {
+      if (state.totalRows === TOTAL_ROWS_RESET) {
+        fetchCount(state, dispatch);
+      }
+    }, [state.totalRows]);
 
     React.useEffect(() => {
       if (!state.client) {

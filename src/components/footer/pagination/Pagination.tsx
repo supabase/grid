@@ -66,53 +66,57 @@ const Pagination: React.FC<PaginationProps> = () => {
 
   return (
     <div className="sb-grid-pagination">
-      <Button
-        icon={<IconArrowLeft />}
-        type="outline"
-        disabled={state.page <= 1}
-        onClick={onPreviousPage}
-        style={{ padding: '3px 10px' }}
-      />
-      <Typography.Text>Page</Typography.Text>
-      <div className="sb-grid-pagination-input-container">
-        <InputNumber
-          value={page}
-          onChange={onPageChange}
-          className="sb-grid-pagination-input"
-          size="tiny"
-          style={{
-            width: '3rem',
-          }}
-          max={maxPages}
-          min={1}
-        />
-      </div>
-      <Typography.Text>{`of ${totalPages}`}</Typography.Text>
-      <Button
-        icon={<IconArrowRight />}
-        type="outline"
-        disabled={state.page >= maxPages}
-        onClick={onNextPage}
-        style={{ padding: '3px 10px' }}
-      />
+      {state.totalRows < 0 ? (
+        <Typography.Text>... loading total records</Typography.Text>
+      ) : (
+        <>
+          <Button
+            icon={<IconArrowLeft />}
+            type="outline"
+            disabled={state.page <= 1}
+            onClick={onPreviousPage}
+            style={{ padding: '3px 10px' }}
+          />
+          <Typography.Text>Page</Typography.Text>
+          <div className="sb-grid-pagination-input-container">
+            <InputNumber
+              value={page}
+              onChange={onPageChange}
+              className="sb-grid-pagination-input"
+              size="tiny"
+              style={{
+                width: '3rem',
+              }}
+              max={maxPages}
+              min={1}
+            />
+          </div>
+          <Typography.Text>{`of ${totalPages}`}</Typography.Text>
+          <Button
+            icon={<IconArrowRight />}
+            type="outline"
+            disabled={state.page >= maxPages}
+            onClick={onNextPage}
+            style={{ padding: '3px 10px' }}
+          />
 
-      <DropdownControl
-        options={rowsPerPageOptions}
-        onSelect={onRowsPerPageChange}
-        side="top"
-        align="start"
-      >
-        <Button
-          as="span"
-          type="outline"
-          style={{ padding: '3px 10px' }}
-        >{`${state.rowsPerPage} rows`}</Button>
-      </DropdownControl>
-      <Typography.Text>
-        {`${state.totalRows.toLocaleString()} ${
-          state.totalRows < 1000 ? 'records' : 'records (estimated count)'
-        }`}
-      </Typography.Text>
+          <DropdownControl
+            options={rowsPerPageOptions}
+            onSelect={onRowsPerPageChange}
+            side="top"
+            align="start"
+          >
+            <Button
+              as="span"
+              type="outline"
+              style={{ padding: '3px 10px' }}
+            >{`${state.rowsPerPage} rows`}</Button>
+          </DropdownControl>
+          <Typography.Text>
+            {`${state.totalRows.toLocaleString()} records`}
+          </Typography.Text>
+        </>
+      )}
     </div>
   );
 };
