@@ -14,7 +14,7 @@ export function countQuery(
   if (filters) {
     query = applyFilters(query, filters);
   }
-  return query;
+  return query + ';';
 }
 
 export function selectQuery(
@@ -41,7 +41,7 @@ export function selectQuery(
     const { limit, offset } = pagination ?? {};
     query += ` limit ${literal(limit)} offset ${literal(offset)}`;
   }
-  return query;
+  return query + ';';
 }
 
 function applySorts(query: string, sorts: Sort[]) {
@@ -59,7 +59,13 @@ function applySorts(query: string, sorts: Sort[]) {
 function applyFilters(query: string, filters: Filter2[]) {
   if (filters.length == 0) return query;
   query += ` where ${filters
-    .map((x) => `${ident(x.column)} ${x.operator} ${literal(x.value)}`)
+    .map((x) => {
+      if (Array.isArray(x.value)) {
+        return `${ident(x.column)} ${x.operator} (${literal(x.value)})`;
+      } else {
+        return `${ident(x.column)} ${x.operator} ${literal(x.value)}`;
+      }
+    })
     .join(' and ')}`;
   return query;
 }

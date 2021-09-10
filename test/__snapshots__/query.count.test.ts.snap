@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic count table 1`] = `"select count(*) from public.users;"`;
+
+exports[`basic count table with filter 1`] = `"select count(*) from public.users where name in ('hello world','xin chao');"`;

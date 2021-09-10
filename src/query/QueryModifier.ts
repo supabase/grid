@@ -43,7 +43,7 @@ export class QueryModifier implements IQueryModifier {
     const { actionValue, filters, sorts } = this.options ?? {};
     switch (this.action) {
       case 'count': {
-        return countQuery(this.table);
+        return countQuery(this.table, { filters });
       }
       case 'select': {
         return selectQuery(this.table, {
@@ -52,6 +52,8 @@ export class QueryModifier implements IQueryModifier {
           filters,
           sorts,
         });
+      }
+      case 'update': {
       }
       default: {
         return '';

@@ -59,6 +59,14 @@ test('select table with match filter', async () => {
     .toSql();
   expect(res).toMatchSnapshot();
 });
+test('select table with in filter', async () => {
+  const res = query
+    .from('users')
+    .select()
+    .filter('name', 'in', ['hello world', 'xin chao'])
+    .toSql();
+  expect(res).toMatchSnapshot();
+});
 test('select table with multi filters', async () => {
   const res = query
     .from('users')
