@@ -82,7 +82,7 @@ export function updateQuery(
     throw { message: 'no filters for this update query' };
   }
   const queryValue = Object.entries(value)
-    .map(([column, value]) => `${ident(column)} = ${literal(value)}`)
+    .map(([column, value]) => `${ident(column)} = ${formatLiteral(value)}`)
     .join(', ');
   let query = `update ${queryTable(table)} set ${queryValue}`;
   if (filters) {
@@ -94,8 +94,19 @@ export function updateQuery(
   return query + ';';
 }
 
-function queryTable(table: QueryTable) {
+export function queryTable(table: QueryTable) {
   return `${ident(table.schema)}.${ident(table.name)}`;
+}
+
+export function formatLiteral(value: any) {
+  if (Array.isArray(value)) {
+    value = JSON.stringify(value);
+    value = value.replace('[', '{');
+    value = value.replace(']', '}');
+  } else if (value?.constructor == Object || Array.isArray(value)) {
+    value = JSON.stringify(value);
+  }
+  return literal(value);
 }
 
 function applySorts(query: string, sorts: Sort[]) {

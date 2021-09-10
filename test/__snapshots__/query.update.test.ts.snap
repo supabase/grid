@@ -4,4 +4,6 @@ exports[`basic update on table 1`] = `"update public.users set young = 't' where
 
 exports[`update should ignore order 1`] = `"update public.users set young = 't' where age < 30;"`;
 
+exports[`update with json column 1`] = `"update public.users set profile = '{\\"firstName\\":\\"aaaa\\",\\"lastName\\":\\"bbb\\"}', numbers = '{1,2,43,5.5,6}' where name = 'hello world';"`;
+
 exports[`update with returning record on table 1`] = `"update public.users set young = 't' where name = 'hello world'returning *;"`;

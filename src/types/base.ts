@@ -22,7 +22,7 @@ export type FilterOperator = '=' | '>' | '<' | '>=' | '<=' | 'in';
 export interface Filter2 {
   column: string;
   operator: FilterOperator;
-  value: any;
+  value: string | number | null;
 }
 
 export interface SavedState {

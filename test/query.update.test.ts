@@ -32,3 +32,14 @@ test('update should ignore order', async () => {
     .toSql();
   expect(res).toMatchSnapshot();
 });
+test('update with json column', async () => {
+  const res = query
+    .from('users')
+    .update({
+      profile: { firstName: 'aaaa', lastName: 'bbb' },
+      numbers: [1, 2, 43, 5.5, 6],
+    })
+    .filter('name', '=', 'hello world')
+    .toSql();
+  expect(res).toMatchSnapshot();
+});
