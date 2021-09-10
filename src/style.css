@@ -77,8 +77,7 @@
   /* @apply text-typography-body-light dark:text-typography-body-dark; */
 }
 .rdg-header-row .rdg-cell p,
-/* .rdg-cell svg  */
- {
+/* .rdg-cell svg  */ {
   @apply text-typography-body-light dark:text-typography-body-dark;
 }
 .rdg-header-row .rdg-cell .react-contextmenu-wrapper {
@@ -584,15 +583,15 @@
   header/filter/FilterDropdown
 */
 
-.sb-grid-filter-dropdown {
+.sb-grid-filter-popover {
   @apply overflow-visible;
 }
 
-.sb-grid-filter-dropdown__misc {
+.sb-grid-filter-popover__misc {
   @apply py-2;
 }
 
-.sb-grid-filter-dropdown__misc__text {
+.sb-grid-filter-popover__misc__text {
   @apply block;
 }
 

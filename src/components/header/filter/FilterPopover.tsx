@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import {
   Dropdown,
   Button,
@@ -6,13 +6,12 @@ import {
   Typography,
   IconFilter,
   Divider,
+  Popover,
 } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
 import FilterRow from './FilterRow';
 
-type FilterDropdownProps = {};
-
-const FilterDropdown: React.FC<FilterDropdownProps> = p => {
+const FilterPopover: FC = () => {
   const state = useTrackedState();
   const btnText =
     state.filters.length > 0
@@ -22,10 +21,10 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
       : 'Filter';
 
   return (
-    <Dropdown
-      className="sb-grid-filter-dropdown"
-      side="bottom"
-      overlay={<Filter {...p} />}
+    <Popover
+      align="start"
+      className="sb-grid-filter-popover"
+      overlay={<Filter />}
     >
       <Button
         as={'span'}
@@ -35,12 +34,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = p => {
       >
         {btnText}
       </Button>
-    </Dropdown>
+    </Popover>
   );
 };
-export default FilterDropdown;
+export default FilterPopover;
 
-const Filter: React.FC<FilterDropdownProps> = ({}) => {
+const Filter: FC = () => {
   const state = useTrackedState();
   const dispatch = useDispatch();
 
@@ -68,12 +67,12 @@ const Filter: React.FC<FilterDropdownProps> = ({}) => {
         ))}
         {state.filters.length == 0 && (
           <Dropdown.Misc>
-            <div className="sb-grid-filter-dropdown__misc">
+            <div className="sb-grid-filter-popover__misc">
               <Typography.Text>No filters applied to this view</Typography.Text>
               <Typography.Text
                 small
                 type="secondary"
-                className="sb-grid-filter-dropdown__misc__text"
+                className="sb-grid-filter-popover__misc__text"
               >
                 Add a column below to filter the view
               </Typography.Text>
