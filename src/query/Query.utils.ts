@@ -21,6 +21,27 @@ export function countQuery(
   return query + ';';
 }
 
+export function deleteQuery(
+  table: QueryTable,
+  filters?: Filter2[],
+  options?: {
+    returning?: boolean;
+  }
+) {
+  if (!filters || filters.length == 0) {
+    throw { message: 'no filters for this delete query' };
+  }
+  let query = `delete from ${queryTable(table)}`;
+  const { returning } = options ?? {};
+  if (filters) {
+    query = applyFilters(query, filters);
+  }
+  if (returning) {
+    query += 'returning *';
+  }
+  return query + ';';
+}
+
 export function selectQuery(
   table: QueryTable,
   columns?: string[],
@@ -56,11 +77,14 @@ export function updateQuery(
     returning?: boolean;
   }
 ) {
+  const { filters, returning } = options ?? {};
+  if (!filters || filters.length == 0) {
+    throw { message: 'no filters for this update query' };
+  }
   const queryValue = Object.entries(value)
     .map(([column, value]) => `${ident(column)} = ${literal(value)}`)
     .join(', ');
   let query = `update ${queryTable(table)} set ${queryValue}`;
-  const { filters, returning } = options ?? {};
   if (filters) {
     query = applyFilters(query, filters);
   }

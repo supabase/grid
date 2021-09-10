@@ -5,7 +5,12 @@ import {
   QueryTable,
   Sort,
 } from '../types';
-import { countQuery, selectQuery, updateQuery } from './Query.utils';
+import {
+  countQuery,
+  deleteQuery,
+  selectQuery,
+  updateQuery,
+} from './Query.utils';
 
 export interface IQueryModifier {
   range: (from: number, to: number) => QueryModifier;
@@ -41,27 +46,36 @@ export class QueryModifier implements IQueryModifier {
    * Return SQL string for query chains
    */
   toSql() {
-    const { actionValue, actionOptions, filters, sorts } = this.options ?? {};
-    switch (this.action) {
-      case 'count': {
-        return countQuery(this.table, { filters });
+    try {
+      const { actionValue, actionOptions, filters, sorts } = this.options ?? {};
+      switch (this.action) {
+        case 'count': {
+          return countQuery(this.table, { filters });
+        }
+        case 'delete': {
+          return deleteQuery(this.table, filters, {
+            returning: actionOptions?.returning,
+          });
+        }
+        case 'select': {
+          return selectQuery(this.table, actionValue as string[] | undefined, {
+            filters,
+            pagination: this.pagination,
+            sorts,
+          });
+        }
+        case 'update': {
+          return updateQuery(this.table, actionValue as Dictionary<any>, {
+            filters,
+            returning: actionOptions?.returning,
+          });
+        }
+        default: {
+          return '';
+        }
       }
-      case 'select': {
-        return selectQuery(this.table, actionValue as string[] | undefined, {
-          filters,
-          pagination: this.pagination,
-          sorts,
-        });
-      }
-      case 'update': {
-        return updateQuery(this.table, actionValue as Dictionary<any>, {
-          filters,
-          returning: actionOptions?.returning,
-        });
-      }
-      default: {
-        return '';
-      }
+    } catch (error) {
+      throw error;
     }
   }
 }

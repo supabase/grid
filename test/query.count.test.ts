@@ -24,3 +24,13 @@ test('count table with multi filters', async () => {
     .toSql();
   expect(res).toMatchSnapshot();
 });
+test('count table should ignore order', async () => {
+  const res = query
+    .from('users')
+    .count()
+    .filter('name', 'in', ['hello world', 'xin chao'])
+    .order('name')
+    .order('age')
+    .toSql();
+  expect(res).toMatchSnapshot();
+});
