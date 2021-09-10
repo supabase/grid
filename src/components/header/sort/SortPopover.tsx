@@ -22,7 +22,7 @@ const SortPopover: FC = () => {
       : 'Sort';
 
   return (
-    <Popover align="start" className="sb-grid-sort-dropdown" overlay={<Sort />}>
+    <Popover align="start" className="sb-grid-sort-popover" overlay={<Sort />}>
       <Button
         as={'span'}
         type="text"

@@ -615,7 +615,7 @@
   header/sort/SortDropdown
 */
 
-.sb-grid-sort-dropdown {
+.sb-grid-sort-popover {
   @apply w-96;
 }
 
