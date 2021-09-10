@@ -1,6 +1,7 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 import Query from '../../query';
+import { SupabaseGridQueue } from '../../constants';
 
 export class SqlRowService implements IRowService {
   protected query = new Query();
@@ -13,15 +14,15 @@ export class SqlRowService implements IRowService {
     protected onError: (error: any) => void
   ) {}
 
-  async count(filters: Filter[], sorts: Sort[]) {
+  async count(filters: Filter[]) {
     // to remove
-    console.log('count: ', filters, sorts);
+    console.log('count: ', filters);
 
     let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
-    sorts.forEach((x) => {
-      queryChains = queryChains.order(x.columnName, x.ascending, x.nullsFirst);
+    filters.forEach((x) => {
+      queryChains = queryChains.filter(x.columnName, '=', x.filterText);
     });
     const query = queryChains.toSql();
     console.log('count query: ', query);
@@ -39,22 +40,31 @@ export class SqlRowService implements IRowService {
 
   async create(row: SupaRow) {
     console.log('create: ', row);
-    return { error: { message: 'Test' } };
+    return { error: { message: 'not implemented' } };
   }
 
   delete(rows: SupaRow[]) {
     console.log('delete: ', rows);
 
-    // const { primaryKeys, error } = this._getPrimaryKeys();
-    // if (error) return { error };
+    const { primaryKeys, error } = this._getPrimaryKeys();
+    if (error) return { error };
 
-    // let query = this.knex(this.table.name);
-    // primaryKeys!.forEach((key) => {
-    //   const primaryKeyValues = rows.map((x) => x[key]);
-    //   query.whereIn(key, primaryKeyValues);
-    // });
-    // query.del();
-    // console.log('delete query: ', query.toSQL());
+    let queryChains = this.query
+      .from(this.table.name, this.table.schema ?? undefined)
+      .delete();
+    primaryKeys!.forEach((key) => {
+      const primaryKeyValues = rows.map((x) => x[key]);
+      queryChains = queryChains.filter(key, 'in', primaryKeyValues);
+    });
+    const query = queryChains.toSql();
+    console.log('delete query: ', query);
+
+    SupabaseGridQueue.add(async () => {
+      const { error } = await this.onSqlQuery(query);
+      if (error) throw error;
+    }).catch((error) => {
+      this.onError(error);
+    });
 
     return { error: { message: 'Test' } };
   }
@@ -91,8 +101,31 @@ export class SqlRowService implements IRowService {
   }
 
   update(row: SupaRow) {
-    console.log('update: ', row);
-    return { error: { message: 'Test' } };
+    const { primaryKeys, error } = this._getPrimaryKeys();
+    if (error) {
+      return { error };
+    }
+
+    const { idx, ...value } = row;
+    const matchValues: any = {};
+    primaryKeys!.forEach((key) => {
+      matchValues[key] = row[key];
+    });
+    const query = this.query
+      .from(this.table.name, this.table.schema ?? undefined)
+      .update(value)
+      .match(matchValues)
+      .toSql();
+    console.log('update query: ', query);
+
+    SupabaseGridQueue.add(async () => {
+      const { error } = await this.onSqlQuery(query);
+      if (error) throw error;
+    }).catch((error) => {
+      this.onError(error);
+    });
+
+    return {};
   }
 
   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {

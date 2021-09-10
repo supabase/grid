@@ -1,7 +1,18 @@
-import { Dictionary, QueryTable, Sort } from '../types';
+import {
+  Dictionary,
+  Filter2,
+  FilterOperator,
+  QueryTable,
+  Sort,
+} from '../types';
 import { IQueryModifier, QueryModifier } from './QueryModifier';
 
 export interface IQueryFilter {
+  filter: (
+    column: string,
+    operator: FilterOperator,
+    value: any
+  ) => IQueryFilter;
   match: (criteria: Dictionary<any>) => IQueryFilter;
   order: (
     column: string,
@@ -11,7 +22,7 @@ export interface IQueryFilter {
 }
 
 export class QueryFilter implements IQueryFilter, IQueryModifier {
-  protected filters: { clause: 'match'; value: Dictionary<any> }[] = [];
+  protected filters: Filter2[] = [];
   protected sorts: Sort[] = [];
 
   constructor(
@@ -20,17 +31,24 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
     protected actionValue?: string[] | Dictionary<any> | Dictionary<any>[]
   ) {}
 
+  filter(column: string, operator: FilterOperator, value: any) {
+    this.filters.push({ column, operator, value });
+    return this;
+  }
+
+  match(criteria: Dictionary<any>) {
+    Object.entries(criteria).map(([column, value]) => {
+      this.filters.push({ column, operator: '=', value });
+    });
+    return this;
+  }
+
   order(column: string, ascending = true, nullsFirst = false) {
     this.sorts.push({
       columnName: column,
       ascending,
       nullsFirst,
     });
-    return this;
-  }
-
-  match(criteria: Dictionary<any>) {
-    this.filters.push({ clause: 'match', value: criteria });
     return this;
   }
 

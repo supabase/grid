@@ -17,6 +17,14 @@ export interface Filter {
   filterText: string;
 }
 
+export type FilterOperator = '=' | '>' | '<' | '>=' | '<=' | 'in';
+
+export interface Filter2 {
+  column: string;
+  operator: FilterOperator;
+  value: any;
+}
+
 export interface SavedState {
   filters: Filter[];
   gridColumns: Column<any, any>[];

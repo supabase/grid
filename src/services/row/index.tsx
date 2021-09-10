@@ -2,8 +2,7 @@ import { Filter, ServiceError, Sort, SupaRow } from '../../types';
 
 export interface IRowService {
   count: (
-    filters: Filter[],
-    sorts: Sort[]
+    filters: Filter[]
   ) => Promise<{ data?: number; error?: ServiceError }>;
 
   create: (row: SupaRow) => Promise<{ data?: SupaRow; error?: ServiceError }>;

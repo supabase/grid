@@ -11,11 +11,11 @@ export class PostgrestRowService implements IRowService {
     protected onError: (error: any) => void
   ) {}
 
-  async count(filters: Filter[], sorts: Sort[]) {
+  async count(filters: Filter[]) {
     let request = this.client
       .from(this.table.name)
       .select('*', { head: true, count: 'exact' });
-    request = this._applyFiltersAndSorts(request, filters, sorts);
+    request = this._applyFiltersAndSorts(request, filters, []);
     const { count, error } = await request;
     if (error) {
       return { error };

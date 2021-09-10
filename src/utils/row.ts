@@ -6,10 +6,7 @@ export async function fetchCount(
   dispatch: (value: unknown) => void
 ) {
   if (!state.rowService) return;
-  const { data, error } = await state.rowService.count(
-    state.filters,
-    state.sorts
-  );
+  const { data, error } = await state.rowService.count(state.filters);
   if (error) {
     // TODO: handle fetch rows count error
   } else {
