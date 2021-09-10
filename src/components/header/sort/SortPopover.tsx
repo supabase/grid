@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import {
   Dropdown,
   Button,
@@ -6,14 +6,13 @@ import {
   IconList,
   IconChevronDown,
   Divider,
+  Popover,
 } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
 
-type SortDropdownProps = {};
-
-const SortDropdown: React.FC<SortDropdownProps> = (p) => {
+const SortPopover: FC = () => {
   const state = useTrackedState();
   const btnText =
     state.sorts.length > 0
@@ -23,12 +22,7 @@ const SortDropdown: React.FC<SortDropdownProps> = (p) => {
       : 'Sort';
 
   return (
-    <Dropdown
-      side="bottom"
-      align="start"
-      overlay={<Sort {...p} />}
-      className="sb-grid-sort-dropdown"
-    >
+    <Popover align="start" className="sb-grid-sort-dropdown" overlay={<Sort />}>
       <Button
         as={'span'}
         type="text"
@@ -37,12 +31,12 @@ const SortDropdown: React.FC<SortDropdownProps> = (p) => {
       >
         {btnText}
       </Button>
-    </Dropdown>
+    </Popover>
   );
 };
-export default SortDropdown;
+export default SortPopover;
 
-const Sort: React.FC<SortDropdownProps> = ({}) => {
+const Sort: FC = () => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const columns = state?.table?.columns!.filter((x) => {
@@ -89,7 +83,6 @@ const Sort: React.FC<SortDropdownProps> = ({}) => {
             onSelect={onAddSort}
             side="bottom"
             align="start"
-            isNested
           >
             <Button
               as="span"
