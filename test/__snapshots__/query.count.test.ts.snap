@@ -2,4 +2,6 @@
 
 exports[`basic count table 1`] = `"select count(*) from public.users;"`;
 
-exports[`basic count table with filter 1`] = `"select count(*) from public.users where name in ('hello world','xin chao');"`;
+exports[`count table with filter 1`] = `"select count(*) from public.users where name in ('hello world','xin chao');"`;
+
+exports[`count table with multi filters 1`] = `"select count(*) from public.users where name in ('hello world','xin chao') and age > 18 and birth_year >= 2000;"`;

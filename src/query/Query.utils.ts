@@ -1,5 +1,11 @@
 import { ident, literal } from '@scaleleap/pg-format';
-import { Filter2, QueryPagination, QueryTable, Sort } from '../types';
+import {
+  Dictionary,
+  Filter2,
+  QueryPagination,
+  QueryTable,
+  Sort,
+} from '../types';
 
 export function countQuery(
   table: QueryTable,
@@ -7,10 +13,8 @@ export function countQuery(
     filters?: Filter2[];
   }
 ) {
-  console.log('countQuery options: ', options);
+  let query = `select count(*) from ${queryTable(table)}`;
   const { filters } = options ?? {};
-  let query = 'select count(*)';
-  query += ` from ${ident(table.schema)}.${ident(table.name)}`;
   if (filters) {
     query = applyFilters(query, filters);
   }
@@ -19,18 +23,18 @@ export function countQuery(
 
 export function selectQuery(
   table: QueryTable,
+  columns?: string[],
   options?: {
-    columns?: string[];
     filters?: Filter2[];
     pagination?: QueryPagination;
     sorts?: Sort[];
   }
 ) {
   let query = '';
-  const { columns, filters, pagination, sorts } = options ?? {};
-  query += `select ${
-    columns?.map((x) => ident(x)).join(', ') ?? '*'
-  } from ${ident(table.schema)}.${ident(table.name)}`;
+  const queryColumn = columns?.map((x) => ident(x)).join(', ') ?? '*';
+  query += `select ${queryColumn} from ${queryTable(table)}`;
+
+  const { filters, pagination, sorts } = options ?? {};
   if (filters) {
     query = applyFilters(query, filters);
   }
@@ -42,6 +46,32 @@ export function selectQuery(
     query += ` limit ${literal(limit)} offset ${literal(offset)}`;
   }
   return query + ';';
+}
+
+export function updateQuery(
+  table: QueryTable,
+  value: Dictionary<any>,
+  options?: {
+    filters?: Filter2[];
+    returning?: boolean;
+  }
+) {
+  const queryValue = Object.entries(value)
+    .map(([column, value]) => `${ident(column)} = ${literal(value)}`)
+    .join(', ');
+  let query = `update ${queryTable(table)} set ${queryValue}`;
+  const { filters, returning } = options ?? {};
+  if (filters) {
+    query = applyFilters(query, filters);
+  }
+  if (returning) {
+    query += 'returning *';
+  }
+  return query + ';';
+}
+
+function queryTable(table: QueryTable) {
+  return `${ident(table.schema)}.${ident(table.name)}`;
 }
 
 function applySorts(query: string, sorts: Sort[]) {

@@ -5,7 +5,7 @@ import {
   QueryTable,
   Sort,
 } from '../types';
-import { countQuery, selectQuery } from './Query.utils';
+import { countQuery, selectQuery, updateQuery } from './Query.utils';
 
 export interface IQueryModifier {
   range: (from: number, to: number) => QueryModifier;
@@ -20,6 +20,7 @@ export class QueryModifier implements IQueryModifier {
     protected action: 'count' | 'delete' | 'insert' | 'select' | 'update',
     protected options?: {
       actionValue?: string[] | Dictionary<any> | Dictionary<any>[];
+      actionOptions?: { returning: boolean };
       filters?: Filter2[];
       sorts?: Sort[];
     }
@@ -40,20 +41,23 @@ export class QueryModifier implements IQueryModifier {
    * Return SQL string for query chains
    */
   toSql() {
-    const { actionValue, filters, sorts } = this.options ?? {};
+    const { actionValue, actionOptions, filters, sorts } = this.options ?? {};
     switch (this.action) {
       case 'count': {
         return countQuery(this.table, { filters });
       }
       case 'select': {
-        return selectQuery(this.table, {
-          columns: actionValue as any,
-          pagination: this.pagination,
+        return selectQuery(this.table, actionValue as string[] | undefined, {
           filters,
+          pagination: this.pagination,
           sorts,
         });
       }
       case 'update': {
+        return updateQuery(this.table, actionValue as Dictionary<any>, {
+          filters,
+          returning: actionOptions?.returning,
+        });
       }
       default: {
         return '';

@@ -28,7 +28,8 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
   constructor(
     protected table: QueryTable,
     protected action: 'count' | 'delete' | 'insert' | 'select' | 'update',
-    protected actionValue?: string[] | Dictionary<any> | Dictionary<any>[]
+    protected actionValue?: string[] | Dictionary<any> | Dictionary<any>[],
+    protected actionOptions?: { returning: boolean }
   ) {}
 
   filter(column: string, operator: FilterOperator, value: any) {
@@ -63,6 +64,7 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
   _getQueryModifier() {
     return new QueryModifier(this.table, this.action, {
       actionValue: this.actionValue,
+      actionOptions: this.actionOptions,
       filters: this.filters,
       sorts: this.sorts,
     });

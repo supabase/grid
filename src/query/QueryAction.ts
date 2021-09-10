@@ -3,10 +3,16 @@ import { IQueryFilter, QueryFilter } from './QueryFilter';
 
 export interface IQueryAction {
   count: () => IQueryFilter;
-  delete: () => IQueryFilter;
-  insert: (values: Dictionary<any> | Dictionary<any>[]) => IQueryFilter;
+  delete: (options?: { returning: boolean }) => IQueryFilter;
+  insert: (
+    values: Dictionary<any> | Dictionary<any>[],
+    options?: { returning: boolean }
+  ) => IQueryFilter;
   select: (columns?: string[]) => IQueryFilter;
-  update: (value: Dictionary<any>) => IQueryFilter;
+  update: (
+    value: Dictionary<any>,
+    options?: { returning: boolean }
+  ) => IQueryFilter;
 }
 
 export class QueryAction implements IQueryAction {
@@ -16,12 +22,15 @@ export class QueryAction implements IQueryAction {
     return new QueryFilter(this.table, 'count');
   }
 
-  delete() {
-    return new QueryFilter(this.table, 'delete');
+  delete(options?: { returning: boolean }) {
+    return new QueryFilter(this.table, 'delete', options);
   }
 
-  insert(values: Dictionary<any> | Dictionary<any>[]) {
-    return new QueryFilter(this.table, 'insert', values);
+  insert(
+    values: Dictionary<any> | Dictionary<any>[],
+    options?: { returning: boolean }
+  ) {
+    return new QueryFilter(this.table, 'insert', values, options);
   }
 
   /**
@@ -31,7 +40,7 @@ export class QueryAction implements IQueryAction {
     return new QueryFilter(this.table, 'select', columns);
   }
 
-  update(value: Dictionary<any>) {
-    return new QueryFilter(this.table, 'update', value);
+  update(value: Dictionary<any>, options?: { returning: boolean }) {
+    return new QueryFilter(this.table, 'update', value, options);
   }
 }
