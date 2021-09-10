@@ -21,9 +21,10 @@ export class SqlRowService implements IRowService {
     let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
-    filters.forEach((x) => {
-      queryChains = queryChains.filter(x.columnName, '=', x.filterText);
-    });
+    // TODO: fix filters
+    // filters.forEach((x) => {
+    //   queryChains = queryChains.filter(x.columnName, '=', x.filterText);
+    // });
     const query = queryChains.toSql();
     console.log('count query: ', query);
     const { data, error } = await this.onSqlQuery(query);
