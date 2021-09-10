@@ -66,7 +66,7 @@ export class SqlRowService implements IRowService {
       this.onError(error);
     });
 
-    return { error: { message: 'Test' } };
+    return {};
   }
 
   async fetchPage(
