@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { Typography, Button, IconMenu, IconX, Dropdown } from '@supabase/ui';
+import {
+  Typography,
+  Button,
+  IconMenu,
+  IconX,
+  Dropdown,
+  Toggle,
+} from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { useDispatch, useTrackedState } from '../../../store';
-import { SegmentedControl } from '../../common';
 import { DragItem } from '../../../types';
 
 type SortRowProps = {
@@ -87,10 +93,10 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
     },
   });
 
-  function onToogle(value: string) {
+  function onToogle(value: boolean) {
     dispatch({
       type: 'UPDATE_SORT',
-      payload: { columnName, ascending: value === 'ASC' },
+      payload: { columnName, ascending: value },
     });
   }
 
@@ -137,16 +143,16 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
           </div>
         </div>
         <div className="sb-grid-sort-row__item">
-          <SegmentedControl
-            options={['ASC', 'DESC']}
-            value={sort.ascending ? 'ASC' : 'DESC'}
-            onToggle={onToogle}
+          <Toggle
+            className="sb-grid-sort-row__item_toogle"
+            layout="horizontal"
+            label="ascending"
+            defaultChecked={sort.ascending}
+            onChange={onToogle}
           />
-          <div>
-            <Typography.Text className="sb-grid-sort-row__item__move">
-              <IconMenu size="tiny" />
-            </Typography.Text>
-          </div>
+          <Typography.Text className="sb-grid-sort-row__item__move">
+            <IconMenu size="tiny" />
+          </Typography.Text>
         </div>
       </div>
     </Dropdown.Misc>

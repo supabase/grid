@@ -651,8 +651,12 @@
   @apply flex items-center space-x-2;
 }
 
+.sb-grid-sort-row__item_toogle {
+  @apply flex items-center space-x-3 gap-0 w-28;
+}
+
 .sb-grid-sort-row__item__move {
-  @apply cursor-move;
+  @apply flex cursor-move;
 }
 
 /*
