@@ -1,3 +1,3 @@
-import FilterDropdownProps from './FilterPopover';
+import FilterPopover from './FilterPopover';
 
-export default FilterDropdownProps;
+export default FilterPopover;
