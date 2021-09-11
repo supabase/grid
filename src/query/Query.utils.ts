@@ -127,6 +127,16 @@ function applyFilters(query: string, filters: Filter[]) {
     .map((x) => {
       if (Array.isArray(x.value)) {
         return `${ident(x.column)} ${x.operator} (${literal(x.value)})`;
+      } else if (x.operator == 'is') {
+        switch (x.value) {
+          case 'null':
+          case 'false':
+          case 'true':
+          case 'not null':
+            return `${ident(x.column)} ${x.operator} ${x.value}`;
+          default:
+            return `${ident(x.column)} ${x.operator} ${literal(x.value)}`;
+        }
       } else {
         return `${ident(x.column)} ${x.operator} ${literal(x.value)}`;
       }
