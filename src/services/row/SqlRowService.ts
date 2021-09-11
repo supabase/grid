@@ -21,10 +21,11 @@ export class SqlRowService implements IRowService {
     let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
-    // TODO: fix filters
-    // filters.forEach((x) => {
-    //   queryChains = queryChains.filter(x.columnName, '=', x.filterText);
-    // });
+    filters
+      .filter((x) => x.value != '')
+      .forEach((x) => {
+        queryChains = queryChains.filter(x.column, x.operator, x.value);
+      });
     const query = queryChains.toSql();
     console.log('count query: ', query);
     const { data, error } = await this.onSqlQuery(query);
@@ -85,6 +86,11 @@ export class SqlRowService implements IRowService {
     let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .select();
+    filters
+      .filter((x) => x.value != '')
+      .forEach((x) => {
+        queryChains = queryChains.filter(x.column, x.operator, x.value);
+      });
     sorts.forEach((x) => {
       queryChains = queryChains.order(x.columnName, x.ascending, x.nullsFirst);
     });
