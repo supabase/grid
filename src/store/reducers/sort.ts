@@ -16,7 +16,7 @@ type SORT_ACTIONTYPE =
       payload: Sort[];
     }
   | { type: 'ADD_SORT'; payload: Sort }
-  | { type: 'REMOVE_SORT'; payload: { columnName: string } }
+  | { type: 'REMOVE_SORT'; payload: { column: string } }
   | {
       type: 'UPDATE_SORT';
       payload: Sort;
@@ -48,16 +48,14 @@ const SortReducer = (state: SortInitialState, action: SORT_ACTIONTYPE) => {
     case 'REMOVE_SORT':
       return {
         ...state,
-        sorts: state.sorts.filter(
-          x => x.columnName !== action.payload.columnName
-        ),
+        sorts: state.sorts.filter((x) => x.column !== action.payload.column),
         refreshPageFlag: Date.now(),
       };
     case 'UPDATE_SORT':
       return {
         ...state,
-        sorts: state.sorts.map(x => {
-          if (x.columnName == action.payload.columnName) return action.payload;
+        sorts: state.sorts.map((x) => {
+          if (x.column == action.payload.column) return action.payload;
           return x;
         }),
         refreshPageFlag: Date.now(),

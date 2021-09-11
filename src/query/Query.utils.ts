@@ -115,7 +115,7 @@ function applySorts(query: string, sorts: Sort[]) {
     .map((x) => {
       const order = x.ascending ? 'asc' : 'desc';
       const nullOrder = x.nullsFirst ? 'nulls first' : 'nulls last';
-      return `${ident(x.columnName)} ${order} ${nullOrder}`;
+      return `${ident(x.column)} ${order} ${nullOrder}`;
     })
     .join(', ')}`;
   return query;

@@ -153,7 +153,7 @@ export class PostgrestRowService implements IRowService {
     // Then sort
     for (let idx in sorts) {
       const sort = sorts[idx];
-      const column = this.table.columns.find((x) => x.name === sort.columnName);
+      const column = this.table.columns.find((x) => x.name === sort.column);
       if (!column) continue;
 
       const columnName = column.name;

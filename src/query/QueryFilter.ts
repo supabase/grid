@@ -40,7 +40,7 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
 
   order(column: string, ascending = true, nullsFirst = false) {
     this.sorts.push({
-      columnName: column,
+      column: column,
       ascending,
       nullsFirst,
     });

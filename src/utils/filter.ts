@@ -1,6 +1,9 @@
-import { SavedState, SupaTable } from '../types';
+import { Filter, SavedState, SupaTable } from '../types';
 
-export function getInitialFilters(table: SupaTable, savedState?: SavedState) {
+export function getInitialFilters(
+  table: SupaTable,
+  savedState?: SavedState
+): Filter[] {
   if (savedState?.filters) {
     // verify column still exists
     const filters = savedState.filters.filter((x) => {

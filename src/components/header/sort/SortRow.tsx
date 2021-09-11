@@ -21,7 +21,7 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const column = state?.table?.columns.find((x) => x.name === columnName);
-  const sort = state?.sorts.find((x) => x.columnName === columnName);
+  const sort = state?.sorts.find((x) => x.column === columnName);
   if (!column || !sort) return null;
 
   const ref = React.useRef<HTMLDivElement>(null);
@@ -96,14 +96,14 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   function onToogle(value: boolean) {
     dispatch({
       type: 'UPDATE_SORT',
-      payload: { columnName, ascending: value },
+      payload: { column: columnName, ascending: value },
     });
   }
 
   function onDeleteClick() {
     dispatch({
       type: 'REMOVE_SORT',
-      payload: { columnName },
+      payload: { column: columnName },
     });
   }
 

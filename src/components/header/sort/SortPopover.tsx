@@ -40,7 +40,7 @@ const Sort: FC = () => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const columns = state?.table?.columns!.filter((x) => {
-    const found = state.sorts.find((y) => y.columnName == x.name);
+    const found = state.sorts.find((y) => y.column == x.name);
     return !found;
   });
   const dropdownOptions =
@@ -51,14 +51,14 @@ const Sort: FC = () => {
   function onAddSort(columnName: string | number) {
     dispatch({
       type: 'ADD_SORT',
-      payload: { columnName, ascending: true },
+      payload: { column: columnName, ascending: true },
     });
   }
 
   return (
     <div>
       {state.sorts.map((x, index) => (
-        <SortRow key={x.columnName} columnName={x.columnName} index={index} />
+        <SortRow key={x.column} columnName={x.column} index={index} />
       ))}
       {state.sorts.length == 0 && (
         <Dropdown.Misc>

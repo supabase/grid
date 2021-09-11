@@ -92,7 +92,7 @@ export class SqlRowService implements IRowService {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });
     sorts.forEach((x) => {
-      queryChains = queryChains.order(x.columnName, x.ascending, x.nullsFirst);
+      queryChains = queryChains.order(x.column, x.ascending, x.nullsFirst);
     });
     const query = queryChains.range(from, to).toSql();
     console.log('select query: ', query);
