@@ -48,7 +48,7 @@ const Filter: FC = () => {
       type: 'ADD_FILTER',
       payload: {
         column: state.table?.columns[0].name,
-        operator: 'eq',
+        operator: '=',
         value: '',
       },
     });

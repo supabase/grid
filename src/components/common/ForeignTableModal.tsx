@@ -24,6 +24,9 @@ type ForeignTableModalProps = {
   onChange: (value: any | null) => void;
 };
 
+/**
+ * TODO: fix to support new FITER model
+ */
 export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   columnName,
   defaultValue,
