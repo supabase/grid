@@ -98,12 +98,13 @@ export class SqlRowService implements IRowService {
     console.log('select query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
-      return { error };
+      this.onError(error);
+      return { data: { rows: [] } };
     } else {
       const rows = data?.map((x: any, index: number) => {
         return { idx: index, ...x } as SupaRow;
       });
-      return { data: { rows, count: rows.length } };
+      return { data: { rows } };
     }
   }
 
