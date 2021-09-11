@@ -19,7 +19,8 @@ export type FilterOperator =
   | '<='
   | '~~'
   | '~~*'
-  | 'in';
+  | 'in'
+  | 'is';
 
 export interface Filter {
   column: string;
