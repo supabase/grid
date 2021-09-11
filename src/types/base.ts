@@ -10,12 +10,6 @@ export interface Sort {
   nullsFirst?: boolean;
 }
 
-export interface Filter {
-  column: string;
-  operator: FilterOperator;
-  value: string | number;
-}
-
 export type FilterOperator =
   | '='
   | '<>'
@@ -27,7 +21,7 @@ export type FilterOperator =
   | '~~*'
   | 'in';
 
-export interface Filter2 {
+export interface Filter {
   column: string;
   operator: FilterOperator;
   value: string | number;

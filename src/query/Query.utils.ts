@@ -1,7 +1,7 @@
 import { ident, literal } from '@scaleleap/pg-format';
 import {
   Dictionary,
-  Filter2,
+  Filter,
   QueryPagination,
   QueryTable,
   Sort,
@@ -10,7 +10,7 @@ import {
 export function countQuery(
   table: QueryTable,
   options?: {
-    filters?: Filter2[];
+    filters?: Filter[];
   }
 ) {
   let query = `select count(*) from ${queryTable(table)}`;
@@ -23,7 +23,7 @@ export function countQuery(
 
 export function deleteQuery(
   table: QueryTable,
-  filters?: Filter2[],
+  filters?: Filter[],
   options?: {
     returning?: boolean;
   }
@@ -46,7 +46,7 @@ export function selectQuery(
   table: QueryTable,
   columns?: string[],
   options?: {
-    filters?: Filter2[];
+    filters?: Filter[];
     pagination?: QueryPagination;
     sorts?: Sort[];
   }
@@ -73,7 +73,7 @@ export function updateQuery(
   table: QueryTable,
   value: Dictionary<any>,
   options?: {
-    filters?: Filter2[];
+    filters?: Filter[];
     returning?: boolean;
   }
 ) {
@@ -121,7 +121,7 @@ function applySorts(query: string, sorts: Sort[]) {
   return query;
 }
 
-function applyFilters(query: string, filters: Filter2[]) {
+function applyFilters(query: string, filters: Filter[]) {
   if (filters.length == 0) return query;
   query += ` where ${filters
     .map((x) => {

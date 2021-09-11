@@ -1,6 +1,6 @@
 import {
   Dictionary,
-  Filter2,
+  Filter,
   QueryPagination,
   QueryTable,
   Sort,
@@ -26,7 +26,7 @@ export class QueryModifier implements IQueryModifier {
     protected options?: {
       actionValue?: string[] | Dictionary<any> | Dictionary<any>[];
       actionOptions?: { returning: boolean };
-      filters?: Filter2[];
+      filters?: Filter[];
       sorts?: Sort[];
     }
   ) {}

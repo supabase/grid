@@ -1,10 +1,4 @@
-import {
-  Dictionary,
-  Filter2,
-  FilterOperator,
-  QueryTable,
-  Sort,
-} from '../types';
+import { Dictionary, Filter, FilterOperator, QueryTable, Sort } from '../types';
 import { IQueryModifier, QueryModifier } from './QueryModifier';
 
 export interface IQueryFilter {
@@ -22,7 +16,7 @@ export interface IQueryFilter {
 }
 
 export class QueryFilter implements IQueryFilter, IQueryModifier {
-  protected filters: Filter2[] = [];
+  protected filters: Filter[] = [];
   protected sorts: Sort[] = [];
 
   constructor(
