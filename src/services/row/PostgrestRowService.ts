@@ -123,36 +123,32 @@ export class PostgrestRowService implements IRowService {
     // Filter first
     for (let idx in filters) {
       const filter = filters[idx];
-      if (filter.filterText == '') continue;
-      const column = this.table.columns.find(
-        (x) => x.name === filter.columnName
-      );
+      if (filter.value == '') continue;
+      const column = this.table.columns.find((x) => x.name === filter.column);
       if (!column) continue;
 
-      const columnName = column.name;
-      switch (filter.condition) {
-        case 'is':
-          const filterText = filter.filterText.toLowerCase();
-          if (filterText == 'null') request = request.is(columnName, null);
-          else if (filterText == 'true') request = request.is(columnName, true);
-          else if (filterText == 'false')
-            request = request.is(columnName, false);
-          break;
-        case 'in':
-          const filterValues = filter.filterText
-            .split(',')
-            .map((x) => x.trim());
-          request = request.in(columnName, filterValues);
-          break;
-        default:
-          request = request.filter(
-            columnName,
-            // @ts-ignore
-            filter.condition.toLowerCase(),
-            filter.filterText
-          );
-          break;
-      }
+      // const columnName = column.name;
+      // switch (filter.operator) {
+      //   case 'is':
+      //     const filterText = filter.value.toLowerCase();
+      //     if (filterText == 'null') request = request.is(columnName, null);
+      //     else if (filterText == 'true') request = request.is(columnName, true);
+      //     else if (filterText == 'false')
+      //       request = request.is(columnName, false);
+      //     break;
+      //   case 'in':
+      //     const filterValues = filter.value.split(',').map((x) => x.trim());
+      //     request = request.in(columnName, filterValues);
+      //     break;
+      //   default:
+      //     request = request.filter(
+      //       columnName,
+      //       // @ts-ignore
+      //       filter.operator.toLowerCase(),
+      //       filter.value
+      //     );
+      //     break;
+      // }
     }
     // Then sort
     for (let idx in sorts) {

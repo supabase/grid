@@ -11,18 +11,26 @@ export interface Sort {
 }
 
 export interface Filter {
-  clause: string;
-  columnName: string;
-  condition: string;
-  filterText: string;
+  column: string;
+  operator: FilterOperator;
+  value: string | number;
 }
 
-export type FilterOperator = '=' | '>' | '<' | '>=' | '<=' | 'in';
+export type FilterOperator =
+  | '='
+  | '<>'
+  | '>'
+  | '<'
+  | '>='
+  | '<='
+  | '~~'
+  | '~~*'
+  | 'in';
 
 export interface Filter2 {
   column: string;
   operator: FilterOperator;
-  value: string | number | null;
+  value: string | number;
 }
 
 export interface SavedState {

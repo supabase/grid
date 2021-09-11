@@ -15,8 +15,8 @@ import {
 import { useTrackedState } from '../../store';
 import { DropdownControl, ModalPortal } from '../common';
 import { Dictionary } from '../../types';
-import { FilterConditionOptions } from '../../components/header/filter/FilterRow';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import { FilterOperatorOptions } from '../header/filter';
 
 type ForeignTableModalProps = {
   columnName?: string;
@@ -35,7 +35,9 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   );
   const [rows, setRows] = React.useState<Dictionary<any>[] | null>(null);
   const state = useTrackedState();
-  const columnDefinition = state.table?.columns.find(x => x.name == columnName);
+  const columnDefinition = state.table?.columns.find(
+    (x) => x.name == columnName
+  );
 
   React.useEffect(() => {
     if (!visible) return;
@@ -93,7 +95,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
             request = request.is(columnName, false);
           break;
         case 'in':
-          const filterValues = filterText.split(',').map(x => x.trim());
+          const filterValues = filterText.split(',').map((x) => x.trim());
           request = request.in(columnName, filterValues);
           break;
         default:
@@ -246,12 +248,12 @@ export const Filter: React.FC<FilterProps> = ({
       : ''
   );
   const [condition, setCondition] = React.useState(
-    FilterConditionOptions[0].value
+    FilterOperatorOptions[0].value
   );
   const [filterText, setFilterText] = React.useState(defaultValue ?? '');
 
   const columnOptions =
-    foreignColumnNames.map(x => {
+    foreignColumnNames.map((x) => {
       return { value: x, label: x };
     }) || [];
 
@@ -303,7 +305,7 @@ export const Filter: React.FC<FilterProps> = ({
       <DropdownControl
         side="bottom"
         align="start"
-        options={FilterConditionOptions}
+        options={FilterOperatorOptions}
         onSelect={onConditionChange}
       >
         <Button as="span" type="outline" iconRight={<IconChevronDown />}>

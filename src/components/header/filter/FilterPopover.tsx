@@ -47,10 +47,9 @@ const Filter: FC = () => {
     dispatch({
       type: 'ADD_FILTER',
       payload: {
-        clause: 'where',
-        columnName: state.table?.columns[0].name,
-        condition: 'eq',
-        filterText: '',
+        column: state.table?.columns[0].name,
+        operator: 'eq',
+        value: '',
       },
     });
   }
