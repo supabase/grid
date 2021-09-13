@@ -23,7 +23,7 @@ export class QueryAction implements IQueryAction {
   }
 
   delete(options?: { returning: boolean }) {
-    return new QueryFilter(this.table, 'delete', options);
+    return new QueryFilter(this.table, 'delete', undefined, options);
   }
 
   insert(

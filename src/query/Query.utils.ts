@@ -37,7 +37,7 @@ export function deleteQuery(
     query = applyFilters(query, filters);
   }
   if (returning) {
-    query += 'returning *';
+    query += ' returning *';
   }
   return query + ';';
 }
@@ -97,7 +97,7 @@ export function updateQuery(
     query = applyFilters(query, filters);
   }
   if (returning) {
-    query += 'returning *';
+    query += ' returning *';
   }
   return query + ';';
 }
@@ -127,7 +127,7 @@ function applyFilters(query: string, filters: Filter[]) {
 
 function inFilterSql(filter: Filter) {
   const values = filter.value.split(',').map((x) => filterLiteral(x.trim()));
-  return `${ident(filter.column)} ${filter.operator} (${literal(values)})`;
+  return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
 }
 
 function isFilterSql(filter: Filter) {
