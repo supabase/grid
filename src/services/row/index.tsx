@@ -30,5 +30,4 @@ export interface IRowService {
   update: (row: SupaRow) => { error?: ServiceError };
 }
 
-export * from './PostgrestRowService';
 export * from './SqlRowService';
