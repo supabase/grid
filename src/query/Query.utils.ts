@@ -82,7 +82,7 @@ export function updateQuery(
     throw { message: 'no filters for this update query' };
   }
   const queryValue = Object.entries(value)
-    .map(([column, value]) => `${ident(column)} = ${formatLiteral(value)}`)
+    .map(([column, value]) => `${ident(column)} = ${fieldLiteral(value)}`)
     .join(', ');
   let query = `update ${queryTable(table)} set ${queryValue}`;
   if (filters) {
@@ -92,21 +92,6 @@ export function updateQuery(
     query += 'returning *';
   }
   return query + ';';
-}
-
-export function queryTable(table: QueryTable) {
-  return `${ident(table.schema)}.${ident(table.name)}`;
-}
-
-export function formatLiteral(value: any) {
-  if (Array.isArray(value)) {
-    value = JSON.stringify(value);
-    value = value.replace('[', '{');
-    value = value.replace(']', '}');
-  } else if (value?.constructor == Object || Array.isArray(value)) {
-    value = JSON.stringify(value);
-  }
-  return literal(value);
 }
 
 function applySorts(query: string, sorts: Sort[]) {
@@ -125,9 +110,7 @@ function applyFilters(query: string, filters: Filter[]) {
   if (filters.length == 0) return query;
   query += ` where ${filters
     .map((x) => {
-      if (Array.isArray(x.value)) {
-        return `${ident(x.column)} ${x.operator} (${literal(x.value)})`;
-      } else if (x.operator == 'is') {
+      if (x.operator == 'is') {
         switch (x.value) {
           case 'null':
           case 'false':
@@ -135,12 +118,55 @@ function applyFilters(query: string, filters: Filter[]) {
           case 'not null':
             return `${ident(x.column)} ${x.operator} ${x.value}`;
           default:
-            return `${ident(x.column)} ${x.operator} ${literal(x.value)}`;
+            return `${ident(x.column)} ${x.operator} ${filterLiteral(x.value)}`;
         }
+      } else if (x.operator == 'in') {
+        const values = x.value.split(',').map((x) => filterLiteral(x.trim()));
+        return `${ident(x.column)} ${x.operator} (${literal(values)})`;
       } else {
-        return `${ident(x.column)} ${x.operator} ${literal(x.value)}`;
+        return `${ident(x.column)} ${x.operator} ${filterLiteral(x.value)}`;
       }
     })
     .join(' and ')}`;
   return query;
+}
+
+function queryTable(table: QueryTable) {
+  return `${ident(table.schema)}.${ident(table.name)}`;
+}
+
+/**
+ * Field value can be array | bool | object | number | string
+ * For object, stringify it
+ * For array, stringify and convert to Postgres array format
+ * For string, check and convert to number if possible
+ *
+ * TODO: need to solve Postgres array vs json array format bug
+ */
+function fieldLiteral(value: any) {
+  if (Array.isArray(value)) {
+    value = JSON.stringify(value);
+    value = value.replace('[', '{');
+    value = value.replace(']', '}');
+  } else if (value?.constructor == Object || Array.isArray(value)) {
+    value = JSON.stringify(value);
+  } else if (typeof value === 'string') {
+    const maybeNumber = Number(value);
+    if (!isNaN(maybeNumber)) value = maybeNumber;
+  }
+  return literal(value);
+}
+
+/**
+ * Filter value can be string | number
+ * However the value receive from input is always string.
+ * If it's a number, we have to convert it back to number format.
+ */
+function filterLiteral(value: string) {
+  const maybeNumber = Number(value);
+  if (isNaN(maybeNumber)) {
+    return literal(value);
+  } else {
+    return literal(maybeNumber);
+  }
 }
