@@ -94,47 +94,6 @@ export function updateQuery(
   return query + ';';
 }
 
-function applySorts(query: string, sorts: Sort[]) {
-  if (sorts.length == 0) return query;
-  query += ` order by ${sorts
-    .map((x) => {
-      const order = x.ascending ? 'asc' : 'desc';
-      const nullOrder = x.nullsFirst ? 'nulls first' : 'nulls last';
-      return `${ident(x.column)} ${order} ${nullOrder}`;
-    })
-    .join(', ')}`;
-  return query;
-}
-
-function applyFilters(query: string, filters: Filter[]) {
-  if (filters.length == 0) return query;
-  query += ` where ${filters
-    .map((x) => {
-      if (x.operator == 'is') {
-        switch (x.value) {
-          case 'null':
-          case 'false':
-          case 'true':
-          case 'not null':
-            return `${ident(x.column)} ${x.operator} ${x.value}`;
-          default:
-            return `${ident(x.column)} ${x.operator} ${filterLiteral(x.value)}`;
-        }
-      } else if (x.operator == 'in') {
-        const values = x.value.split(',').map((x) => filterLiteral(x.trim()));
-        return `${ident(x.column)} ${x.operator} (${literal(values)})`;
-      } else {
-        return `${ident(x.column)} ${x.operator} ${filterLiteral(x.value)}`;
-      }
-    })
-    .join(' and ')}`;
-  return query;
-}
-
-function queryTable(table: QueryTable) {
-  return `${ident(table.schema)}.${ident(table.name)}`;
-}
-
 /**
  * Field value can be array | bool | object | number | string
  * For object, stringify it
@@ -157,6 +116,48 @@ function fieldLiteral(value: any) {
   return literal(value);
 }
 
+//============================================================
+// Filter Utils
+//============================================================
+
+function applyFilters(query: string, filters: Filter[]) {
+  if (filters.length == 0) return query;
+  query += ` where ${filters
+    .map((filter) => {
+      switch (filter.operator) {
+        case 'in':
+          return inFilterSql(filter);
+        case 'is':
+          return isFilterSql(filter);
+        default:
+          return `${ident(filter.column)} ${filter.operator} ${filterLiteral(
+            filter.value
+          )}`;
+      }
+    })
+    .join(' and ')}`;
+  return query;
+}
+
+function inFilterSql(filter: Filter) {
+  const values = filter.value.split(',').map((x) => filterLiteral(x.trim()));
+  return `${ident(filter.column)} ${filter.operator} (${literal(values)})`;
+}
+
+function isFilterSql(filter: Filter) {
+  switch (filter.value) {
+    case 'null':
+    case 'false':
+    case 'true':
+    case 'not null':
+      return `${ident(filter.column)} ${filter.operator} ${filter.value}`;
+    default:
+      return `${ident(filter.column)} ${filter.operator} ${filterLiteral(
+        filter.value
+      )}`;
+  }
+}
+
 /**
  * Filter value can be string | number
  * However the value receive from input is always string.
@@ -169,4 +170,28 @@ function filterLiteral(value: string) {
   } else {
     return literal(maybeNumber);
   }
+}
+
+//============================================================
+// Sort Utils
+//============================================================
+
+function applySorts(query: string, sorts: Sort[]) {
+  if (sorts.length == 0) return query;
+  query += ` order by ${sorts
+    .map((x) => {
+      const order = x.ascending ? 'asc' : 'desc';
+      const nullOrder = x.nullsFirst ? 'nulls first' : 'nulls last';
+      return `${ident(x.column)} ${order} ${nullOrder}`;
+    })
+    .join(', ')}`;
+  return query;
+}
+
+//============================================================
+// Misc
+//============================================================
+
+function queryTable(table: QueryTable) {
+  return `${ident(table.schema)}.${ident(table.name)}`;
 }
