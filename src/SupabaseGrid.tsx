@@ -13,7 +13,6 @@ import {
 } from './types';
 import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
-import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import {
   fetchCount,
@@ -32,6 +31,7 @@ import { Grid } from './components/grid';
 import { Shortcuts } from './components/common';
 import Header from './components/header';
 import Footer from './components/footer';
+import { fetchEditableInfo, fetchReadOnlyInfo } from './SupabaseGrid.utils';
 
 /**
  * Ensure that if editable is false, we should remove all editing actions
@@ -242,13 +242,10 @@ function initTable(
     });
   }
 
-  /**
-   * TODO: we should drop support for fetch table info using rpc FUNCTIONS
-   */
   if (typeof props.table === 'string') {
     const fetchMethod = props.editable
-      ? fetchTableInfo(state.tableService!, props.table, props.schema)
-      : fetchReadonlyTableInfo(state.openApiService!, props.table);
+      ? fetchEditableInfo(state.metaService!, props.table, props.schema)
+      : fetchReadOnlyInfo(state.metaService!, props.table, props.schema);
 
     fetchMethod.then((res) => {
       if (res) onInitTable(res, props);

@@ -1,12 +1,12 @@
-import { ITableService } from '.';
+import { IMetaService } from '.';
 import {
   getColumnsSql,
   getPrimaryKeysSql,
   getRelationshipsSql,
   getTableSql,
-} from './SqlTableService.sqls';
+} from './SqlMetaService.sqls';
 
-export class SqlTableService implements ITableService {
+export class SqlMetaService implements IMetaService {
   constructor(
     protected onSqlQuery: (
       query: string

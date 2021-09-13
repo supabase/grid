@@ -3,14 +3,15 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import { IRowService, SqlRowService } from '../../services/row';
-import { ITableService, SqlTableService } from '../../services/table';
+import { IMetaService, SqlMetaService } from '../../services/meta';
+
 import OpenApiService from '../../services/OpenApiService';
 
 export interface BaseInitialState {
   client: SupabaseClient | null;
   openApiService: OpenApiService | null;
   table: SupaTable | null;
-  tableService: ITableService | null;
+  metaService: IMetaService | null;
   rowService: IRowService | null;
   refreshPageFlag: number;
   isInitialComplete: boolean;
@@ -21,7 +22,7 @@ export const baseInitialState: BaseInitialState = {
   client: null,
   openApiService: null,
   table: null,
-  tableService: null,
+  metaService: null,
   rowService: null,
   refreshPageFlag: 0,
   isInitialComplete: false,
@@ -70,7 +71,7 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
         ...state,
         client,
         openApiService,
-        tableService: new SqlTableService(action.payload.onSqlQuery),
+        metaService: new SqlMetaService(action.payload.onSqlQuery),
       };
     }
     case 'INIT_TABLE': {

@@ -1,6 +1,6 @@
 import { Dictionary, ServiceError } from '../../types';
 
-export interface ITableService {
+export interface IMetaService {
   fetchInfo: (
     name: string,
     schema?: string
@@ -19,4 +19,4 @@ export interface ITableService {
   ) => Promise<{ data?: Dictionary<any>[]; error?: ServiceError }>;
 }
 
-export * from './SqlTableService';
+export * from './SqlMetaService';
