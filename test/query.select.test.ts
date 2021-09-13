@@ -63,7 +63,7 @@ test('select table with in filter', async () => {
   const res = query
     .from('users')
     .select()
-    .filter('name', 'in', ['hello world', 'xin chao'])
+    .filter('name', 'in', 'hello world, xin chao')
     .toSql();
   expect(res).toMatchSnapshot();
 });
@@ -72,7 +72,7 @@ test('select table with multi filters', async () => {
     .from('users')
     .select()
     .filter('name', '=', 'hello world')
-    .filter('age', '>', 18)
+    .filter('age', '>', '18')
     .toSql();
   expect(res).toMatchSnapshot();
 });
@@ -81,7 +81,7 @@ test('select table with filter and order', async () => {
     .from('users')
     .select()
     .filter('name', '=', 'hello world')
-    .filter('age', '>', 18)
+    .filter('age', '>', '18')
     .order('id')
     .toSql();
   expect(res).toMatchSnapshot();
