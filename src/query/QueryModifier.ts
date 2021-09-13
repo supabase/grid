@@ -57,6 +57,9 @@ export class QueryModifier implements IQueryModifier {
             returning: actionOptions?.returning,
           });
         }
+        case 'insert': {
+          throw 'not implemented';
+        }
         case 'select': {
           return selectQuery(this.table, actionValue as string[] | undefined, {
             filters,
