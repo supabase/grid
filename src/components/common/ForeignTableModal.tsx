@@ -14,9 +14,10 @@ import {
 } from '@supabase/ui';
 import { useTrackedState } from '../../store';
 import { DropdownControl, ModalPortal } from '../common';
-import { Dictionary } from '../../types';
-import { FilterConditionOptions } from '../../components/header/filter/FilterRow';
+import { Dictionary, FilterOperator } from '../../types';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import { FilterOperatorOptions } from '../header/filter';
+import Query from '../../query';
 
 type ForeignTableModalProps = {
   columnName?: string;
@@ -35,7 +36,9 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   );
   const [rows, setRows] = React.useState<Dictionary<any>[] | null>(null);
   const state = useTrackedState();
-  const columnDefinition = state.table?.columns.find(x => x.name == columnName);
+  const columnDefinition = state.table?.columns.find(
+    (x) => x.name == columnName
+  );
 
   React.useEffect(() => {
     if (!visible) return;
@@ -55,20 +58,19 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
 
   async function fetchColumns() {
     if (
-      !state.openApiService ||
+      !state.metaService ||
       !columnDefinition?.targetTableName ||
       !columnDefinition?.targetTableSchema
     )
       return;
 
-    const { data, error } = await state.openApiService.fetchDescription();
-    if (!error && data && data.definitions) {
-      const tableInfo = data.definitions[columnDefinition?.targetTableName];
-      if (tableInfo) {
-        const columns = tableInfo.properties as Dictionary<any>;
-        const columnNames = Object.keys(columns) as string[];
-        setForeignColumnNames(columnNames);
-      }
+    const { data } = await state.metaService.fetchColumns(
+      columnDefinition?.targetTableName,
+      columnDefinition?.targetTableSchema
+    );
+    if (data && data.length > 0) {
+      const columnNames = data.map((x) => x.name);
+      setForeignColumnNames(columnNames);
     }
   }
 
@@ -77,43 +79,35 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
     condition: string;
     filterText: string;
   }) {
-    if (!state.client || !columnDefinition?.targetTableName) return;
+    console.log('fetchData: ', fetchData);
+    if (!state.onSqlQuery || !columnDefinition?.targetTableName) return;
 
-    let request = state.client.from(columnDefinition?.targetTableName).select();
+    const query = new Query();
+    let queryChains = query
+      .from(
+        columnDefinition?.targetTableName,
+        columnDefinition?.targetTableSchema ?? undefined
+      )
+      .select();
 
     if (filter && filter.filterText) {
       const { columnName, condition, filterText } = filter;
-      switch (condition) {
-        case 'is':
-          const _filterText = filterText.toLowerCase();
-          if (_filterText == 'null') request = request.is(columnName, null);
-          else if (_filterText == 'true')
-            request = request.is(columnName, true);
-          else if (_filterText == 'false')
-            request = request.is(columnName, false);
-          break;
-        case 'in':
-          const filterValues = filterText.split(',').map(x => x.trim());
-          request = request.in(columnName, filterValues);
-          break;
-        default:
-          request = request.filter(
-            columnName,
-            // @ts-ignore
-            condition.toLowerCase(),
-            filterText
-          );
-          break;
-      }
+      queryChains = queryChains.filter(
+        columnName,
+        condition as FilterOperator,
+        filterText
+      );
     }
 
     // TODO: How to let users know that filter result limit at 20 results
     // should we allow a higher value?
-    const res = await request.limit(20);
-    if (!res.data || res.error) {
+    const sql = queryChains.range(0, 20).toSql();
+    console.log('select query: ', query);
+    const { data, error } = await state.onSqlQuery(sql);
+    if (error) {
       setRows(null);
     } else {
-      setRows(res.data);
+      setRows(data);
     }
   }
 
@@ -246,12 +240,12 @@ export const Filter: React.FC<FilterProps> = ({
       : ''
   );
   const [condition, setCondition] = React.useState(
-    FilterConditionOptions[0].value
+    FilterOperatorOptions[0].value
   );
   const [filterText, setFilterText] = React.useState(defaultValue ?? '');
 
   const columnOptions =
-    foreignColumnNames.map(x => {
+    foreignColumnNames.map((x) => {
       return { value: x, label: x };
     }) || [];
 
@@ -303,7 +297,7 @@ export const Filter: React.FC<FilterProps> = ({
       <DropdownControl
         side="bottom"
         align="start"
-        options={FilterConditionOptions}
+        options={FilterOperatorOptions}
         onSelect={onConditionChange}
       >
         <Button as="span" type="outline" iconRight={<IconChevronDown />}>

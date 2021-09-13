@@ -8,9 +8,8 @@ describe('<SupabaseGrid />', () => {
     ReactDOM.render(
       <SupabaseGrid
         table=""
-        clientProps={{
-          supabaseUrl: '',
-          supabaseKey: '',
+        onSqlQuery={async (query: string) => {
+          return { error: { message: query } };
         }}
       />,
       div

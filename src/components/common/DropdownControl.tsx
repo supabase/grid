@@ -7,16 +7,18 @@ type DropdownControlProps = {
   className?: string;
   side?: 'bottom' | 'left' | 'top' | 'right' | undefined;
   align?: 'start' | 'center' | 'end' | undefined;
+  isNested?: boolean;
 };
 
-export const DropdownControl: React.FC<DropdownControlProps> = p => {
-  const { className, children, side, align } = p;
+export const DropdownControl: React.FC<DropdownControlProps> = (p) => {
+  const { className, children, side, align, isNested } = p;
   return (
     <Dropdown
       className={className}
       side={side}
       align={align}
       overlay={<DropdownItems {...p} />}
+      isNested={isNested}
     >
       {children}
     </Dropdown>
@@ -34,7 +36,7 @@ const DropdownItems: React.FC<DropdownControlProps> = ({
           No more items
         </Typography.Text>
       )}
-      {options.map(x => {
+      {options.map((x) => {
         return (
           <Dropdown.Item key={x.value} onClick={() => onSelect(x.value)}>
             {x.label}

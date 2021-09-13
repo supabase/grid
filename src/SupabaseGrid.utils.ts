@@ -1,10 +1,8 @@
-import OpenApiService from '../services/OpenApiService';
-import TableService from '../services/TableService';
-import { Dictionary, SupaColumn, SupaTable } from '../types';
+import { IMetaService } from './services/meta';
+import { Dictionary, SupaColumn, SupaTable } from './types';
 
-// Using stored procedures function
-export async function fetchTableInfo(
-  service: TableService,
+export async function fetchEditableInfo(
+  service: IMetaService,
   tableName: string,
   schema?: string
 ): Promise<SupaTable | null> {
@@ -17,11 +15,10 @@ export async function fetchTableInfo(
     resColumns.data &&
     resPrimaryKeys.data &&
     resRelationships.data &&
-    resTable.data.length > 0 &&
     resColumns.data.length > 0
   ) {
     const supaTable = parseSupaTable({
-      table: resTable.data[0],
+      table: resTable.data,
       columns: resColumns.data,
       primaryKeys: resPrimaryKeys.data,
       relationships: resRelationships.data,
@@ -38,7 +35,7 @@ export function parseSupaTable(data: {
   relationships: Dictionary<any>[];
 }): SupaTable {
   const { table, columns, primaryKeys, relationships } = data;
-  const supaColumns: SupaColumn[] = columns.map(x => {
+  const supaColumns: SupaColumn[] = columns.map((x) => {
     const temp = {
       position: x.ordinal_position,
       name: x.name,
@@ -56,10 +53,10 @@ export function parseSupaTable(data: {
       targetTableName: null,
       targetColumnName: null,
     };
-    const primaryKey = primaryKeys.find(pk => pk.name == x.name);
+    const primaryKey = primaryKeys.find((pk) => pk.name == x.name);
     temp.isPrimaryKey = !!primaryKey;
 
-    const relationship = relationships.find(r => {
+    const relationship = relationships.find((r) => {
       return r.source_column_name == x.name;
     });
     if (relationship) {
@@ -78,47 +75,28 @@ export function parseSupaTable(data: {
   };
 }
 
-// Using postgrest OpenAPI description
-export async function fetchReadonlyTableInfo(
-  service: OpenApiService,
-  tableName: string
+export async function fetchReadOnlyInfo(
+  service: IMetaService,
+  name: string,
+  schema?: string
 ): Promise<SupaTable | null> {
-  const { data, error } = await service.fetchDescription();
-  if (error || !data || !data.definitions) return null;
+  const { data } = await service.fetchColumns(name, schema);
 
-  const tableInfo = data.definitions[tableName];
-  if (tableInfo) {
-    const supaTable = parseReadonlySupaTable(tableInfo, tableName);
-    return supaTable;
-  } else {
-    return null;
-  }
-}
+  if (data) {
+    const supaColumns: SupaColumn[] = data.map((x, index) => {
+      return {
+        name: x.name,
+        dataType: x.format,
+        format: x.format,
+        position: index,
+        isUpdatable: false,
+      };
+    });
 
-export function parseReadonlySupaTable(
-  table: Dictionary<any>,
-  tableName: string
-): SupaTable | null {
-  if (!table) return null;
-
-  const columns = table.properties ? (table.properties as Dictionary<any>) : {};
-  const columnNames = Object.keys(columns) as string[];
-  const supaColumns: SupaColumn[] = columnNames.map((x, index) => {
-    const col = columns[x];
     return {
-      name: x,
-      dataType: col.type,
-      format: col.format,
-      enum: col.enum,
-      comment: col.description,
-      position: index,
-      isUpdatable: false,
+      name: name,
+      columns: supaColumns,
     };
-  });
-
-  return {
-    name: tableName,
-    comment: table.description,
-    columns: supaColumns,
-  };
+  }
+  return null;
 }

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic delete on table 1`] = `"delete from public.users where name = 'hello world';"`;
+
+exports[`delete should ignore order 1`] = `"delete from public.users where name = 'hello world';"`;
+
+exports[`delete with returning record on table 1`] = `"delete from public.users where name = 'hello world';"`;

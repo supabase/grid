@@ -1,27 +1,21 @@
 import { Column } from '@supabase/react-data-grid';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import RowService from '../../services/RowService';
-import TableService from '../../services/TableService';
-import OpenApiService from '../../services/OpenApiService';
+import { IRowService, SqlRowService } from '../../services/row';
+import { IMetaService, SqlMetaService } from '../../services/meta';
 
 export interface BaseInitialState {
-  client: SupabaseClient | null;
-  openApiService: OpenApiService | null;
   table: SupaTable | null;
-  tableService: TableService | null;
-  rowService: RowService | null;
+  metaService: IMetaService | null;
+  rowService: IRowService | null;
   refreshPageFlag: number;
   isInitialComplete: boolean;
   editable: boolean;
 }
 
 export const baseInitialState: BaseInitialState = {
-  client: null,
-  openApiService: null,
   table: null,
-  tableService: null,
+  metaService: null,
   rowService: null,
   refreshPageFlag: 0,
   isInitialComplete: false,
@@ -36,6 +30,7 @@ export type INIT_ACTIONTYPE =
         supabaseKey: string;
         schema?: string;
         headers?: { [key: string]: string };
+        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
       };
     }
   | {
@@ -46,6 +41,7 @@ export type INIT_ACTIONTYPE =
         gridProps?: GridProps;
         savedState?: SavedState;
         editable?: boolean;
+        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
         onError: (error: any) => void;
       };
     };
@@ -55,26 +51,18 @@ type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
   switch (action.type) {
     case 'INIT_CLIENT': {
-      const { supabaseUrl, supabaseKey, headers, schema } = action.payload;
-      const client = new SupabaseClient(supabaseUrl, supabaseKey, {
-        schema: schema,
-        headers: headers,
-      });
-      const openApiService = new OpenApiService(supabaseUrl, supabaseKey);
       return {
         ...state,
-        client,
-        openApiService,
-        tableService: new TableService(client),
+        metaService: new SqlMetaService(action.payload.onSqlQuery),
       };
     }
     case 'INIT_TABLE': {
       return {
         ...state,
         table: action.payload.table,
-        rowService: new RowService(
+        rowService: new SqlRowService(
           action.payload.table,
-          state.client!,
+          action.payload.onSqlQuery,
           action.payload.onError
         ),
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,

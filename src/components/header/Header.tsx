@@ -11,7 +11,7 @@ import {
 } from '@supabase/ui';
 import FileSaver from 'file-saver';
 import FilterDropdown from './filter';
-import SortDropdown from './sort';
+import SortPopover from './sort';
 import StatusLabel from './StatusLabel';
 import RefreshButton from './RefreshButton';
 import { exportRowsToCsv } from '../../utils';
@@ -83,7 +83,7 @@ const DefaultHeader: React.FC<DefaultHeaderProps> = ({
     <>
       <RefreshButton />
       <FilterDropdown />
-      <SortDropdown />
+      <SortPopover />
       <Divider
         light
         type="vertical"
@@ -109,7 +109,7 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
         'Are you sure you want to delete the selected rows? This action cannot be undone.',
       onConfirm: async () => {
         const rowIdxs = Array.from(selectedRows) as number[];
-        const rows = allRows.filter(x => rowIdxs.includes(x.idx));
+        const rows = allRows.filter((x) => rowIdxs.includes(x.idx));
         const { error } = state.rowService!.delete(rows);
         if (error) {
           if (state.onError) state.onError(error);
@@ -125,7 +125,7 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
   };
 
   function onRowsExportCsv() {
-    const rows = allRows.filter(x => selectedRows.has(x.idx));
+    const rows = allRows.filter((x) => selectedRows.has(x.idx));
     const csv = exportRowsToCsv(state.table!.columns, rows);
     const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     FileSaver.saveAs(csvData, `${state.table!.name}_rows.csv`);

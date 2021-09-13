@@ -5,15 +5,27 @@ export interface Dictionary<T> {
 }
 
 export interface Sort {
-  columnName: string;
-  order: string;
+  column: string;
+  ascending?: boolean;
+  nullsFirst?: boolean;
 }
 
+export type FilterOperator =
+  | '='
+  | '<>'
+  | '>'
+  | '<'
+  | '>='
+  | '<='
+  | '~~'
+  | '~~*'
+  | 'in'
+  | 'is';
+
 export interface Filter {
-  clause: string;
-  columnName: string;
-  condition: string;
-  filterText: string;
+  column: string;
+  operator: FilterOperator;
+  value: string;
 }
 
 export interface SavedState {

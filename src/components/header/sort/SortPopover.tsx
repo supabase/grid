@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import {
   Dropdown,
   Button,
@@ -6,14 +6,13 @@ import {
   IconList,
   IconChevronDown,
   Divider,
+  Popover,
 } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
 
-type SortDropdownProps = {};
-
-const SortDropdown: React.FC<SortDropdownProps> = p => {
+const SortPopover: FC = () => {
   const state = useTrackedState();
   const btnText =
     state.sorts.length > 0
@@ -23,12 +22,7 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       : 'Sort';
 
   return (
-    <Dropdown
-      side="bottom"
-      align="start"
-      overlay={<Sort {...p} />}
-      className="sb-grid-sort-dropdown"
-    >
+    <Popover align="start" className="sb-grid-sort-popover" overlay={<Sort />}>
       <Button
         as={'span'}
         type="text"
@@ -37,34 +31,34 @@ const SortDropdown: React.FC<SortDropdownProps> = p => {
       >
         {btnText}
       </Button>
-    </Dropdown>
+    </Popover>
   );
 };
-export default SortDropdown;
+export default SortPopover;
 
-const Sort: React.FC<SortDropdownProps> = ({}) => {
+const Sort: FC = () => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const columns = state?.table?.columns!.filter(x => {
-    const found = state.sorts.find(y => y.columnName == x.name);
+  const columns = state?.table?.columns!.filter((x) => {
+    const found = state.sorts.find((y) => y.column == x.name);
     return !found;
   });
   const dropdownOptions =
-    columns?.map(x => {
+    columns?.map((x) => {
       return { value: x.name, label: x.name };
     }) || [];
 
   function onAddSort(columnName: string | number) {
     dispatch({
       type: 'ADD_SORT',
-      payload: { columnName, order: 'ASC' },
+      payload: { column: columnName, ascending: true },
     });
   }
 
   return (
     <div>
       {state.sorts.map((x, index) => (
-        <SortRow key={x.columnName} columnName={x.columnName} index={index} />
+        <SortRow key={x.column} columnName={x.column} index={index} />
       ))}
       {state.sorts.length == 0 && (
         <Dropdown.Misc>

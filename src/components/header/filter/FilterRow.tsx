@@ -1,42 +1,9 @@
 import * as React from 'react';
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { Button, Input, Dropdown, IconX, IconChevronDown } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
-import { Filter } from '../../../types';
-
-const FilterClauseOptions = [
-  { value: 'where', label: 'WHERE' },
-  { value: 'and', label: 'AND' },
-  { value: 'or', label: 'OR' },
-];
-
-export const FilterConditionOptions = [
-  { value: 'eq', label: '[eq] equals' },
-  { value: 'neq', label: '[neq] not equal' },
-  { value: 'gt', label: '[gt] greater than' },
-  { value: 'lt', label: '[lt] less than' },
-  { value: 'gte', label: '[gte] greater than or equal' },
-  { value: 'lte', label: '[lte]less than or equal' },
-  { value: 'like', label: '[like] LIKE operator' },
-  { value: 'ilike', label: '[ilike] ILIKE operator' },
-  { value: 'is', label: '[is] checking for (null,true,false)' },
-  { value: 'in', label: '[in] one of a list of values' },
-];
-
-const updateFilterText = (
-  payload: {
-    filterIdx: number;
-    value: Filter;
-  },
-  dispatch: (value: unknown) => void
-) => {
-  dispatch({
-    type: 'UPDATE_FILTER',
-    payload: payload,
-  });
-};
-const updateFilterTextDebounced = AwesomeDebouncePromise(updateFilterText, 550);
+import { FilterOperatorOptions } from './Filter.constants';
+import { updateFilterValueDebounced } from './Filter.utils';
 
 /**
  * use `now` to trigger re-render as filterIdx won't change value
@@ -51,46 +18,39 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
   const filter = state.filters[filterIdx];
-  const column = state.table?.columns.find(x => x.name === filter.columnName);
+  const column = state.table?.columns.find((x) => x.name === filter.column);
   const columnOptions =
-    state.table?.columns?.map(x => {
+    state.table?.columns?.map((x) => {
       return { value: x.name, label: x.name };
     }) || [];
-  const [filterText, setFilterText] = React.useState(filter.filterText);
+  const [filterValue, setFilterValue] = React.useState(filter.value);
 
   React.useEffect(() => {
     const filter = state.filters[filterIdx];
-    setFilterText(filter.filterText);
+    setFilterValue(filter.value);
   }, [filterIdx, now]);
 
-  function onClauseChange(clause: string | number) {
+  function onColumnChange(column: string | number) {
     dispatch({
       type: 'UPDATE_FILTER',
-      payload: { filterIdx, value: { ...filter, clause } },
+      payload: { filterIdx, value: { ...filter, column } },
     });
   }
 
-  function onColumnChange(columnName: string | number) {
+  function onOperatorChange(operator: string | number) {
     dispatch({
       type: 'UPDATE_FILTER',
-      payload: { filterIdx, value: { ...filter, columnName } },
-    });
-  }
-
-  function onConditionChange(condition: string | number) {
-    dispatch({
-      type: 'UPDATE_FILTER',
-      payload: { filterIdx, value: { ...filter, condition } },
+      payload: { filterIdx, value: { ...filter, operator } },
     });
   }
 
   function onFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-    setFilterText(value);
-    updateFilterTextDebounced(
+    setFilterValue(value);
+    updateFilterValueDebounced(
       {
         filterIdx,
-        value: { ...filter, filterText: value },
+        value: { ...filter, value: value },
       },
       dispatch
     );
@@ -117,15 +77,6 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
           />
           <DropdownControl
             align="start"
-            options={FilterClauseOptions}
-            onSelect={onClauseChange}
-          >
-            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-              {filter.clause}
-            </Button>
-          </DropdownControl>
-          <DropdownControl
-            align="start"
             options={columnOptions}
             onSelect={onColumnChange}
           >
@@ -135,16 +86,16 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
           </DropdownControl>
           <DropdownControl
             align="start"
-            options={FilterConditionOptions}
-            onSelect={onConditionChange}
+            options={FilterOperatorOptions}
+            onSelect={onOperatorChange}
           >
             <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-              {filter.condition}
+              {filter.operator}
             </Button>
           </DropdownControl>
         </div>
         <div>
-          <Input size="tiny" value={filterText} onChange={onFilterChange} />
+          <Input size="tiny" value={filterValue} onChange={onFilterChange} />
         </div>
       </div>
     </Dropdown.Misc>

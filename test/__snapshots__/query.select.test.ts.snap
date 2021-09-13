@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic select table 1`] = `"select * from public.users;"`;
+
+exports[`select table with Capital columns 1`] = `"select \\"Name\\", id, \\"Age\\" from public.users;"`;
+
+exports[`select table with Capital name, schema 1`] = `"select * from \\"Ext\\".\\"UsErs\\";"`;
+
+exports[`select table with columns 1`] = `"select name, id, age from public.users;"`;
+
+exports[`select table with custom schema 1`] = `"select * from ext.users;"`;
+
+exports[`select table with filter 1`] = `"select * from public.users where name = 'hello world';"`;
+
+exports[`select table with filter and order 1`] = `"select * from public.users where name = 'hello world' and age > 18 order by id asc nulls last;"`;
+
+exports[`select table with in filter 1`] = `"select * from public.users where name in ('hello world','xin chao');"`;
+
+exports[`select table with match filter 1`] = `"select * from public.users where name = 'hello world' and birth_year = 1988;"`;
+
+exports[`select table with multi filters 1`] = `"select * from public.users where name = 'hello world' and age > 18;"`;
+
+exports[`select table with multi orders 1`] = `"select * from public.users order by name asc nulls last, age desc nulls last;"`;
+
+exports[`select table with order 1`] = `"select * from public.users order by name asc nulls last;"`;
+
+exports[`select table with order descending null lass 1`] = `"select * from public.users order by name desc nulls last;"`;
+
+exports[`select table with pagination 1`] = `"select * from public.users limit 100 offset 0;"`;

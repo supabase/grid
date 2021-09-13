@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { Typography, Button, IconMenu, IconX, Dropdown } from '@supabase/ui';
+import {
+  Typography,
+  Button,
+  IconMenu,
+  IconX,
+  Dropdown,
+  Toggle,
+} from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { useDispatch, useTrackedState } from '../../../store';
-import { SegmentedControl } from '../../common';
 import { DragItem } from '../../../types';
 
 type SortRowProps = {
@@ -14,8 +20,8 @@ type SortRowProps = {
 const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   const state = useTrackedState();
   const dispatch = useDispatch();
-  const column = state?.table?.columns.find(x => x.name === columnName);
-  const sort = state?.sorts.find(x => x.columnName === columnName);
+  const column = state?.table?.columns.find((x) => x.name === columnName);
+  const sort = state?.sorts.find((x) => x.column === columnName);
   if (!column || !sort) return null;
 
   const ref = React.useRef<HTMLDivElement>(null);
@@ -87,17 +93,17 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
     },
   });
 
-  function onToogle(value: string) {
+  function onToogle(value: boolean) {
     dispatch({
       type: 'UPDATE_SORT',
-      payload: { columnName, order: value },
+      payload: { column: columnName, ascending: value },
     });
   }
 
   function onDeleteClick() {
     dispatch({
       type: 'REMOVE_SORT',
-      payload: { columnName },
+      payload: { column: columnName },
     });
   }
 
@@ -137,16 +143,16 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
           </div>
         </div>
         <div className="sb-grid-sort-row__item">
-          <SegmentedControl
-            options={['ASC', 'DESC']}
-            value={sort.order}
-            onToggle={onToogle}
+          <Toggle
+            className="sb-grid-sort-row__item_toogle"
+            layout="horizontal"
+            label="ascending"
+            defaultChecked={sort.ascending}
+            onChange={onToogle}
           />
-          <div>
-            <Typography.Text className="sb-grid-sort-row__item__move">
-              <IconMenu size="tiny" />
-            </Typography.Text>
-          </div>
+          <Typography.Text className="sb-grid-sort-row__item__move">
+            <IconMenu size="tiny" />
+          </Typography.Text>
         </div>
       </div>
     </Dropdown.Misc>

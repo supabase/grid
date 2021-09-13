@@ -1,10 +1,6 @@
 import React from 'react';
 import { SupabaseGrid, SupabaseGridRef, SupaRow } from '@supabase/grid';
-
-const clientProps = {
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY ?? '',
-};
+import { postAndWait } from './grid.utils';
 
 export default function Grid() {
   const gridRef = React.useRef<SupabaseGridRef>(null);
@@ -87,7 +83,6 @@ export default function Grid() {
             table={tableName}
             editable={!isReadonly}
             storageRef="dqofwyqljsmbgrubmnzk"
-            clientProps={clientProps}
             theme={uiMode}
             gridProps={{ height: '100%' }}
             onError={(error) => {
@@ -108,6 +103,11 @@ export default function Grid() {
             }}
             onEditRow={(row: SupaRow) => {
               console.log('edit row: ', row.idx);
+            }}
+            onSqlQuery={async (query: string) => {
+              const res = await postAndWait('/api/sql-query', { query });
+              // console.log('onSqlQuery res: ', res);
+              return res;
             }}
             headerActions={
               <>

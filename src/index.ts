@@ -1,3 +1,3 @@
 export * from './types';
 export * from './SupabaseGrid';
-export { parseSupaTable } from './utils';
+export { parseSupaTable } from './SupabaseGrid.utils';

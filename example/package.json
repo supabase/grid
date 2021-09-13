@@ -12,13 +12,14 @@
     "@monaco-editor/react": "^4.2.2",
     "@supabase/grid": "file:../",
     "@supabase/react-data-grid": "7.1.0-beta.1",
-    "@supabase/supabase-js": "^1.11.15",
     "@supabase/ui": "0.34.4",
-    "next": "11.1.2",
+    "next": "^10.2.3",
+    "pg": "^8.7.1",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom"
   },
   "devDependencies": {
+    "@types/pg": "^8.6.1",
     "@types/react": "17.0.20",
     "encoding": "^0.1.13",
     "eslint": "7.32.0",

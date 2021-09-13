@@ -1,5 +1,9 @@
 import update from 'immutability-helper';
-import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
+import {
+  REFRESH_PAGE_IMMEDIATELY,
+  TOTAL_ROWS_INITIAL,
+  TOTAL_ROWS_RESET,
+} from '../../constants';
 import { Dictionary, SupaRow } from '../../types';
 import { INIT_ACTIONTYPE } from './base';
 
@@ -18,7 +22,7 @@ export const rowInitialState: RowInitialState = {
   selectedCellPosition: null,
   page: 1,
   rowsPerPage: 100,
-  totalRows: 0,
+  totalRows: TOTAL_ROWS_INITIAL,
 };
 
 type ROW_ACTIONTYPE =
@@ -35,7 +39,11 @@ type ROW_ACTIONTYPE =
   | { type: 'SET_ROWS_PER_PAGE'; payload: number }
   | {
       type: 'SET_ROWS';
-      payload: { rows: SupaRow[]; totalRows: number };
+      payload: { rows: SupaRow[] };
+    }
+  | {
+      type: 'SET_ROWS_COUNT';
+      payload: number;
     }
   | { type: 'ADD_ROWS'; payload: SupaRow[] }
   | { type: 'ADD_NEW_ROW'; payload: Dictionary<any> }
@@ -50,6 +58,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         page: 1,
         selectedCellPosition: null,
         selectedRows: new Set(),
+        totalRows: TOTAL_ROWS_RESET,
       };
     }
     case 'SELECTED_CELL_CHANGE': {
@@ -79,13 +88,19 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
       };
     }
-    case 'SET_ROWS':
+    case 'SET_ROWS': {
       return {
         ...state,
         rows: action.payload.rows,
-        totalRows: action.payload.totalRows,
         refreshPageFlag: 0,
       };
+    }
+    case 'SET_ROWS_COUNT': {
+      return {
+        ...state,
+        totalRows: action.payload,
+      };
+    }
     case 'ADD_ROWS': {
       const totalRows = state.totalRows + action.payload.length;
       return {
@@ -116,7 +131,7 @@ const RowReducer = (state: RowInitialState, action: ROW_ACTIONTYPE) => {
       const totalRows = state.totalRows - action.payload.rowIdxs.length;
       return {
         ...state,
-        rows: state.rows.filter(x => !action.payload.rowIdxs.includes(x.idx)),
+        rows: state.rows.filter((x) => !action.payload.rowIdxs.includes(x.idx)),
         totalRows: totalRows,
       };
     }

@@ -22,7 +22,9 @@ export const Grid = memo(
       const dispatch = useDispatch();
       const state = useTrackedState();
       // workaround to force state tracking on state.gridColumns
-      const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
+      const columnHeaders = state.gridColumns.map(
+        (x) => `${x.key}_${x.frozen}`
+      );
       const { gridColumns, rows, onError: onErrorFunc } = state;
 
       function onColumnResized(index: number, width: number) {
@@ -37,7 +39,7 @@ export const Grid = memo(
         data: RowsChangeData<SupaRow, unknown>
       ) {
         const rowData = rows[data.indexes[0]];
-        const originRowData = state.rows.find(x => x.idx == rowData.idx);
+        const originRowData = state.rows.find((x) => x.idx == rowData.idx);
         const hasChange =
           JSON.stringify(rowData) !== JSON.stringify(originRowData);
         if (hasChange) {
@@ -47,7 +49,7 @@ export const Grid = memo(
           } else {
             dispatch({
               type: 'SET_ROWS',
-              payload: { rows, totalRows: state.totalRows },
+              payload: { rows },
             });
           }
         }

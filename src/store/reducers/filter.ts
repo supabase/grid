@@ -101,12 +101,12 @@ const FilterReducer = (
 
 export default FilterReducer;
 
-function isValidFilter(value: Filter) {
+function isValidFilter(filter: Filter) {
   return (
-    value &&
-    value.columnName &&
-    value.columnName != '' &&
-    value.filterText &&
-    value.filterText != ''
+    filter &&
+    filter.column &&
+    filter.column != '' &&
+    filter.value &&
+    filter.value != ''
   );
 }

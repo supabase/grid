@@ -17,21 +17,13 @@ export type SupabaseGridProps = {
    */
   table: SupaTable | string;
   /**
-   * props to create client
+   * table schema. Default set to 'public' if not provided
    */
-  clientProps: {
-    supabaseUrl: string;
-    supabaseKey: string;
-    headers?: { [key: string]: string };
-  };
+  schema?: string;
   /**
    * props to config grid view
    */
   gridProps?: GridProps;
-  /**
-   * table schema. Default set to 'public' if not provided
-   */
-  schema?: string;
   /**
    * storageRef is used to save state on localstorage
    */
@@ -72,6 +64,10 @@ export type SupabaseGridProps = {
    * show edit row button if available
    */
   onEditRow?: (row: SupaRow) => void;
+  /**
+   * run sql query
+   */
+  onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
 };
 
 export type SupabaseGridRef = {

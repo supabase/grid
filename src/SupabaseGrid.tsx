@@ -13,16 +13,25 @@ import {
 } from './types';
 import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
-import { fetchReadonlyTableInfo, fetchTableInfo } from './utils/table';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
-import { fetchPage, getStorageKey, refreshPageDebounced } from './utils';
-import { REFRESH_PAGE_IMMEDIATELY, STORAGE_KEY_PREFIX } from './constants';
+import {
+  fetchCount,
+  fetchPage,
+  getStorageKey,
+  refreshPageDebounced,
+} from './utils';
+import {
+  REFRESH_PAGE_IMMEDIATELY,
+  STORAGE_KEY_PREFIX,
+  TOTAL_ROWS_RESET,
+} from './constants';
 import { InitialStateType } from './store/reducers';
 import { getGridColumns } from './utils/gridColumns';
 import { Grid } from './components/grid';
 import { Shortcuts } from './components/common';
 import Header from './components/header';
 import Footer from './components/footer';
+import { fetchEditableInfo, fetchReadOnlyInfo } from './SupabaseGrid.utils';
 
 /**
  * Ensure that if editable is false, we should remove all editing actions
@@ -87,14 +96,7 @@ export const SupabaseGrid = React.forwardRef<
 
 const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   (props, ref) => {
-    const {
-      editable,
-      schema,
-      storageRef,
-      clientProps,
-      gridProps,
-      headerActions,
-    } = props;
+    const { editable, storageRef, gridProps, headerActions } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
     const gridRef = React.useRef<DataGridHandle>(null);
@@ -143,20 +145,26 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     }, [state.refreshPageFlag]);
 
     React.useEffect(() => {
-      if (!state.client) {
+      if (state.totalRows === TOTAL_ROWS_RESET) {
+        fetchCount(state, dispatch);
+      }
+    }, [state.totalRows]);
+
+    React.useEffect(() => {
+      if (!state.metaService) {
         dispatch({
           type: 'INIT_CLIENT',
-          payload: { ...clientProps, schema },
+          payload: { onSqlQuery: props.onSqlQuery },
         });
         dispatch({
           type: 'INIT_CALLBACK',
           payload: { ...props },
         });
       }
-    }, [state.client]);
+    }, [state.metaService]);
 
     React.useEffect(() => {
-      if (!state.client) return;
+      if (!state.metaService) return;
 
       if (
         !state.table ||
@@ -166,7 +174,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
       ) {
         initTable(props, state, dispatch);
       }
-    }, [state.client, state.table, props.table]);
+    }, [state.metaService, state.table, props.table]);
 
     return (
       <div className="sb-grid">
@@ -221,6 +229,7 @@ function initTable(
         gridColumns,
         savedState,
         editable: props.editable,
+        onSqlQuery: props.onSqlQuery,
         onError: props.onError ?? defaultErrorHandler,
       },
     });
@@ -228,8 +237,8 @@ function initTable(
 
   if (typeof props.table === 'string') {
     const fetchMethod = props.editable
-      ? fetchTableInfo(state.tableService!, props.table, props.schema)
-      : fetchReadonlyTableInfo(state.openApiService!, props.table);
+      ? fetchEditableInfo(state.metaService!, props.table, props.schema)
+      : fetchReadOnlyInfo(state.metaService!, props.table, props.schema);
 
     fetchMethod.then((res) => {
       if (res) onInitTable(res, props);
