@@ -75,7 +75,7 @@ export type SupabaseGridProps = {
   /**
    * run sql query
    */
-  onSqlQuery?: (query: string) => Promise<{ data?: any; error?: any }>;
+  onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
 };
 
 export type SupabaseGridRef = {

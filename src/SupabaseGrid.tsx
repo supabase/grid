@@ -161,7 +161,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
       if (!state.client) {
         dispatch({
           type: 'INIT_CLIENT',
-          payload: { ...clientProps, schema },
+          payload: { ...clientProps, schema, onSqlQuery: props.onSqlQuery },
         });
         dispatch({
           type: 'INIT_CALLBACK',

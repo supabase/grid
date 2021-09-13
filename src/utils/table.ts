@@ -1,27 +1,30 @@
 import OpenApiService from '../services/OpenApiService';
-import TableService from '../services/TableService';
+import { ITableService } from '../services/table';
 import { Dictionary, SupaColumn, SupaTable } from '../types';
 
 // Using stored procedures function
 export async function fetchTableInfo(
-  service: TableService,
+  service: ITableService,
   tableName: string,
   schema?: string
 ): Promise<SupaTable | null> {
   const resTable = await service.fetchInfo(tableName, schema);
+  console.log('resTable: ', resTable);
   const resColumns = await service.fetchColumns(tableName, schema);
+  console.log('resColumns: ', resColumns);
   const resPrimaryKeys = await service.fetchPrimaryKeys(tableName, schema);
+  console.log('resPrimaryKeys: ', resPrimaryKeys);
   const resRelationships = await service.fetchRelationships(tableName, schema);
+  console.log('resRelationships: ', resRelationships);
   if (
     resTable.data &&
     resColumns.data &&
     resPrimaryKeys.data &&
     resRelationships.data &&
-    resTable.data.length > 0 &&
     resColumns.data.length > 0
   ) {
     const supaTable = parseSupaTable({
-      table: resTable.data[0],
+      table: resTable.data,
       columns: resColumns.data,
       primaryKeys: resPrimaryKeys.data,
       relationships: resRelationships.data,
@@ -38,7 +41,7 @@ export function parseSupaTable(data: {
   relationships: Dictionary<any>[];
 }): SupaTable {
   const { table, columns, primaryKeys, relationships } = data;
-  const supaColumns: SupaColumn[] = columns.map(x => {
+  const supaColumns: SupaColumn[] = columns.map((x) => {
     const temp = {
       position: x.ordinal_position,
       name: x.name,
@@ -56,10 +59,10 @@ export function parseSupaTable(data: {
       targetTableName: null,
       targetColumnName: null,
     };
-    const primaryKey = primaryKeys.find(pk => pk.name == x.name);
+    const primaryKey = primaryKeys.find((pk) => pk.name == x.name);
     temp.isPrimaryKey = !!primaryKey;
 
-    const relationship = relationships.find(r => {
+    const relationship = relationships.find((r) => {
       return r.source_column_name == x.name;
     });
     if (relationship) {

@@ -2,20 +2,15 @@ import { Column } from '@supabase/react-data-grid';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
-import {
-  IRowService,
-  PostgrestRowService,
-  SqlRowService,
-} from '../../services/row';
-
-import TableService from '../../services/TableService';
+import { IRowService, SqlRowService } from '../../services/row';
+import { ITableService, SqlTableService } from '../../services/table';
 import OpenApiService from '../../services/OpenApiService';
 
 export interface BaseInitialState {
   client: SupabaseClient | null;
   openApiService: OpenApiService | null;
   table: SupaTable | null;
-  tableService: TableService | null;
+  tableService: ITableService | null;
   rowService: IRowService | null;
   refreshPageFlag: number;
   isInitialComplete: boolean;
@@ -41,6 +36,7 @@ export type INIT_ACTIONTYPE =
         supabaseKey: string;
         schema?: string;
         headers?: { [key: string]: string };
+        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
       };
     }
   | {
@@ -51,7 +47,7 @@ export type INIT_ACTIONTYPE =
         gridProps?: GridProps;
         savedState?: SavedState;
         editable?: boolean;
-        onSqlQuery?: (query: string) => Promise<{ data?: any; error?: any }>;
+        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
         onError: (error: any) => void;
       };
     };
@@ -74,29 +70,18 @@ const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
         ...state,
         client,
         openApiService,
-        tableService: new TableService(client),
+        tableService: new SqlTableService(action.payload.onSqlQuery),
       };
     }
     case 'INIT_TABLE': {
-      /**
-       * TODO: need to refactor
-       * */
-      const rowService = action.payload.onSqlQuery
-        ? new SqlRowService(
-            action.payload.table,
-            action.payload.onSqlQuery,
-            action.payload.onError
-          )
-        : new PostgrestRowService(
-            action.payload.table,
-            state.client!,
-            action.payload.onError
-          );
-
       return {
         ...state,
         table: action.payload.table,
-        rowService,
+        rowService: new SqlRowService(
+          action.payload.table,
+          action.payload.onSqlQuery,
+          action.payload.onError
+        ),
         refreshPageFlag: REFRESH_PAGE_IMMEDIATELY,
         isInitialComplete: true,
         editable: action.payload.editable || false,
