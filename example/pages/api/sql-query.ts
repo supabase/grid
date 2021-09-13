@@ -15,9 +15,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (error) {
     res.status(500).json({ error });
   } finally {
-    // clean up pg pool
     if (pool) {
-      pool.end().then(() => console.log('pool has ended'));
+      pool.end().then(() => console.log('connection pool has ended'));
     }
   }
 };

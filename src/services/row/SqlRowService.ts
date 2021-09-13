@@ -15,9 +15,6 @@ export class SqlRowService implements IRowService {
   ) {}
 
   async count(filters: Filter[]) {
-    // to remove
-    console.log('count: ', filters);
-
     let queryChains = this.query
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
@@ -46,8 +43,6 @@ export class SqlRowService implements IRowService {
   }
 
   delete(rows: SupaRow[]) {
-    console.log('delete: ', rows);
-
     const { primaryKeys, error } = this._getPrimaryKeys();
     if (error) return { error };
 
@@ -77,9 +72,6 @@ export class SqlRowService implements IRowService {
     filters: Filter[],
     sorts: Sort[]
   ) {
-    // to remove
-    console.log('fetchPage', filters, sorts);
-
     const pageFromZero = page > 0 ? page - 1 : page;
     const from = pageFromZero * rowsPerPage;
     const to = (pageFromZero + 1) * rowsPerPage - 1;
