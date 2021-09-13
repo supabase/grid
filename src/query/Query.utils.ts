@@ -81,10 +81,18 @@ export function updateQuery(
   if (!filters || filters.length == 0) {
     throw { message: 'no filters for this update query' };
   }
-  const queryValue = Object.entries(value)
-    .map(([column, value]) => `${ident(column)} = ${fieldLiteral(value)}`)
-    .join(', ');
-  let query = `update ${queryTable(table)} set ${queryValue}`;
+  const queryColumns = Object.keys(value)
+    .map((x) => ident(x))
+    .join(',');
+  let query = `
+  update ${queryTable(table)} set (${queryColumns}) = 
+  (
+    select * from 
+    json_populate_record(
+      null::${queryTable(table)}, ${literal(JSON.stringify(value))}
+    )
+  )
+  `;
   if (filters) {
     query = applyFilters(query, filters);
   }
@@ -92,28 +100,6 @@ export function updateQuery(
     query += 'returning *';
   }
   return query + ';';
-}
-
-/**
- * Field value can be array | bool | object | number | string
- * For object, stringify it
- * For array, stringify and convert to Postgres array format
- * For string, check and convert to number if possible
- *
- * TODO: need to solve Postgres array vs json array format bug
- */
-function fieldLiteral(value: any) {
-  if (Array.isArray(value)) {
-    value = JSON.stringify(value);
-    value = value.replace('[', '{');
-    value = value.replace(']', '}');
-  } else if (value?.constructor == Object || Array.isArray(value)) {
-    value = JSON.stringify(value);
-  } else if (typeof value === 'string') {
-    const maybeNumber = Number(value);
-    if (!isNaN(maybeNumber)) value = maybeNumber;
-  }
-  return literal(value);
 }
 
 //============================================================
