@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@monaco-editor/react": "^4.2.2",
     "@supabase/grid": "file:../",
     "@supabase/react-data-grid": "7.1.0-beta.1",
     "@supabase/ui": "0.34.4",

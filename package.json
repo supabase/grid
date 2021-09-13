@@ -12,14 +12,12 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@monaco-editor/react": "^4.2.2",
     "@supabase/react-data-grid": "7.1.0-beta.1",
     "@supabase/ui": "0.34.4",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@monaco-editor/react": "^4.2.2",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
@@ -49,6 +47,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.2.2",
     "@scaleleap/pg-format": "^1.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "dayjs": "^1.10.4",
