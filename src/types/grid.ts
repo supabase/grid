@@ -2,40 +2,45 @@ import React from 'react';
 import { Dictionary } from './base';
 import { SupaRow, SupaTable } from './table';
 
-export type GridProps = {
+export interface GridProps {
   width?: string | number;
   height?: string | number;
   defaultColumnWidth?: string | number;
   containerClass?: string;
   gridClass?: string;
   rowClass?: ((row: SupaRow) => string | undefined) | undefined;
-};
+}
 
-export type SupabaseGridProps = {
+export interface SupabaseGridProps {
   /**
    * database table swagger or table name
    */
   table: SupaTable | string;
   /**
-   * table schema. Default set to 'public' if not provided
+   * run sql query
    */
-  schema?: string;
+  onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
+
   /**
-   * props to config grid view
+   * Optional react node to display in grid header
    */
-  gridProps?: GridProps;
-  /**
-   * storageRef is used to save state on localstorage
-   */
-  storageRef?: string;
+  headerActions?: React.ReactNode;
   /**
    * enable table editor
    */
   editable?: boolean;
   /**
-   * Optional react node to display in grid header
+   * props to config grid view
    */
-  headerActions?: React.ReactNode;
+  gridProps?: GridProps;
+  /**
+   * table schema. Default set to 'public' if not provided
+   */
+  schema?: string;
+  /**
+   * storageRef is used to save state on localstorage
+   */
+  storageRef?: string;
   /**
    * Optional grid theme
    */
@@ -49,28 +54,35 @@ export type SupabaseGridProps = {
    */
   onAddRow?: () => void;
   /**
-   * error handler
+   * show delete column menu if available
    */
-  onError?: (error: any) => void;
+  onDeleteColumn?: (columnName: string) => void;
   /**
    * show edit column menu if available
    */
   onEditColumn?: (columnName: string) => void;
   /**
-   * show delete column menu if available
-   */
-  onDeleteColumn?: (columnName: string) => void;
-  /**
    * show edit row button if available
    */
   onEditRow?: (row: SupaRow) => void;
   /**
-   * run sql query
+   * error handler
    */
-  onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
-};
+  onError?: (error: any) => void;
+}
 
-export type SupabaseGridRef = {
+export interface SupabaseGridRef {
+  /**
+   * callback when a new row is added
+   *
+   * @param row   newly added row data
+   */
   rowAdded(row: Dictionary<any>): void;
+  /**
+   * callback when a row is edited
+   *
+   * @param row   edited row data
+   * @param idx   edited row index
+   */
   rowEdited(row: Dictionary<any>, idx: number): void;
-};
+}

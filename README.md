@@ -14,7 +14,7 @@ npm i @supabase/grid
 This package requires some peer dependencies, which you need to install by yourself.
 
 ```bash
-npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/supabase-js @supabase/ui
+npm i react react-dom @supabase/react-data-grid @supabase/ui
 ```
 
 ## Usage
@@ -23,34 +23,34 @@ npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/s
 <SupabaseGrid
   table="countries"
   onSqlQuery={async (query: string) => {
-    return {};
+    // run query and return the result
   }}
 />
 ```
 
-`table` variable can be:
-
-- SupaTable object
-- Table or View name
-  - Readonly: support both table and view
-  - Editable: only for table. Required to create [Postgresql functions](FUNCTIONS.md) so that it can pull your table info.
-
 ## Properties
 
-- `table` database table swagger or table name.
-- `clientProps` props to create Supabase client.
-- `gridProps` props to config grid view.
-- `schema` table schema. Defaults to 'public'.
-- `storageRef` storageRef is used to save state on localstorage.
+#### Required
+
+- `table` SupaTable object or table/view name.
+  - readonly mode: support both table and view
+  - editable mode: only for table
+- `onSqlQuery` run sql query.
+
+#### Optional
+
 - `editable` enable table editor.
 - `headerActions` react node to display in grid header.
+- `gridProps` props to config grid view.
+- `schema` table/view schema. Defaults to 'public'.
+- `storageRef` storageRef is used to save state on localstorage.
 - `theme` grid theme.
 - `onAddColumn` show create new column button if available.
 - `onAddRow` show add row button if available.
 - `onError` error handler.
 - `onEditColumn` show edit column menu if available.
-- `onDeleteColumn` show delete column menu if available.
 - `onEditRow` show edit row button if available.
+- `onDeleteColumn` show delete column menu if available.
 
 ## Run example
 
@@ -59,14 +59,6 @@ npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/s
 3. Create **.env** file: `cp .env.example .env`
 4. Update **example/.env** file with your Supabase project settings
 5. Run example app: `npm start`
-
-## Enable table editor
-
-1. Create the [helper functions](https://github.com/supabase/grid/blob/develop/FUNCTIONS.md) in your Postgres database's **public** schema
-   > You can set the schema to public either with the `set search_path to public` statement above the
-   > `create function` statements in your SQL console or
-   > by prepending each function name with `public` e.g. `CREATE FUNCTION public.load_table_info`
-2. Add the `editable` prop to the `SupabaseGrid` component
 
 ## Contributing
 
