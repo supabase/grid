@@ -22,9 +22,8 @@ npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/s
 ```js
 <SupabaseGrid
   table="countries"
-  clientProps={{
-    supabaseUrl: '',
-    supabaseKey: '',
+  onSqlQuery={async (query: string) => {
+    return {};
   }}
 />
 ```
@@ -58,7 +57,7 @@ npm i react react-dom @monaco-editor/react @supabase/react-data-grid @supabase/s
 1. Build library: `npm start`
 2. Go to example folder: `cd example`
 3. Create **.env** file: `cp .env.example .env`
-4. Update **example/.env** file with your Supabase project URL and key
+4. Update **example/.env** file with your Supabase project settings
 5. Run example app: `npm start`
 
 ## Enable table editor

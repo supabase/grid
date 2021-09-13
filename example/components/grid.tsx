@@ -2,11 +2,6 @@ import React from 'react';
 import { SupabaseGrid, SupabaseGridRef, SupaRow } from '@supabase/grid';
 import { postAndWait } from './grid.utils';
 
-const clientProps = {
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY ?? '',
-};
-
 export default function Grid() {
   const gridRef = React.useRef<SupabaseGridRef>(null);
   const [inputValue, setInputValue] = React.useState('test_table');
@@ -88,7 +83,6 @@ export default function Grid() {
             table={tableName}
             editable={!isReadonly}
             storageRef="dqofwyqljsmbgrubmnzk"
-            clientProps={clientProps}
             theme={uiMode}
             gridProps={{ height: '100%' }}
             onError={(error) => {

@@ -96,14 +96,7 @@ export const SupabaseGrid = React.forwardRef<
 
 const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
   (props, ref) => {
-    const {
-      editable,
-      schema,
-      storageRef,
-      clientProps,
-      gridProps,
-      headerActions,
-    } = props;
+    const { editable, storageRef, gridProps, headerActions } = props;
     const dispatch = useDispatch();
     const state = useTrackedState();
     const gridRef = React.useRef<DataGridHandle>(null);
@@ -158,20 +151,20 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     }, [state.totalRows]);
 
     React.useEffect(() => {
-      if (!state.client) {
+      if (!state.metaService) {
         dispatch({
           type: 'INIT_CLIENT',
-          payload: { ...clientProps, schema, onSqlQuery: props.onSqlQuery },
+          payload: { onSqlQuery: props.onSqlQuery },
         });
         dispatch({
           type: 'INIT_CALLBACK',
           payload: { ...props },
         });
       }
-    }, [state.client]);
+    }, [state.metaService]);
 
     React.useEffect(() => {
-      if (!state.client) return;
+      if (!state.metaService) return;
 
       if (
         !state.table ||
@@ -181,7 +174,7 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
       ) {
         initTable(props, state, dispatch);
       }
-    }, [state.client, state.table, props.table]);
+    }, [state.metaService, state.table, props.table]);
 
     return (
       <div className="sb-grid">

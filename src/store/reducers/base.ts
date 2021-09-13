@@ -1,15 +1,10 @@
 import { Column } from '@supabase/react-data-grid';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import { IRowService, SqlRowService } from '../../services/row';
 import { IMetaService, SqlMetaService } from '../../services/meta';
 
-import OpenApiService from '../../services/OpenApiService';
-
 export interface BaseInitialState {
-  client: SupabaseClient | null;
-  openApiService: OpenApiService | null;
   table: SupaTable | null;
   metaService: IMetaService | null;
   rowService: IRowService | null;
@@ -19,8 +14,6 @@ export interface BaseInitialState {
 }
 
 export const baseInitialState: BaseInitialState = {
-  client: null,
-  openApiService: null,
   table: null,
   metaService: null,
   rowService: null,
@@ -58,19 +51,8 @@ type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 const BaseReducer = (state: BaseInitialState, action: BASE_ACTIONTYPE) => {
   switch (action.type) {
     case 'INIT_CLIENT': {
-      /**
-       * TODO: we need openApiService to support view at least for now
-       */
-      const { supabaseUrl, supabaseKey, headers, schema } = action.payload;
-      const client = new SupabaseClient(supabaseUrl, supabaseKey, {
-        schema: schema,
-        headers: headers,
-      });
-      const openApiService = new OpenApiService(supabaseUrl, supabaseKey);
       return {
         ...state,
-        client,
-        openApiService,
         metaService: new SqlMetaService(action.payload.onSqlQuery),
       };
     }
