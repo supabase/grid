@@ -19,7 +19,6 @@ export class SqlMetaService implements IMetaService {
     if (error) {
       return { error };
     } else {
-      console.log('fetchInfo', data);
       if (data?.length == 1) {
         return { data: data[0] };
       } else {
