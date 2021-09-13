@@ -5,7 +5,7 @@ export interface IQueryFilter {
   filter: (
     column: string,
     operator: FilterOperator,
-    value: any
+    value: string
   ) => IQueryFilter;
   match: (criteria: Dictionary<any>) => IQueryFilter;
   order: (
@@ -26,7 +26,7 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
     protected actionOptions?: { returning: boolean }
   ) {}
 
-  filter(column: string, operator: FilterOperator, value: any) {
+  filter(column: string, operator: FilterOperator, value: string) {
     this.filters.push({ column, operator, value });
     return this;
   }

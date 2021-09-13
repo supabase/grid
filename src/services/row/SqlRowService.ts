@@ -55,7 +55,7 @@ export class SqlRowService implements IRowService {
       .from(this.table.name, this.table.schema ?? undefined)
       .delete();
     primaryKeys!.forEach((key) => {
-      const primaryKeyValues = rows.map((x) => x[key]);
+      const primaryKeyValues = rows.map((x) => x[key]).join(',');
       queryChains = queryChains.filter(key, 'in', primaryKeyValues);
     });
     const query = queryChains.toSql();
