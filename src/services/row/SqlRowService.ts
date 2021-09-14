@@ -19,7 +19,7 @@ export class SqlRowService implements IRowService {
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
     filters
-      .filter((x) => x.value != '')
+      .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });
@@ -79,7 +79,7 @@ export class SqlRowService implements IRowService {
       .from(this.table.name, this.table.schema ?? undefined)
       .select();
     filters
-      .filter((x) => x.value != '')
+      .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });

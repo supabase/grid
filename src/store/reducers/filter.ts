@@ -1,4 +1,5 @@
 import update from 'immutability-helper';
+import { TOTAL_ROWS_RESET } from '../../constants';
 import { Filter } from '../../types';
 import { getInitialFilters } from '../../utils';
 import { INIT_ACTIONTYPE } from './base';
@@ -52,47 +53,50 @@ const FilterReducer = (
       };
     case 'ADD_FILTER': {
       const isValid = isValidFilter(action.payload);
-      const result: any = {
+      const newState: any = {
         ...state,
         filters: update(state.filters, { $push: [action.payload] }),
       };
       if (isValid) {
-        result.refreshPageFlag = Date.now();
-        result.page = 1;
+        newState.page = 1;
+        newState.refreshPageFlag = Date.now();
+        newState.totalRows = TOTAL_ROWS_RESET;
       }
-      return result;
+      return newState;
     }
     case 'REMOVE_FILTER': {
       const removeIdx = action.payload.index;
       const removeFilter = state.filters[removeIdx];
       const isValid = isValidFilter(removeFilter);
-      const result: any = {
+      const newState: any = {
         ...state,
         filters: update(state.filters, {
           $splice: [[removeIdx, 1]],
         }),
       };
       if (isValid) {
-        result.refreshPageFlag = Date.now();
-        result.page = 1;
+        newState.page = 1;
+        newState.refreshPageFlag = Date.now();
+        newState.totalRows = TOTAL_ROWS_RESET;
       }
-      return result;
+      return newState;
     }
     case 'UPDATE_FILTER': {
       const updatedFilter = state.filters[action.payload.filterIdx];
       const previousIsValid = isValidFilter(updatedFilter);
       const afterIsValid = isValidFilter(action.payload.value);
-      const result: any = {
+      const newState: any = {
         ...state,
         filters: update(state.filters, {
           [action.payload.filterIdx]: { $set: action.payload.value },
         }),
       };
       if (previousIsValid || afterIsValid) {
-        result.refreshPageFlag = Date.now();
-        result.page = 1;
+        newState.page = 1;
+        newState.refreshPageFlag = Date.now();
+        newState.totalRows = TOTAL_ROWS_RESET;
       }
-      return result;
+      return newState;
     }
     default:
       return state;
