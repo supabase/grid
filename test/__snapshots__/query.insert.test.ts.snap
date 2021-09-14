@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic insert on table 1`] = `
+"
+  insert into public.test_table (text_col,json_col,number_array_col,text_array_col) 
+  values ('lorem ipsum','{\\"firstName\\":\\"aaa\\",\\"lastName\\":\\"bbb\\"}'::jsonb,'{1,2,3,4,5}','{''aa'', ''bb'', ''cc'', ''dd''}')
+  ;"
+`;
+
+exports[`insert should ignore order and filter 1`] = `
+"
+  insert into public.users (name,age) 
+  values ('aaaaa',24)
+  ;"
+`;

@@ -42,6 +42,31 @@ export function deleteQuery(
   return query + ';';
 }
 
+export function insertQuery(
+  table: QueryTable,
+  value: Dictionary<any>,
+  options?: {
+    returning?: boolean;
+  }
+) {
+  const { returning } = options ?? {};
+  const queryColumns = Object.keys(value)
+    .map((x) => ident(x))
+    .join(',');
+  const queryValues = Object.keys(value)
+    .map((key) => literal(value[key]))
+    .join(',');
+  let query = `
+  insert into ${queryTable(table)} (${queryColumns}) 
+  values (${queryValues})
+  `;
+  if (returning) {
+    query += ' returning *';
+  }
+  console.log(query);
+  return query + ';';
+}
+
 export function selectQuery(
   table: QueryTable,
   columns?: string[],
