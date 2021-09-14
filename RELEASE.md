@@ -4,6 +4,8 @@ Releases are handled by Semantic release. This document is for forcing and docum
 
 ## 2.0.0
 
+- Remove @supabase-js dependency
+
 #### Breaking changes
 
 **Install**
