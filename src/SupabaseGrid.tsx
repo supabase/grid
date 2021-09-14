@@ -31,27 +31,11 @@ import { Grid } from './components/grid';
 import { Shortcuts } from './components/common';
 import Header from './components/header';
 import Footer from './components/footer';
-import { fetchEditableInfo, fetchReadOnlyInfo } from './SupabaseGrid.utils';
-
-/**
- * Ensure that if editable is false, we should remove all editing actions
- * to prevent rare-case bugs with the UI
- */
-function cleanupProps(props: SupabaseGridProps) {
-  const { editable } = props;
-  if (!editable) {
-    return {
-      ...props,
-      onAddColumn: undefined,
-      onAddRow: undefined,
-      onEditColumn: undefined,
-      onDeleteColumn: undefined,
-      onEditRow: undefined,
-    };
-  } else {
-    return props;
-  }
-}
+import {
+  cleanupProps,
+  fetchEditableInfo,
+  fetchReadOnlyInfo,
+} from './SupabaseGrid.utils';
 
 /**
  * Supabase Grid.
