@@ -42,6 +42,11 @@ export function deleteQuery(
   return query + ';';
 }
 
+/**
+ * TODO: Need a way to handle Postgres array.
+ * Right now, we have no way to detect if a key-value is json or Postgres array.
+ * Users would have to format Postgres array into string in advance.
+ */
 export function insertQuery(
   table: QueryTable,
   value: Dictionary<any>,
