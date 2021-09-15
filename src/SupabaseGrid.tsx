@@ -1,40 +1,23 @@
 import './style.css';
 import React from 'react';
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { createPortal } from 'react-dom';
 import { useMonaco } from '@monaco-editor/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import {
-  Dictionary,
-  SupabaseGridProps,
-  SupabaseGridRef,
-  SupaTable,
-} from './types';
+import { Dictionary, SupabaseGridProps, SupabaseGridRef } from './types';
 import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
-import {
-  fetchCount,
-  fetchPage,
-  getStorageKey,
-  refreshPageDebounced,
-} from './utils';
-import {
-  REFRESH_PAGE_IMMEDIATELY,
-  STORAGE_KEY_PREFIX,
-  TOTAL_ROWS_RESET,
-} from './constants';
-import { InitialStateType } from './store/reducers';
-import { getGridColumns } from './utils/gridColumns';
+import { fetchCount, fetchPage, refreshPageDebounced } from './utils';
+import { REFRESH_PAGE_IMMEDIATELY, TOTAL_ROWS_RESET } from './constants';
 import { Grid } from './components/grid';
 import { Shortcuts } from './components/common';
 import Header from './components/header';
 import Footer from './components/footer';
 import {
   cleanupProps,
-  fetchEditableInfo,
-  fetchReadOnlyInfo,
+  initTable,
+  saveStorageDebounced,
 } from './SupabaseGrid.utils';
 
 /**
@@ -152,13 +135,15 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
 
       if (
         !state.table ||
-        (typeof props.table == 'string' && state.table!.name != props.table) ||
+        (typeof props.table == 'string' &&
+          state.table!.name != props.table &&
+          state.table!.schema != props.schema) ||
         (typeof props.table != 'string' &&
           JSON.stringify(props.table) !== JSON.stringify(state.table))
       ) {
         initTable(props, state, dispatch);
       }
-    }, [state.metaService, state.table, props.table]);
+    }, [state.metaService, state.table, props.table, props.schema]);
 
     return (
       <div className="sb-grid">
@@ -175,86 +160,3 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
     );
   }
 );
-
-function defaultErrorHandler(error: any) {
-  console.log('Supabase grid error: ', error);
-}
-
-function initTable(
-  props: SupabaseGridProps,
-  state: InitialStateType,
-  dispatch: (value: any) => void
-) {
-  function onLoadStorage(storageRef: string, tableName: string) {
-    const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef);
-    const jsonStr = localStorage.getItem(key);
-    if (!jsonStr) return;
-    const json = JSON.parse(jsonStr);
-    return json[tableName];
-  }
-
-  function onInitTable(table: SupaTable, props: SupabaseGridProps) {
-    const gridColumns = getGridColumns(table, {
-      defaultWidth: props.gridProps?.defaultColumnWidth,
-      onAddColumn: props.editable ? props.onAddColumn : undefined,
-    });
-
-    let savedState;
-    if (props.storageRef) {
-      savedState = onLoadStorage(props.storageRef, table.name);
-      // console.log('savedState', savedState);
-    }
-
-    dispatch({
-      type: 'INIT_TABLE',
-      payload: {
-        table,
-        gridProps: props.gridProps,
-        gridColumns,
-        savedState,
-        editable: props.editable,
-        onSqlQuery: props.onSqlQuery,
-        onError: props.onError ?? defaultErrorHandler,
-      },
-    });
-  }
-
-  if (typeof props.table === 'string') {
-    const fetchMethod = props.editable
-      ? fetchEditableInfo(state.metaService!, props.table, props.schema)
-      : fetchReadOnlyInfo(state.metaService!, props.table, props.schema);
-
-    fetchMethod.then((res) => {
-      if (res) onInitTable(res, props);
-      else {
-        if (props.onError) {
-          props.onError({ message: 'fetch table info failed' });
-        }
-      }
-    });
-  } else {
-    onInitTable(props.table, props);
-  }
-}
-
-function saveStorage(state: InitialStateType, storageRef: string) {
-  if (!state.table) return;
-
-  const config = {
-    gridColumns: state.gridColumns,
-    sorts: state.sorts,
-    filters: state.filters,
-  };
-  const key = getStorageKey(STORAGE_KEY_PREFIX, storageRef);
-  const savedStr = localStorage.getItem(key);
-
-  let savedJson;
-  if (savedStr) {
-    savedJson = JSON.parse(savedStr);
-    savedJson = { ...savedJson, [state.table.name]: config };
-  } else {
-    savedJson = { [state.table.name]: config };
-  }
-  localStorage.setItem(key, JSON.stringify(savedJson));
-}
-const saveStorageDebounced = AwesomeDebouncePromise(saveStorage, 500);
