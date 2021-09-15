@@ -23,8 +23,8 @@ export class SqlRowService implements IRowService {
       .forEach((x) => {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });
+
     const query = queryChains.toSql();
-    console.log('count query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
       return { error };
@@ -53,9 +53,8 @@ export class SqlRowService implements IRowService {
       const primaryKeyValues = rows.map((x) => x[key]).join(',');
       queryChains = queryChains.filter(key, 'in', primaryKeyValues);
     });
-    const query = queryChains.toSql();
-    console.log('delete query: ', query);
 
+    const query = queryChains.toSql();
     SupabaseGridQueue.add(async () => {
       const { error } = await this.onSqlQuery(query);
       if (error) throw error;
@@ -86,8 +85,8 @@ export class SqlRowService implements IRowService {
     sorts.forEach((x) => {
       queryChains = queryChains.order(x.column, x.ascending, x.nullsFirst);
     });
+
     const query = queryChains.range(from, to).toSql();
-    console.log('select query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
       this.onError(error);
@@ -116,8 +115,6 @@ export class SqlRowService implements IRowService {
       .update(value)
       .match(matchValues)
       .toSql();
-    console.log('update query: ', query);
-
     SupabaseGridQueue.add(async () => {
       const { error } = await this.onSqlQuery(query);
       if (error) throw error;
