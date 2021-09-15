@@ -5,12 +5,15 @@ const query = new Query();
 test('basic insert on table', async () => {
   const res = query
     .from('test_table')
-    .insert({
-      text_col: 'lorem ipsum',
-      json_col: { firstName: 'aaa', lastName: 'bbb' },
-      number_array_col: '{1,2,3,4,5}',
-      text_array_col: "{'aa', 'bb', 'cc', 'dd'}",
-    })
+    .insert(
+      {
+        text_col: 'Lorem ipsum dolor sit amet',
+        json_col: { firstName: 'aaa', lastName: 'bbb' },
+        number_array_col: [1, 2, 3, 4, 5],
+        text_array_col: ['aa', 'bb', 'cc', 'dd'],
+      },
+      { returning: true }
+    )
     .toSql();
   expect(res).toMatchSnapshot();
 });

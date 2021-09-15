@@ -1,4 +1,4 @@
-import { ident, literal } from '@scaleleap/pg-format';
+import { ident, literal, format } from '@scaleleap/pg-format';
 import {
   Dictionary,
   Filter,
@@ -42,11 +42,6 @@ export function deleteQuery(
   return query + ';';
 }
 
-/**
- * TODO: Need a way to handle Postgres array.
- * Right now, we have no way to detect if a key-value is json or Postgres array.
- * Users would have to format Postgres array into string in advance.
- */
 export function insertQuery(
   table: QueryTable,
   value: Dictionary<any>,
@@ -58,13 +53,12 @@ export function insertQuery(
   const queryColumns = Object.keys(value)
     .map((x) => ident(x))
     .join(',');
-  const queryValues = Object.keys(value)
-    .map((key) => literal(value[key]))
-    .join(',');
-  let query = `
-  insert into ${queryTable(table)} (${queryColumns}) 
-  values (${queryValues})
-  `;
+  let query = format(
+    'insert into %1$s (%2$s) select %2$s from json_populate_record(null::%1$s, %3$s)',
+    queryTable(table),
+    queryColumns,
+    literal(JSON.stringify(value))
+  );
   if (returning) {
     query += ' returning *';
   }
@@ -114,15 +108,12 @@ export function updateQuery(
   const queryColumns = Object.keys(value)
     .map((x) => ident(x))
     .join(',');
-  let query = `
-  update ${queryTable(table)} set (${queryColumns}) = 
-  (
-    select * from 
-    json_populate_record(
-      null::${queryTable(table)}, ${literal(JSON.stringify(value))}
-    )
-  )
-  `;
+  let query = format(
+    'update %1$s set (%2$s) = (select %2$s from json_populate_record(null::%1$s, %3$s))',
+    queryTable(table),
+    queryColumns,
+    literal(JSON.stringify(value))
+  );
   if (filters) {
     query = applyFilters(query, filters);
   }
