@@ -13,17 +13,17 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@supabase/react-data-grid": "7.1.0-beta.1",
-    "@supabase/ui": "0.34.4",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "@supabase/react-data-grid": "^7.1.0-beta.5",
+    "@supabase/ui": "^0.35.0",
+    "react": "^16.14 || ^17.0.0",
+    "react-dom": "^16.14 || ^17.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
-    "@supabase/react-data-grid": "7.1.0-beta.1",
-    "@supabase/ui": "0.34.4",
+    "@supabase/react-data-grid": "*",
+    "@supabase/ui": "*",
     "@tailwindcss/forms": "^0.3.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
