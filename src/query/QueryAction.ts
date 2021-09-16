@@ -38,7 +38,7 @@ export class QueryAction implements IQueryAction {
    * Performs an INSERT into the table.
    *
    * @param values             The values to insert.
-   * @param options.returning  If `true`, return the deleted row(s) in the response.
+   * @param options.returning  If `true`, return the inserted row(s) in the response.
    */
   insert(values: Dictionary<any>[], options?: { returning: boolean }) {
     return new QueryFilter(this.table, 'insert', values, options);
@@ -57,7 +57,7 @@ export class QueryAction implements IQueryAction {
    * Performs an UPDATE on the table.
    *
    * @param value  The value to update.
-   * @param options.returning  If `true`, return the deleted row(s) in the response.
+   * @param options.returning  If `true`, return the updated row(s) in the response.
    */
   update(value: Dictionary<any>, options?: { returning: boolean }) {
     return new QueryFilter(this.table, 'update', value, options);
