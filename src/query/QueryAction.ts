@@ -37,11 +37,11 @@ export class QueryAction implements IQueryAction {
   /**
    * Performs an INSERT into the table.
    *
-   * @param value  The values to insert.
+   * @param values             The values to insert.
    * @param options.returning  If `true`, return the deleted row(s) in the response.
    */
-  insert(value: Dictionary<any>, options?: { returning: boolean }) {
-    return new QueryFilter(this.table, 'insert', value, options);
+  insert(values: Dictionary<any>[], options?: { returning: boolean }) {
+    return new QueryFilter(this.table, 'insert', values, options);
   }
 
   /**

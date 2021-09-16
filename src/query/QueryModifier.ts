@@ -59,7 +59,7 @@ export class QueryModifier implements IQueryModifier {
           });
         }
         case 'insert': {
-          return insertQuery(this.table, actionValue as Dictionary<any>, {
+          return insertQuery(this.table, actionValue as Dictionary<any>[], {
             returning: actionOptions?.returning,
           });
         }
