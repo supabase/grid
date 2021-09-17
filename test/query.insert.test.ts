@@ -17,7 +17,6 @@ test('basic insert on table', async () => {
       { returning: true }
     )
     .toSql();
-  console.log(res);
   expect(res).toMatchSnapshot();
 });
 test('insert multi rows', async () => {

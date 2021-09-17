@@ -65,7 +65,6 @@ export function insertQuery(
   if (returning) {
     query += ' returning *';
   }
-  console.log(query);
   return query + ';';
 }
 
