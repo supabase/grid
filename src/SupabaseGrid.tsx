@@ -2,6 +2,8 @@ import './style.css';
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { useMonaco } from '@monaco-editor/react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Dictionary, SupabaseGridProps, SupabaseGridRef } from './types';
 import { DataGridHandle } from '@supabase/react-data-grid';
 import { RowContextMenu } from './components/menu';
@@ -10,7 +12,6 @@ import { fetchCount, fetchPage, refreshPageDebounced } from './utils';
 import { REFRESH_PAGE_IMMEDIATELY, TOTAL_ROWS_RESET } from './constants';
 import { Grid } from './components/grid';
 import { Shortcuts } from './components/common';
-import DragAndDrop from './components/common/DragAndDrop';
 import Header from './components/header';
 import Footer from './components/footer';
 import {
@@ -53,9 +54,9 @@ export const SupabaseGrid = React.forwardRef<
 
   return (
     <StoreProvider>
-      <DragAndDrop>
+      <DndProvider backend={HTML5Backend}>
         <SupabaseGridLayout ref={ref} {..._props} />
-      </DragAndDrop>
+      </DndProvider>
     </StoreProvider>
   );
 });
