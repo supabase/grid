@@ -75,14 +75,12 @@ const SupabaseGridLayout = React.forwardRef<SupabaseGridRef, SupabaseGridProps>(
           type: 'ADD_NEW_ROW',
           payload: row,
         });
-        console.log('rowAdded: ', row);
       },
       rowEdited(row: Dictionary<any>, idx: number) {
         dispatch({
           type: 'EDIT_ROW',
           payload: { row, idx },
         });
-        console.log('rowEdited: ', row, 'at index: ', idx);
       },
     }));
 
