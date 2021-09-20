@@ -5,3 +5,5 @@ exports[`basic insert on table 1`] = `"insert into public.test_table (text_col,j
 exports[`insert multi rows 1`] = `"insert into public.test_table (text_col,json_col,number_array_col) select text_col,json_col,number_array_col from jsonb_populate_recordset(null::public.test_table, '[{\\"text_col\\":\\"Lorem ipsum 1\\",\\"json_col\\":{\\"firstName\\":\\"aaa\\",\\"lastName\\":\\"bbb\\"},\\"number_array_col\\":[1,2,3,4,5]},{\\"text_col\\":\\"Lorem ipsum 2\\",\\"json_col\\":{\\"firstName\\":\\"eee\\",\\"lastName\\":\\"rrr\\"},\\"number_array_col\\":[1,2,3,4,5]},{\\"text_col\\":\\"Lorem ipsum 3\\",\\"json_col\\":{\\"firstName\\":\\"uuu\\",\\"lastName\\":\\"jjj\\"},\\"number_array_col\\":[1,2,3,4,5]}]') returning *;"`;
 
 exports[`insert should ignore order and filter 1`] = `"insert into public.users (name,age) select name,age from jsonb_populate_recordset(null::public.users, '[{\\"name\\":\\"aaaaa\\",\\"age\\":24}]');"`;
+
+exports[`insert with default values 1`] = `"insert into public.users select from jsonb_populate_recordset(null::public.users, '[{},{}]');"`;

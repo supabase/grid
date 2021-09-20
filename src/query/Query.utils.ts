@@ -56,12 +56,21 @@ export function insertQuery(
   const queryColumns = Object.keys(values[0])
     .map((x) => ident(x))
     .join(',');
-  let query = format(
-    'insert into %1$s (%2$s) select %2$s from jsonb_populate_recordset(null::%1$s, %3$s)',
-    queryTable(table),
-    queryColumns,
-    literal(JSON.stringify(values))
-  );
+  let query = '';
+  if (queryColumns.length == 0) {
+    query = format(
+      'insert into %1$s select from jsonb_populate_recordset(null::%1$s, %2$s)',
+      queryTable(table),
+      literal(JSON.stringify(values))
+    );
+  } else {
+    query = format(
+      'insert into %1$s (%2$s) select %2$s from jsonb_populate_recordset(null::%1$s, %3$s)',
+      queryTable(table),
+      queryColumns,
+      literal(JSON.stringify(values))
+    );
+  }
   if (returning) {
     query += ' returning *';
   }

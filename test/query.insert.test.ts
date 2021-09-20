@@ -54,3 +54,8 @@ test('insert should ignore order and filter', async () => {
     .toSql();
   expect(res).toMatchSnapshot();
 });
+
+test('insert with default values', async () => {
+  const res = query.from('users').insert([{}, {}]).toSql();
+  expect(res).toMatchSnapshot();
+});
