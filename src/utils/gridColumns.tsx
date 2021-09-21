@@ -26,7 +26,7 @@ export function getGridColumns(
     defaultWidth?: string | number;
   }
 ): any[] {
-  const columns = table.columns.map(x => {
+  const columns = table.columns.map((x) => {
     const columnType = _getColumnType(x);
     const columnDef: Column<SupaRow> = {
       key: x.name,
@@ -35,7 +35,7 @@ export function getGridColumns(
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
       frozen: x.isPrimaryKey,
-      headerRenderer: props => (
+      headerRenderer: (props) => (
         <ColumnHeader
           {...props}
           columnType={columnType}
@@ -50,15 +50,10 @@ export function getGridColumns(
     return columnDef;
   });
 
-  // console.log('table', table);
-  // console.log('columns', columns);
-
   const gridColumns = [SelectColumn, ...columns];
   if (options?.onAddColumn) {
     gridColumns.push(AddColumn);
   }
-
-  // console.log('gridColumns', gridColumns);
 
   return gridColumns;
 }
@@ -82,7 +77,7 @@ function _getColumnEditor(columnDef: SupaColumn, columnType: ColumnType) {
       return TimeEditor;
     }
     case 'enum': {
-      const options = columnDef.enum!.map(x => {
+      const options = columnDef.enum!.map((x) => {
         return { label: x, value: x };
       });
       return (p: any) => <SelectEditor {...p} options={options} />;

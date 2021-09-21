@@ -43,7 +43,6 @@ export function initTable(
     let savedState;
     if (props.storageRef) {
       savedState = onLoadStorage(props.storageRef, table.name, table.schema);
-      // console.log('savedState', savedState);
     }
 
     dispatch({

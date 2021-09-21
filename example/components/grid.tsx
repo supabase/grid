@@ -121,7 +121,6 @@ export default function Grid() {
             }}
             onSqlQuery={async (query: string) => {
               const res = await postAndWait('/api/sql-query', { query });
-              // console.log('onSqlQuery res: ', res);
               return res;
             }}
             headerActions={
