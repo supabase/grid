@@ -2,6 +2,7 @@ export * from './BooleanEditor';
 export * from './DateEditor';
 export * from './DateTimeEditor';
 export * from './JsonEditor';
+export * from './NullableBooleanEditor';
 export * from './NumberEditor';
 export * from './SelectEditor';
 export * from './TextEditor';

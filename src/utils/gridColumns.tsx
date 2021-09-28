@@ -6,6 +6,7 @@ import {
   DateEditor,
   DateTimeEditor,
   JsonEditor,
+  NullableBooleanEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
@@ -28,7 +29,7 @@ export function getGridColumns(
 ): any[] {
   const columns = table.columns.map((x) => {
     const columnType = _getColumnType(x);
-    const columnDef: Column<SupaRow> = {
+    const columnDefinition: Column<SupaRow> = {
       key: x.name,
       name: x.name,
       resizable: true,
@@ -47,7 +48,7 @@ export function getGridColumns(
       formatter: _getColumnFormatter(x, columnType),
     };
 
-    return columnDef;
+    return columnDefinition;
   });
 
   const gridColumns = [SelectColumn, ...columns];
@@ -58,14 +59,19 @@ export function getGridColumns(
   return gridColumns;
 }
 
-function _getColumnEditor(columnDef: SupaColumn, columnType: ColumnType) {
-  if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
+function _getColumnEditor(
+  columnDefinition: SupaColumn,
+  columnType: ColumnType
+) {
+  if (columnDefinition.isPrimaryKey || !columnDefinition.isUpdatable) {
     return;
   }
 
   switch (columnType) {
     case 'boolean': {
-      return BooleanEditor;
+      return columnDefinition.isNullable
+        ? NullableBooleanEditor
+        : BooleanEditor;
     }
     case 'date': {
       return DateEditor;
@@ -77,7 +83,7 @@ function _getColumnEditor(columnDef: SupaColumn, columnType: ColumnType) {
       return TimeEditor;
     }
     case 'enum': {
-      const options = columnDef.enum!.map((x) => {
+      const options = columnDefinition.enum!.map((x) => {
         return { label: x, value: x };
       });
       return (p: any) => <SelectEditor {...p} options={options} />;
