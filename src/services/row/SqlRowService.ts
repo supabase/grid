@@ -1,7 +1,7 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 import Query from '../../query';
-import { SupabaseGridQueue } from '../../constants';
+import { ERROR_PRIMARY_KEY_NOTFOUND, SupabaseGridQueue } from '../../constants';
 
 export class SqlRowService implements IRowService {
   protected query = new Query();
@@ -128,7 +128,7 @@ export class SqlRowService implements IRowService {
   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
     const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
     if (!pkColumns || pkColumns.length == 0) {
-      return { error: { message: "Can't find primary key" } };
+      return { error: { message: ERROR_PRIMARY_KEY_NOTFOUND } };
     }
     return { primaryKeys: pkColumns.map((x) => x.name) };
   }
