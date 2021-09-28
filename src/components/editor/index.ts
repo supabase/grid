@@ -1,4 +1,4 @@
-export * from './CheckboxEditor';
+export * from './BooleanEditor';
 export * from './DateEditor';
 export * from './DateTimeEditor';
 export * from './JsonEditor';
