@@ -36,7 +36,6 @@ export const Grid = memo(
         rows: SupaRow[],
         data: RowsChangeData<SupaRow, unknown>
       ) {
-        console.log('onRowsChange: ', rows, data);
         const rowData = rows[data.indexes[0]];
         const originRowData = state.rows.find((x) => x.idx == rowData.idx);
         const hasChange =
