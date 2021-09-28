@@ -44,6 +44,7 @@ export function NullableBooleanEditor<TRow, TSummaryRow = unknown>({
         title="Clear"
         icon={<IconX size="tiny" strokeWidth={2} />}
         onClick={onClear}
+        style={{ padding: '3px', margin: 'auto 5px auto auto' }}
       />
     </div>
   );
