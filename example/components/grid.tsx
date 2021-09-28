@@ -35,7 +35,7 @@ export default function Grid() {
   }
 
   function reloadGrid() {
-    if (tableInput !== table.name && schemaInput !== table.schema) {
+    if (tableInput !== table.name || schemaInput !== table.schema) {
       setTable({ name: tableInput, schema: schemaInput });
     } else {
       setReload(true);
