@@ -5,6 +5,7 @@ import {
   BooleanEditor,
   DateEditor,
   DateTimeEditor,
+  DateTimeWithTimezoneEditor,
   JsonEditor,
   NullableBooleanEditor,
   NumberEditor,
@@ -77,7 +78,9 @@ function _getColumnEditor(
       return DateEditor;
     }
     case 'datetime': {
-      return DateTimeEditor;
+      return columnDefinition.format.endsWith('z')
+        ? DateTimeWithTimezoneEditor
+        : DateTimeEditor;
     }
     case 'time': {
       return TimeEditor;
