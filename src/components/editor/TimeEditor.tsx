@@ -10,23 +10,27 @@ function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.select();
 }
 
+interface TimeEditorProps<TRow, TSummaryRow = unknown>
+  extends EditorProps<TRow, TSummaryRow> {
+  format: string;
+}
+
 /**
  * original input time format 'HH:mm'
  * when step=1, it becomes 'HH:mm:ss'
  */
 const INPUT_TIME_FORMAT = 'HH:mm:ss';
 
-export function TimeEditor<TRow, TSummaryRow = unknown>({
+function BaseEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
+  format,
   onRowChange,
   onClose,
-}: EditorProps<TRow, TSummaryRow>) {
-  const value = (row[column.key as keyof TRow] as unknown) as string;
-  const serverTimeFormat =
-    value && value.includes('+') ? 'HH:mm:ssZZ' : 'HH:mm:ss';
+}: TimeEditorProps<TRow, TSummaryRow>) {
+  const value = row[column.key as keyof TRow] as unknown as string;
   const timeValue = value
-    ? dayjs(value, serverTimeFormat).format(INPUT_TIME_FORMAT)
+    ? dayjs(value, format).format(INPUT_TIME_FORMAT)
     : value;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -34,9 +38,7 @@ export function TimeEditor<TRow, TSummaryRow = unknown>({
     if (_value == '') {
       onRowChange({ ...row, [column.key]: null });
     } else {
-      const _timeValue = dayjs(_value, INPUT_TIME_FORMAT).format(
-        serverTimeFormat
-      );
+      const _timeValue = dayjs(_value, INPUT_TIME_FORMAT).format(format);
       onRowChange({ ...row, [column.key]: _timeValue });
     }
   }
@@ -52,4 +54,16 @@ export function TimeEditor<TRow, TSummaryRow = unknown>({
       step="1"
     />
   );
+}
+
+export function TimeEditor<TRow, TSummaryRow = unknown>(
+  props: EditorProps<TRow, TSummaryRow>
+) {
+  return <BaseEditor {...props} format="HH:mm:ss" />;
+}
+
+export function TimeWithTimezoneEditor<TRow, TSummaryRow = unknown>(
+  props: EditorProps<TRow, TSummaryRow>
+) {
+  return <BaseEditor {...props} format="HH:mm:ssZZ" />;
 }

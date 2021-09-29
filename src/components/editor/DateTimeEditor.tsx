@@ -14,6 +14,7 @@ interface DateTimeEditorProps<TRow, TSummaryRow = unknown>
   extends EditorProps<TRow, TSummaryRow> {
   format: string;
 }
+
 const INPUT_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 
 function BaseEditor<TRow, TSummaryRow = unknown>({

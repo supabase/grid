@@ -12,6 +12,7 @@ import {
   SelectEditor,
   TextEditor,
   TimeEditor,
+  TimeWithTimezoneEditor,
 } from '../components/editor';
 import { AddColumn, ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
@@ -83,7 +84,9 @@ function _getColumnEditor(
         : DateTimeEditor;
     }
     case 'time': {
-      return TimeEditor;
+      return columnDefinition.format.endsWith('z')
+        ? TimeWithTimezoneEditor
+        : TimeEditor;
     }
     case 'enum': {
       const options = columnDefinition.enum!.map((x) => {
