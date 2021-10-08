@@ -25,8 +25,9 @@ import {
 export function getGridColumns(
   table: SupaTable,
   options?: {
-    onAddColumn?: () => void;
+    editable?: boolean;
     defaultWidth?: string | number;
+    onAddColumn?: () => void;
   }
 ): any[] {
   const columns = table.columns.map((x) => {
@@ -46,7 +47,7 @@ export function getGridColumns(
           format={x.format}
         />
       ),
-      editor: _getColumnEditor(x, columnType),
+      editor: options?.editable ? _getColumnEditor(x, columnType) : undefined,
       formatter: _getColumnFormatter(x, columnType),
     };
 
