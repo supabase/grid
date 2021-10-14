@@ -36,6 +36,7 @@ export function initTable(
 ) {
   function onInitTable(table: SupaTable, props: SupabaseGridProps) {
     const gridColumns = getGridColumns(table, {
+      storage: props.supabaseStorageClient,
       editable: props.editable,
       defaultWidth: props.gridProps?.defaultColumnWidth,
       onAddColumn: props.editable ? props.onAddColumn : undefined,

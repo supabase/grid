@@ -1,6 +1,6 @@
 import { Dictionary } from './base';
 
-export interface SupaColumn {
+interface _SupaColumn {
   readonly dataType: string;
   readonly format: string;
   readonly name: string;
@@ -10,6 +10,7 @@ export interface SupaColumn {
   readonly isPrimaryKey?: boolean;
   readonly isIdentity?: boolean;
   readonly isGeneratable?: boolean;
+  readonly isStorageMedia?: boolean;
   readonly isNullable?: boolean;
   readonly isUpdatable?: boolean;
   readonly targetTableSchema?: string | null;
@@ -17,6 +18,13 @@ export interface SupaColumn {
   readonly targetColumnName?: string | null;
   position: number;
 }
+
+export interface SupaStorageMediaColumn extends _SupaColumn {
+  readonly bucketName: string;
+  readonly mediaUrlPrefix: string;
+}
+
+export type SupaColumn = _SupaColumn & SupaStorageMediaColumn;
 
 export interface SupaTable {
   readonly columns: SupaColumn[];

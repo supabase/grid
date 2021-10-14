@@ -42,6 +42,10 @@ export interface SupabaseGridProps {
    */
   storageRef?: string;
   /**
+   * supabaseStorageClient is for managing files on supabase storage with `storageMedia` columns.
+   */
+  supabaseStorageClient?: any;
+  /**
    * Optional grid theme
    */
   theme?: 'dark' | 'light';

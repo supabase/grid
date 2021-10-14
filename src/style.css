@@ -451,6 +451,30 @@
 }
 
 /*
+ StorageMediaEditor
+*/
+
+.sb-grid-storage-media-editor {
+  @apply w-full h-full;
+  position: relative;
+}
+
+.sb-grid-storage-media-editor > img {
+  @apply w-full;
+  height: auto;
+}
+
+.sb-grid-storage-media-editor-overlay {
+  position: absolute;
+  @apply w-full h-full;
+}
+
+.sb-grid-storage-media-editor-overlay__trigger {
+  background-color: 'red';
+  opacity: 0.5;
+}
+
+/*
   TimeEditor
 */
 

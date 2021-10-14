@@ -10,6 +10,7 @@ import {
   NullableBooleanEditor,
   NumberEditor,
   SelectEditor,
+  StorageMediaEditor,
   TextEditor,
   TimeEditor,
   TimeWithTimezoneEditor,
@@ -20,18 +21,30 @@ import {
   BooleanFormatter,
   DefaultFormatter,
   ForeignKeyFormatter,
+  StorageMediaFormatter,
 } from '../components/formatter';
 
 export function getGridColumns(
   table: SupaTable,
   options?: {
+    storage?: any;
     editable?: boolean;
     defaultWidth?: string | number;
     onAddColumn?: () => void;
   }
 ): any[] {
   const columns = table.columns.map((x) => {
+    // HACK: we need a new column type with the properties set below
+    if (x.name === 'media_url') {
+      // @ts-ignore
+      x.isStorageMedia = true;
+      // @ts-ignore
+      x.mediaUrlPrefix = process.env.NEXT_PUBLIC_MEDIA_URL_PREFIX;
+      // @ts-ignore
+      x.bucketName = process.env.NEXT_PUBLIC_BUCKET_NAME;
+    }
     const columnType = _getColumnType(x);
+
     const columnDefinition: Column<SupaRow> = {
       key: x.name,
       name: x.name,
@@ -47,7 +60,9 @@ export function getGridColumns(
           format={x.format}
         />
       ),
-      editor: options?.editable ? _getColumnEditor(x, columnType) : undefined,
+      editor: options?.editable
+        ? _getColumnEditor(x, columnType, options.storage)
+        : undefined,
       formatter: _getColumnFormatter(x, columnType),
     };
 
@@ -64,8 +79,19 @@ export function getGridColumns(
 
 function _getColumnEditor(
   columnDefinition: SupaColumn,
-  columnType: ColumnType
-) {
+  columnType: 'storage_media',
+  storage: any
+): (p: any) => JSX.Element;
+function _getColumnEditor(
+  columnDefinition: SupaColumn,
+  columnType: ColumnType,
+  storage: undefined
+): ((p: any) => JSX.Element) | undefined;
+function _getColumnEditor(
+  columnDefinition: SupaColumn,
+  columnType: ColumnType,
+  storage?: any
+): ((p: any) => JSX.Element) | undefined {
   if (columnDefinition.isPrimaryKey || !columnDefinition.isUpdatable) {
     return;
   }
@@ -105,6 +131,18 @@ function _getColumnEditor(
     case 'text': {
       return TextEditor;
     }
+    case 'storage_media': {
+      return (p: any) => (
+        <StorageMediaEditor
+          {...p}
+          storage={storage}
+          options={{
+            bucketName: columnDefinition.bucketName,
+            mediaUrlPrefix: columnDefinition.mediaUrlPrefix,
+          }}
+        />
+      );
+    }
     default: {
       return undefined;
     }
@@ -113,6 +151,13 @@ function _getColumnEditor(
 
 function _getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
   switch (columnType) {
+    case 'storage_media':
+      return (p: any) => (
+        <StorageMediaFormatter
+          {...p}
+          mediaUrlPrefix={columnDef.mediaUrlPrefix}
+        />
+      );
     case 'boolean': {
       return BooleanFormatter;
     }
@@ -130,7 +175,9 @@ function _getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
 }
 
 function _getColumnType(columnDef: SupaColumn): ColumnType {
-  if (_isForeignKeyColumn(columnDef)) {
+  if (_isStorageMediaColumn(columnDef)) {
+    return 'storage_media';
+  } else if (_isForeignKeyColumn(columnDef)) {
     return 'foreign_key';
   } else if (_isNumericalColumn(columnDef.dataType)) {
     return 'number';
@@ -231,6 +278,11 @@ function _isBoolColumn(type: string) {
 const ENUM_TYPES = ['user-defined'];
 function _isEnumColumn(type: string) {
   return ENUM_TYPES.indexOf(type.toLowerCase()) > -1;
+}
+
+// not sure if this is necessary
+function _isStorageMediaColumn(columnDef: SupaColumn) {
+  return columnDef.isStorageMedia;
 }
 
 function _isForeignKeyColumn(columnDef: SupaColumn) {

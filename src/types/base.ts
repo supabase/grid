@@ -40,6 +40,7 @@ export interface DragItem {
 }
 
 export type ColumnType =
+  | 'storage_media'
   | 'array'
   | 'boolean'
   | 'date'
