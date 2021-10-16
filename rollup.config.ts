@@ -33,7 +33,7 @@ export default {
     nodeResolve(),
     json(),
     commonjs(),
-    typescript({ useTsconfigDeclarationDir: true }),
+    typescript({ useTsconfigDeclarationDir: true, abortOnError: false }),
     postcss({
       plugins: [
         tailwindcss(tailwindconfig),
