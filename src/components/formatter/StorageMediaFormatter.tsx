@@ -10,7 +10,15 @@ interface StorageMediaFormatterProps<T, Q> extends FormatterProps<T, Q> {
 export const StorageMediaFormatter = (
   p: React.PropsWithChildren<StorageMediaFormatterProps<SupaRow, unknown>>
 ) => {
-  const value = p.row[p.column.key] as boolean | null;
+  const value = p.row[p.column.key] as string | null;
   if (value === null) return <NullValue />;
-  return <img height="200" width="auto" src={p.mediaUrlPrefix + value} />;
+  const isVideo = value.toLowerCase().endsWith('.mp4');
+  const fullUrl = p.mediaUrlPrefix + value;
+  return isVideo ? (
+    <video controls>
+      <source type="video/mp4" src={fullUrl} />
+    </video>
+  ) : (
+    <img height="200" width="auto" src={fullUrl} />
+  );
 };

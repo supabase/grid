@@ -455,13 +455,14 @@
 */
 
 .sb-grid-storage-media-editor {
-  @apply w-full h-full;
+  @apply w-full h-full flex flex-col items-center;
   position: relative;
 }
 
-.sb-grid-storage-media-editor > img {
-  @apply w-full;
-  height: auto;
+.sb-grid-storage-media-editor > img,
+.sb-grid-storage-media-editor > video {
+  @apply h-full;
+  width: auto;
 }
 
 .sb-grid-storage-media-editor-overlay {
@@ -470,8 +471,12 @@
 }
 
 .sb-grid-storage-media-editor-overlay__trigger {
-  background-color: 'red';
-  opacity: 0.5;
+  background-color: #24b47e;
+  opacity: 0.1;
+}
+
+.sb-grid-storage-media-upload-icon {
+  @apply w-full m-6;
 }
 
 /*
