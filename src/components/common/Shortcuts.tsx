@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTrackedState } from '../../store';
 import { useKeyboardShortcuts } from './Hooks';
-import { DataGridHandle } from '@supabase/react-data-grid';
+import { DataGridHandle } from '@mildtomato/react-data-grid';
 import { formatClipboardValue } from '../../utils';
 
 type ShortcutsProps = {

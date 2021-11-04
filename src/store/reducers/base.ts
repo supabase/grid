@@ -1,4 +1,4 @@
-import { Column } from '@supabase/react-data-grid';
+import { Column } from '@mildtomato/react-data-grid';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import { IRowService, SqlRowService } from '../../services/row';

@@ -4,7 +4,7 @@ import {
   FormatterProps,
   GroupFormatterProps,
   useRowSelection,
-} from '@supabase/react-data-grid';
+} from '@mildtomato/react-data-grid';
 import { Button, IconMaximize2 } from '@supabase/ui';
 import { SupaRow } from '../../types';
 import { RowMenu } from '../menu';

@@ -1,4 +1,4 @@
-import { CalculatedColumn } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@mildtomato/react-data-grid';
 import {
   Button,
   Dropdown,

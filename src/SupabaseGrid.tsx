@@ -11,7 +11,7 @@ import {
   SupabaseGridRef,
   SupaTable,
 } from './types';
-import { DataGridHandle } from '@supabase/react-data-grid';
+import { DataGridHandle } from '@mildtomato/react-data-grid';
 import { RowContextMenu } from './components/menu';
 import { StoreProvider, useDispatch, useTrackedState } from './store';
 import {
@@ -224,7 +224,7 @@ function initTable(
       ? fetchEditableInfo(state.metaService!, props.table, props.schema)
       : fetchReadOnlyInfo(state.metaService!, props.table, props.schema);
 
-    fetchMethod.then((res) => {
+    fetchMethod.then(res => {
       if (res) onInitTable(res, props);
       else {
         if (props.onError) {

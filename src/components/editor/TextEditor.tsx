@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Popover } from 'react-tiny-popover';
-import { EditorProps } from '@supabase/react-data-grid';
+import { EditorProps } from '@mildtomato/react-data-grid';
 import { useTrackedState } from '../../store';
 import { BlockKeys, MonacoEditor, NullValue, EmptyValue } from '../common';
 

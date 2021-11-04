@@ -3,7 +3,7 @@ import { memo } from 'react-tracked';
 import DataGrid, {
   DataGridHandle,
   RowsChangeData,
-} from '@supabase/react-data-grid';
+} from '@mildtomato/react-data-grid';
 import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
@@ -22,9 +22,7 @@ export const Grid = memo(
       const dispatch = useDispatch();
       const state = useTrackedState();
       // workaround to force state tracking on state.gridColumns
-      const columnHeaders = state.gridColumns.map(
-        (x) => `${x.key}_${x.frozen}`
-      );
+      const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
       const { gridColumns, rows, onError: onErrorFunc } = state;
 
       function onColumnResized(index: number, width: number) {
@@ -39,7 +37,7 @@ export const Grid = memo(
         data: RowsChangeData<SupaRow, unknown>
       ) {
         const rowData = rows[data.indexes[0]];
-        const originRowData = state.rows.find((x) => x.idx == rowData.idx);
+        const originRowData = state.rows.find(x => x.idx == rowData.idx);
         const hasChange =
           JSON.stringify(rowData) !== JSON.stringify(originRowData);
         if (hasChange) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormatterProps } from '@supabase/react-data-grid';
+import { FormatterProps } from '@mildtomato/react-data-grid';
 import { SupaRow } from '../../types';
 import { NullValue } from '../common';
 import { ForeignTableModal } from '../common/ForeignTableModal';

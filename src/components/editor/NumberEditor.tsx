@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditorProps } from '@supabase/react-data-grid';
+import { EditorProps } from '@mildtomato/react-data-grid';
 
 function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.focus();
