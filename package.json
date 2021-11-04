@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@supabase/react-data-grid": "7.1.0-beta.1",
+    "@mildtomato/react-data-grid": "^7.1.0-beta.6",
     "@supabase/ui": "0.34.4",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
@@ -22,7 +22,7 @@
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
-    "@supabase/react-data-grid": "7.1.0-beta.1",
+    "@mildtomato/react-data-grid": "^7.1.0-beta.6",
     "@supabase/ui": "0.34.4",
     "@tailwindcss/forms": "^0.3.3",
     "@testing-library/jest-dom": "^5.14.1",

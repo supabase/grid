@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@supabase/grid": "file:../",
-    "@supabase/react-data-grid": "7.1.0-beta.1",
+    "@mildtomato/react-data-grid": "^7.1.0-beta.6",
     "@supabase/ui": "0.34.4",
     "next": "^10.2.3",
     "pg": "^8.7.1",
