@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { EditorProps } from '@supabase/react-data-grid';
+import { EditorProps } from '@mildtomato/react-data-grid';
 import { Button, IconX } from '@supabase/ui';
 
 export function NullableBooleanEditor<TRow, TSummaryRow = unknown>({
