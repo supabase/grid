@@ -1,9 +1,5 @@
 import { SupaColumn, SupaRow } from '../types';
 
-export function getStorageKey(prefix: string, ref: string) {
-  return `${prefix}_${ref}`;
-}
-
 export function deepClone(obj: unknown) {
   try {
     return JSON.parse(JSON.stringify(obj));
@@ -17,14 +13,14 @@ export function exportRowsToCsv(
   rows: SupaRow[],
   separator: string = ','
 ) {
-  const keys = columns.map(x => x.name) || [];
+  const keys = columns.map((x) => x.name) || [];
   const csv =
     keys.join(separator) +
     '\n' +
     rows
-      .map(row => {
+      .map((row) => {
         return keys
-          .map(k => {
+          .map((k) => {
             let cell = row[k] === null || row[k] === undefined ? '' : row[k];
             cell =
               cell instanceof Date

@@ -8,6 +8,7 @@ import { Typography, Loading } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
 import RowRenderer from './RowRenderer';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 
 function rowKeyGetter(row: SupaRow) {
   return row.idx;
@@ -22,14 +23,13 @@ export const Grid = memo(
       const dispatch = useDispatch();
       const state = useTrackedState();
       // workaround to force state tracking on state.gridColumns
-      const columnHeaders = state.gridColumns.map(x => `${x.key}_${x.frozen}`);
+      const columnHeaders = state.gridColumns.map(
+        (x) => `${x.key}_${x.frozen}`
+      );
       const { gridColumns, rows, onError: onErrorFunc } = state;
 
-      function onColumnResized(index: number, width: number) {
-        dispatch({
-          type: 'UPDATE_COLUMN_SIZE',
-          payload: { index, width: Math.round(width) },
-        });
+      function onColumnResize(index: number, width: number) {
+        updateColumnResizeDebounced(index, width, dispatch);
       }
 
       function onRowsChange(
@@ -37,7 +37,7 @@ export const Grid = memo(
         data: RowsChangeData<SupaRow, unknown>
       ) {
         const rowData = rows[data.indexes[0]];
-        const originRowData = state.rows.find(x => x.idx == rowData.idx);
+        const originRowData = state.rows.find((x) => x.idx == rowData.idx);
         const hasChange =
           JSON.stringify(rowData) !== JSON.stringify(originRowData);
         if (hasChange) {
@@ -96,7 +96,7 @@ export const Grid = memo(
             rowRenderer={RowRenderer}
             rowKeyGetter={rowKeyGetter}
             selectedRows={state.selectedRows}
-            onColumnResize={onColumnResized}
+            onColumnResize={onColumnResize}
             onRowsChange={onRowsChange}
             onSelectedCellChange={onSelectedCellChange}
             onSelectedRowsChange={onSelectedRowsChange}
@@ -108,4 +108,19 @@ export const Grid = memo(
       );
     }
   )
+);
+
+const updateColumnResize = (
+  index: number,
+  width: number,
+  dispatch: (value: unknown) => void
+) => {
+  dispatch({
+    type: 'UPDATE_COLUMN_SIZE',
+    payload: { index, width: Math.round(width) },
+  });
+};
+const updateColumnResizeDebounced = AwesomeDebouncePromise(
+  updateColumnResize,
+  500
 );

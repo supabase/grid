@@ -1,7 +1,7 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 import Query from '../../query';
-import { SupabaseGridQueue } from '../../constants';
+import { ERROR_PRIMARY_KEY_NOTFOUND, SupabaseGridQueue } from '../../constants';
 
 export class SqlRowService implements IRowService {
   protected query = new Query();
@@ -19,12 +19,12 @@ export class SqlRowService implements IRowService {
       .from(this.table.name, this.table.schema ?? undefined)
       .count();
     filters
-      .filter((x) => x.value != '')
+      .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });
+
     const query = queryChains.toSql();
-    console.log('count query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
       return { error };
@@ -53,9 +53,8 @@ export class SqlRowService implements IRowService {
       const primaryKeyValues = rows.map((x) => x[key]).join(',');
       queryChains = queryChains.filter(key, 'in', primaryKeyValues);
     });
-    const query = queryChains.toSql();
-    console.log('delete query: ', query);
 
+    const query = queryChains.toSql();
     SupabaseGridQueue.add(async () => {
       const { error } = await this.onSqlQuery(query);
       if (error) throw error;
@@ -79,15 +78,15 @@ export class SqlRowService implements IRowService {
       .from(this.table.name, this.table.schema ?? undefined)
       .select();
     filters
-      .filter((x) => x.value != '')
+      .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         queryChains = queryChains.filter(x.column, x.operator, x.value);
       });
     sorts.forEach((x) => {
       queryChains = queryChains.order(x.column, x.ascending, x.nullsFirst);
     });
+
     const query = queryChains.range(from, to).toSql();
-    console.log('select query: ', query);
     const { data, error } = await this.onSqlQuery(query);
     if (error) {
       this.onError(error);
@@ -116,8 +115,6 @@ export class SqlRowService implements IRowService {
       .update(value)
       .match(matchValues)
       .toSql();
-    console.log('update query: ', query);
-
     SupabaseGridQueue.add(async () => {
       const { error } = await this.onSqlQuery(query);
       if (error) throw error;
@@ -131,7 +128,7 @@ export class SqlRowService implements IRowService {
   _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
     const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
     if (!pkColumns || pkColumns.length == 0) {
-      return { error: { message: "Can't find primary key" } };
+      return { error: { message: ERROR_PRIMARY_KEY_NOTFOUND } };
     }
     return { primaryKeys: pkColumns.map((x) => x.name) };
   }

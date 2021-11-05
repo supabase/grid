@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EditorProps } from '@mildtomato/react-data-grid';
 
-export function CheckboxEditor<TRow, TSummaryRow = unknown>({
+export function BooleanEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
   onRowChange,
@@ -19,7 +19,7 @@ export function CheckboxEditor<TRow, TSummaryRow = unknown>({
     <div className="sb-grid-checkbox-editor">
       <input
         className="sb-grid-checkbox-editor__input"
-        checked={(row[column.key as keyof TRow] as unknown) as boolean}
+        checked={row[column.key as keyof TRow] as unknown as boolean}
         onChange={onChange}
         onBlur={onBlur}
         type="checkbox"

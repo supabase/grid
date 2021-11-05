@@ -73,7 +73,7 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
           const { idx, rowIdx } = selectedCellPosition;
           if (idx > 0) {
             const colKey = gridColumns[idx].key;
-            const cellValue = rows[rowIdx][colKey] ?? '';
+            const cellValue = rows[rowIdx]?.[colKey] ?? '';
             const value = formatClipboardValue(cellValue);
             navigator.clipboard.writeText(value);
           }

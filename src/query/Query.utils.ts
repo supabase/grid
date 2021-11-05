@@ -1,4 +1,4 @@
-import { ident, literal } from '@scaleleap/pg-format';
+import { ident, literal, format } from '@scaleleap/pg-format';
 import {
   Dictionary,
   Filter,
@@ -35,6 +35,41 @@ export function deleteQuery(
   const { returning } = options ?? {};
   if (filters) {
     query = applyFilters(query, filters);
+  }
+  if (returning) {
+    query += ' returning *';
+  }
+  return query + ';';
+}
+
+export function insertQuery(
+  table: QueryTable,
+  values: Dictionary<any>[],
+  options?: {
+    returning?: boolean;
+  }
+) {
+  if (!values || values.length == 0) {
+    throw { message: 'no value to insert' };
+  }
+  const { returning } = options ?? {};
+  const queryColumns = Object.keys(values[0])
+    .map((x) => ident(x))
+    .join(',');
+  let query = '';
+  if (queryColumns.length == 0) {
+    query = format(
+      'insert into %1$s select from jsonb_populate_recordset(null::%1$s, %2$s)',
+      queryTable(table),
+      literal(JSON.stringify(values))
+    );
+  } else {
+    query = format(
+      'insert into %1$s (%2$s) select %2$s from jsonb_populate_recordset(null::%1$s, %3$s)',
+      queryTable(table),
+      queryColumns,
+      literal(JSON.stringify(values))
+    );
   }
   if (returning) {
     query += ' returning *';
@@ -84,15 +119,12 @@ export function updateQuery(
   const queryColumns = Object.keys(value)
     .map((x) => ident(x))
     .join(',');
-  let query = `
-  update ${queryTable(table)} set (${queryColumns}) = 
-  (
-    select * from 
-    json_populate_record(
-      null::${queryTable(table)}, ${literal(JSON.stringify(value))}
-    )
-  )
-  `;
+  let query = format(
+    'update %1$s set (%2$s) = (select %2$s from json_populate_record(null::%1$s, %3$s))',
+    queryTable(table),
+    queryColumns,
+    literal(JSON.stringify(value))
+  );
   if (filters) {
     query = applyFilters(query, filters);
   }

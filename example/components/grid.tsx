@@ -4,17 +4,17 @@ import { postAndWait } from './grid.utils';
 
 export default function Grid() {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [inputValue, setInputValue] = React.useState('test_table');
-  const [tableName, setName] = React.useState('test_table');
+  const [tableInput, setTableInput] = React.useState('test_table');
+  const [schemaInput, setSchemaInput] = React.useState('public');
+  const [table, setTable] = React.useState({
+    name: 'test_table',
+    schema: 'public',
+  });
   const [uiMode, setUiMode] = React.useState<'dark' | 'light' | undefined>(
     undefined
   );
   const [isReadonly, setReadonly] = React.useState(true);
   const [reload, setReload] = React.useState(false);
-
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value);
-  }
 
   function onReadonlyInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setReadonly(e.target.checked);
@@ -35,8 +35,8 @@ export default function Grid() {
   }
 
   function reloadGrid() {
-    if (inputValue !== tableName) {
-      setName(inputValue);
+    if (tableInput !== table.name || schemaInput !== table.schema) {
+      setTable({ name: tableInput, schema: schemaInput });
     } else {
       setReload(true);
       setTimeout(() => {
@@ -56,7 +56,21 @@ export default function Grid() {
   return (
     <div className="main-container">
       <div className="tool-bar">
-        <input value={inputValue} onChange={onInputChange} />
+        <input
+          value={schemaInput}
+          placeholder="Schema name"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSchemaInput(e.target.value);
+          }}
+        />
+        <input
+          value={tableInput}
+          placeholder="Table name"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setTableInput(e.target.value);
+          }}
+          style={{ marginLeft: '10px' }}
+        />
         <button onClick={reloadGrid} style={{ marginLeft: '10px' }}>
           Reload Data Grid
         </button>
@@ -80,7 +94,8 @@ export default function Grid() {
         <div className="grid-container">
           <SupabaseGrid
             ref={gridRef}
-            table={tableName}
+            table={table.name}
+            schema={table.schema}
             editable={!isReadonly}
             storageRef="dqofwyqljsmbgrubmnzk"
             theme={uiMode}
@@ -106,7 +121,6 @@ export default function Grid() {
             }}
             onSqlQuery={async (query: string) => {
               const res = await postAndWait('/api/sql-query', { query });
-              // console.log('onSqlQuery res: ', res);
               return res;
             }}
             headerActions={

@@ -14,23 +14,22 @@
   "license": "MIT",
   "peerDependencies": {
     "@mildtomato/react-data-grid": "^7.1.0-beta.6",
-    "@supabase/ui": "0.34.4",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "@supabase/ui": "^0.35.0",
+    "react": "^16.14 || ^17.0.0",
+    "react-dom": "^16.14 || ^17.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@mildtomato/react-data-grid": "^7.1.0-beta.6",
-    "@supabase/ui": "0.34.4",
+    "@supabase/ui": "^0.35.0",
     "@tailwindcss/forms": "^0.3.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@types/file-saver": "^2.0.2",
     "@types/jest": "^27.0.1",
     "@types/react": "^17.0.20",
-    "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "^17.0.9",
     "autoprefixer": "^10.3.4",
     "cssnano": "^5.0.8",
@@ -56,8 +55,8 @@
     "immutability-helper": "^3.1.1",
     "p-queue": "6.6.2",
     "react-contexify": "^5.0.0",
-    "react-dnd": "^14.0.1",
-    "react-dnd-html5-backend": "^14.0.0",
+    "react-dnd": "^14.0.3",
+    "react-dnd-html5-backend": "^14.0.1",
     "react-tiny-popover": "^6.0.5",
     "react-tracked": "^1.7.4",
     "scheduler": "^0.20.2"

@@ -8,6 +8,7 @@ import {
 import {
   countQuery,
   deleteQuery,
+  insertQuery,
   selectQuery,
   updateQuery,
 } from './Query.utils';
@@ -58,7 +59,9 @@ export class QueryModifier implements IQueryModifier {
           });
         }
         case 'insert': {
-          throw 'not implemented';
+          return insertQuery(this.table, actionValue as Dictionary<any>[], {
+            returning: actionOptions?.returning,
+          });
         }
         case 'select': {
           return selectQuery(this.table, actionValue as string[] | undefined, {

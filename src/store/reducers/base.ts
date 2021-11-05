@@ -26,10 +26,6 @@ export type INIT_ACTIONTYPE =
   | {
       type: 'INIT_CLIENT';
       payload: {
-        supabaseUrl: string;
-        supabaseKey: string;
-        schema?: string;
-        headers?: { [key: string]: string };
         onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
       };
     }

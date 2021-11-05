@@ -10,18 +10,23 @@ function autoFocusAndSelect(input: HTMLInputElement | null) {
   input?.select();
 }
 
-const INPUT_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
-const SERVER_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
+interface DateTimeEditorProps<TRow, TSummaryRow = unknown>
+  extends EditorProps<TRow, TSummaryRow> {
+  format: string;
+}
 
-export function DateTimeEditor<TRow, TSummaryRow = unknown>({
+const INPUT_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+
+function BaseEditor<TRow, TSummaryRow = unknown>({
   row,
   column,
+  format,
   onRowChange,
   onClose,
-}: EditorProps<TRow, TSummaryRow>) {
-  const value = (row[column.key as keyof TRow] as unknown) as string;
+}: DateTimeEditorProps<TRow, TSummaryRow>) {
+  const value = row[column.key as keyof TRow] as unknown as string;
   const timeValue = value
-    ? dayjs(value, SERVER_DATE_TIME_FORMAT).format(INPUT_DATE_TIME_FORMAT)
+    ? dayjs(value, format).format(INPUT_DATE_TIME_FORMAT)
     : value;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -29,9 +34,7 @@ export function DateTimeEditor<TRow, TSummaryRow = unknown>({
     if (_value == '') {
       onRowChange({ ...row, [column.key]: null });
     } else {
-      const _timeValue = dayjs(_value, INPUT_DATE_TIME_FORMAT).format(
-        SERVER_DATE_TIME_FORMAT
-      );
+      const _timeValue = dayjs(_value, INPUT_DATE_TIME_FORMAT).format(format);
       onRowChange({ ...row, [column.key]: _timeValue });
     }
   }
@@ -47,4 +50,16 @@ export function DateTimeEditor<TRow, TSummaryRow = unknown>({
       step="1"
     />
   );
+}
+
+export function DateTimeEditor<TRow, TSummaryRow = unknown>(
+  props: EditorProps<TRow, TSummaryRow>
+) {
+  return <BaseEditor {...props} format="YYYY-MM-DDTHH:mm:ss" />;
+}
+
+export function DateTimeWithTimezoneEditor<TRow, TSummaryRow = unknown>(
+  props: EditorProps<TRow, TSummaryRow>
+) {
+  return <BaseEditor {...props} format="YYYY-MM-DDTHH:mm:ssZ" />;
 }

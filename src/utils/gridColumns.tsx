@@ -2,14 +2,17 @@ import * as React from 'react';
 import { Column } from '@mildtomato/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
-  CheckboxEditor,
+  BooleanEditor,
   DateEditor,
   DateTimeEditor,
+  DateTimeWithTimezoneEditor,
   JsonEditor,
+  NullableBooleanEditor,
   NumberEditor,
   SelectEditor,
   TextEditor,
   TimeEditor,
+  TimeWithTimezoneEditor,
 } from '../components/editor';
 import { AddColumn, ColumnHeader, SelectColumn } from '../components/grid';
 import { COLUMN_MIN_WIDTH } from '../constants';
@@ -22,20 +25,21 @@ import {
 export function getGridColumns(
   table: SupaTable,
   options?: {
-    onAddColumn?: () => void;
+    editable?: boolean;
     defaultWidth?: string | number;
+    onAddColumn?: () => void;
   }
 ): any[] {
-  const columns = table.columns.map(x => {
+  const columns = table.columns.map((x) => {
     const columnType = _getColumnType(x);
-    const columnDef: Column<SupaRow> = {
+    const columnDefinition: Column<SupaRow> = {
       key: x.name,
       name: x.name,
       resizable: true,
       width: options?.defaultWidth || _getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
       frozen: x.isPrimaryKey,
-      headerRenderer: props => (
+      headerRenderer: (props) => (
         <ColumnHeader
           {...props}
           columnType={columnType}
@@ -43,46 +47,50 @@ export function getGridColumns(
           format={x.format}
         />
       ),
-      editor: _getColumnEditor(x, columnType),
+      editor: options?.editable ? _getColumnEditor(x, columnType) : undefined,
       formatter: _getColumnFormatter(x, columnType),
     };
 
-    return columnDef;
+    return columnDefinition;
   });
-
-  // console.log('table', table);
-  // console.log('columns', columns);
 
   const gridColumns = [SelectColumn, ...columns];
   if (options?.onAddColumn) {
     gridColumns.push(AddColumn);
   }
 
-  // console.log('gridColumns', gridColumns);
-
   return gridColumns;
 }
 
-function _getColumnEditor(columnDef: SupaColumn, columnType: ColumnType) {
-  if (columnDef.isPrimaryKey || !columnDef.isUpdatable) {
+function _getColumnEditor(
+  columnDefinition: SupaColumn,
+  columnType: ColumnType
+) {
+  if (columnDefinition.isPrimaryKey || !columnDefinition.isUpdatable) {
     return;
   }
 
   switch (columnType) {
     case 'boolean': {
-      return CheckboxEditor;
+      return columnDefinition.isNullable
+        ? NullableBooleanEditor
+        : BooleanEditor;
     }
     case 'date': {
       return DateEditor;
     }
     case 'datetime': {
-      return DateTimeEditor;
+      return columnDefinition.format.endsWith('z')
+        ? DateTimeWithTimezoneEditor
+        : DateTimeEditor;
     }
     case 'time': {
-      return TimeEditor;
+      return columnDefinition.format.endsWith('z')
+        ? TimeWithTimezoneEditor
+        : TimeEditor;
     }
     case 'enum': {
-      const options = columnDef.enum!.map(x => {
+      const options = columnDefinition.enum!.map((x) => {
         return { label: x, value: x };
       });
       return (p: any) => <SelectEditor {...p} options={options} />;
