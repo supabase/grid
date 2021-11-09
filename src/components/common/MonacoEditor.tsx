@@ -46,7 +46,9 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
       width={width}
       height={height || '200px'}
       theme="supabase"
-      wrapperClassName="grid-monaco-editor-container"
+      wrapperProps={{
+        className: 'grid-monaco-editor-container',
+      }}
       className="grid-monaco-editor"
       defaultLanguage={language || 'plaintext'}
       defaultValue={value}
@@ -61,7 +63,6 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
         glyphMargin: false,
         folding: false,
         lineNumbers: 'off',
-        // lineDecorationsWidth: 0,
         lineNumbersMinChars: 0,
         scrollBeyondLastLine: false,
         wordWrap: 'on',
