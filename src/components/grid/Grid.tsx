@@ -92,6 +92,8 @@ export const Grid = memo(
           <DataGrid
             ref={ref}
             columns={gridColumns}
+            headerRowHeight={35}
+            rowHeight={200}
             rows={rows ?? []}
             rowRenderer={RowRenderer}
             rowKeyGetter={rowKeyGetter}

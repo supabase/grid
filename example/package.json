@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/grid": "file:../",
     "@supabase/react-data-grid": "^7.1.0-beta.5",
+    "@supabase/supabase-js": "^1.24.0",
     "@supabase/ui": "^0.35.0",
     "next": "^11.1.2",
     "pg": "^8.7.1",

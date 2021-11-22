@@ -51,6 +51,7 @@ npm i react react-dom @supabase/react-data-grid @supabase/ui
 - `onEditColumn` show edit column menu if available.
 - `onEditRow` show edit row button if available.
 - `onDeleteColumn` show delete column menu if available.
+- `supabaseStorageClient` for managing files on supabase storage with `storageMedia` columns.
 
 ## Run example
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { SupabaseGrid, SupabaseGridRef, SupaRow } from '@supabase/grid';
+import { createClient } from '@supabase/supabase-js';
 import { postAndWait } from './grid.utils';
 
 export default function Grid() {
@@ -15,6 +16,14 @@ export default function Grid() {
   );
   const [isReadonly, setReadonly] = React.useState(true);
   const [reload, setReload] = React.useState(false);
+  let supabase = createClient(
+    `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co`,
+    process.env.NEXT_PUBLIC_SUPABASE_KEY,
+    {
+      localStorage: undefined,
+      detectSessionInUrl: false,
+    }
+  );
 
   function onReadonlyInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setReadonly(e.target.checked);
@@ -123,6 +132,7 @@ export default function Grid() {
               const res = await postAndWait('/api/sql-query', { query });
               return res;
             }}
+            supabaseStorageClient={supabase.storage}
             headerActions={
               <>
                 <span>{`'{headerActions}' can be used to insert`}</span>,
