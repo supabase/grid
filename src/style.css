@@ -319,7 +319,7 @@
 */
 
 .dropdown-control {
-  @apply overflow-scroll;
+  @apply overflow-auto;
 }
 
 .dropdown-control .sbui-typography {
