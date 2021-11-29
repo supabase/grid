@@ -177,6 +177,9 @@ function isFilterSql(filter: Filter) {
 }
 
 function filterLiteral(value: string) {
+  if (value.startsWith('ARRAY[') && value.endsWith(']')) {
+    return value;
+  }
   return literal(value);
 }
 
