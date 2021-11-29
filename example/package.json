@@ -12,7 +12,7 @@
     "@supabase/grid": "file:../",
     "@supabase/react-data-grid": "^7.1.0-beta.5",
     "@supabase/ui": "^0.35.0",
-    "next": "^11.1.2",
+    "next": "^12.0.4",
     "pg": "^8.7.1",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom"
