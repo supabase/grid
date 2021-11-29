@@ -1,7 +1,7 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
-import Query from '../../query';
 import { ERROR_PRIMARY_KEY_NOTFOUND, SupabaseGridQueue } from '../../constants';
+import Query from '../../query';
 
 export class SqlRowService implements IRowService {
   protected query = new Query();
@@ -43,7 +43,7 @@ export class SqlRowService implements IRowService {
   }
 
   delete(rows: SupaRow[]) {
-    const { primaryKeys, error } = this._getPrimaryKeys();
+    const { primaryKeys, error } = this.getPrimaryKeys();
     if (error) return { error };
 
     let queryChains = this.query
@@ -100,7 +100,7 @@ export class SqlRowService implements IRowService {
   }
 
   update(row: SupaRow) {
-    const { primaryKeys, error } = this._getPrimaryKeys();
+    const { primaryKeys, error } = this.getPrimaryKeys();
     if (error) {
       return { error };
     }
@@ -127,7 +127,7 @@ export class SqlRowService implements IRowService {
     return {};
   }
 
-  _getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
+  getPrimaryKeys(): { primaryKeys?: string[]; error?: ServiceError } {
     const pkColumns = this.table.columns.filter((x) => x.isPrimaryKey);
     if (!pkColumns || pkColumns.length == 0) {
       return { error: { message: ERROR_PRIMARY_KEY_NOTFOUND } };
