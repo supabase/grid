@@ -104,11 +104,13 @@ export class SqlRowService implements IRowService {
     if (error) {
       return { error };
     }
-
     const { idx, ...value } = row;
     const matchValues: any = {};
     primaryKeys!.forEach((key) => {
       matchValues[key] = row[key];
+      // fix: https://github.com/supabase/grid/issues/94
+      // remove primary key from updated value object
+      delete value[key];
     });
     const query = this.query
       .from(this.table.name, this.table.schema ?? undefined)
