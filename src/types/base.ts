@@ -25,7 +25,7 @@ export type FilterOperator =
 export interface Filter {
   column: string;
   operator: FilterOperator;
-  value: string;
+  value: any;
 }
 
 export interface SavedState {

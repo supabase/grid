@@ -1,6 +1,7 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 import { ERROR_PRIMARY_KEY_NOTFOUND, SupabaseGridQueue } from '../../constants';
+import { isNumericalColumn } from '../../utils/gridColumns';
 import Query from '../../query';
 
 export class SqlRowService implements IRowService {
@@ -21,7 +22,8 @@ export class SqlRowService implements IRowService {
     filters
       .filter((x) => x.value && x.value != '')
       .forEach((x) => {
-        queryChains = queryChains.filter(x.column, x.operator, x.value);
+        const value = this.formatFilterValue(x);
+        queryChains = queryChains.filter(x.column, x.operator, value);
       });
 
     const query = queryChains.toSql();
@@ -80,7 +82,9 @@ export class SqlRowService implements IRowService {
     filters
       .filter((x) => x.value && x.value != '')
       .forEach((x) => {
-        queryChains = queryChains.filter(x.column, x.operator, x.value);
+        const value = this.formatFilterValue(x);
+        console.log('value: ', value, '  x.value: ', x.value);
+        queryChains = queryChains.filter(x.column, x.operator, value);
       });
     sorts.forEach((x) => {
       queryChains = queryChains.order(x.column, x.ascending, x.nullsFirst);
@@ -133,5 +137,17 @@ export class SqlRowService implements IRowService {
       return { error: { message: ERROR_PRIMARY_KEY_NOTFOUND } };
     }
     return { primaryKeys: pkColumns.map((x) => x.name) };
+  }
+
+  /**
+   * temporary fix until we impliment a better filter UI
+   * which validate input value base on the column type
+   */
+  formatFilterValue(filter: Filter) {
+    const column = this.table.columns.find((x) => x.name == filter.column);
+    if (column && isNumericalColumn(column.format)) {
+      return Number(filter.value);
+    }
+    return filter.value;
   }
 }

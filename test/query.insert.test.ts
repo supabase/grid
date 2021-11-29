@@ -49,7 +49,7 @@ test('insert should ignore order and filter', async () => {
   const res = query
     .from('users')
     .insert([{ name: 'aaaaa', age: 24 }])
-    .filter('age', '<', '30')
+    .filter('age', '<', 30)
     .order('name')
     .toSql();
   expect(res).toMatchSnapshot();

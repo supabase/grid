@@ -6,7 +6,7 @@ test('basic update on table', async () => {
   const res = query
     .from('users')
     .update({ young: true })
-    .filter('age', '<', '30')
+    .filter('age', '<', 30)
     .toSql();
   expect(res).toMatchSnapshot();
 });
@@ -27,7 +27,7 @@ test('update should ignore order', async () => {
   const res = query
     .from('users')
     .update({ young: true })
-    .filter('age', '<', '30')
+    .filter('age', '<', 30)
     .order('name')
     .toSql();
   expect(res).toMatchSnapshot();

@@ -26,7 +26,7 @@ export class QueryFilter implements IQueryFilter, IQueryModifier {
     protected actionOptions?: { returning: boolean }
   ) {}
 
-  filter(column: string, operator: FilterOperator, value: string) {
+  filter(column: string, operator: FilterOperator, value: any) {
     this.filters.push({ column, operator, value });
     return this;
   }

@@ -158,7 +158,7 @@ function applyFilters(query: string, filters: Filter[]) {
 }
 
 function inFilterSql(filter: Filter) {
-  const values = filter.value.split(',').map((x) => filterLiteral(x.trim()));
+  const values = filter.value.split(',').map((x: any) => filterLiteral(x));
   return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
 }
 
@@ -176,11 +176,16 @@ function isFilterSql(filter: Filter) {
   }
 }
 
-function filterLiteral(value: string) {
-  if (value.startsWith('ARRAY[') && value.endsWith(']')) {
-    return value;
+function filterLiteral(value: any) {
+  if (typeof value === 'string') {
+    const temp = value.trim();
+    if (temp?.startsWith('ARRAY[') && temp?.endsWith(']')) {
+      return temp;
+    } else {
+      return literal(temp);
+    }
   }
-  return literal(value);
+  return value;
 }
 
 //============================================================

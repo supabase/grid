@@ -19,8 +19,8 @@ test('count table with multi filters', async () => {
     .from('users')
     .count()
     .filter('name', 'in', 'hello world, xin chao')
-    .filter('age', '>', '18')
-    .filter('birth_year', '>=', '2000')
+    .filter('age', '>', 18)
+    .filter('birth_year', '>=', 2000)
     .toSql();
   expect(res).toMatchSnapshot();
 });

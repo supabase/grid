@@ -31,12 +31,12 @@ export function getGridColumns(
   }
 ): any[] {
   const columns = table.columns.map((x) => {
-    const columnType = _getColumnType(x);
+    const columnType = getColumnType(x);
     const columnDefinition: Column<SupaRow> = {
       key: x.name,
       name: x.name,
       resizable: true,
-      width: options?.defaultWidth || _getColumnWidth(x),
+      width: options?.defaultWidth || getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
       frozen: x.isPrimaryKey,
       headerRenderer: (props) => (
@@ -47,8 +47,8 @@ export function getGridColumns(
           format={x.format}
         />
       ),
-      editor: options?.editable ? _getColumnEditor(x, columnType) : undefined,
-      formatter: _getColumnFormatter(x, columnType),
+      editor: options?.editable ? getColumnEditor(x, columnType) : undefined,
+      formatter: getColumnFormatter(x, columnType),
     };
 
     return columnDefinition;
@@ -62,10 +62,7 @@ export function getGridColumns(
   return gridColumns;
 }
 
-function _getColumnEditor(
-  columnDefinition: SupaColumn,
-  columnType: ColumnType
-) {
+function getColumnEditor(columnDefinition: SupaColumn, columnType: ColumnType) {
   if (columnDefinition.isPrimaryKey || !columnDefinition.isUpdatable) {
     return;
   }
@@ -111,7 +108,7 @@ function _getColumnEditor(
   }
 }
 
-function _getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
+function getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
   switch (columnType) {
     case 'boolean': {
       return BooleanFormatter;
@@ -129,42 +126,42 @@ function _getColumnFormatter(columnDef: SupaColumn, columnType: ColumnType) {
   }
 }
 
-function _getColumnType(columnDef: SupaColumn): ColumnType {
-  if (_isForeignKeyColumn(columnDef)) {
+function getColumnType(columnDef: SupaColumn): ColumnType {
+  if (isForeignKeyColumn(columnDef)) {
     return 'foreign_key';
-  } else if (_isNumericalColumn(columnDef.dataType)) {
+  } else if (isNumericalColumn(columnDef.dataType)) {
     return 'number';
-  } else if (_isArrayColumn(columnDef.dataType)) {
+  } else if (isArrayColumn(columnDef.dataType)) {
     return 'array';
-  } else if (_isJsonColumn(columnDef.dataType)) {
+  } else if (isJsonColumn(columnDef.dataType)) {
     return 'json';
-  } else if (_isTextColumn(columnDef.dataType)) {
+  } else if (isTextColumn(columnDef.dataType)) {
     return 'text';
-  } else if (_isDateColumn(columnDef.format)) {
+  } else if (isDateColumn(columnDef.format)) {
     return 'date';
-  } else if (_isTimeColumn(columnDef.format)) {
+  } else if (isTimeColumn(columnDef.format)) {
     return 'time';
-  } else if (_isDateTimeColumn(columnDef.format)) {
+  } else if (isDateTimeColumn(columnDef.format)) {
     return 'datetime';
-  } else if (_isBoolColumn(columnDef.dataType)) {
+  } else if (isBoolColumn(columnDef.dataType)) {
     return 'boolean';
-  } else if (_isEnumColumn(columnDef.dataType)) {
+  } else if (isEnumColumn(columnDef.dataType)) {
     return 'enum';
   } else return 'unknown';
 }
 
-function _getColumnWidth(columnDef: SupaColumn): string | number | undefined {
-  if (_isNumericalColumn(columnDef.dataType)) {
+function getColumnWidth(columnDef: SupaColumn): string | number | undefined {
+  if (isNumericalColumn(columnDef.dataType)) {
     return 120;
   } else if (
-    _isDateTimeColumn(columnDef.format) ||
-    _isDateColumn(columnDef.format) ||
-    _isTimeColumn(columnDef.format)
+    isDateTimeColumn(columnDef.format) ||
+    isDateColumn(columnDef.format) ||
+    isTimeColumn(columnDef.format)
   ) {
     return 150;
-  } else if (_isBoolColumn(columnDef.dataType)) {
+  } else if (isBoolColumn(columnDef.dataType)) {
     return 120;
-  } else if (_isEnumColumn(columnDef.dataType)) {
+  } else if (isEnumColumn(columnDef.dataType)) {
     return 150;
   } else return 250;
 }
@@ -189,51 +186,51 @@ const NUMERICAL_TYPES = [
   'serial4',
   'serial8',
 ];
-function _isNumericalColumn(type: string) {
+export function isNumericalColumn(type: string) {
   return NUMERICAL_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const JSON_TYPES = ['json', 'jsonb', 'array'];
-function _isJsonColumn(type: string) {
+function isJsonColumn(type: string) {
   return JSON_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const ARRAY_TYPES = ['array'];
-function _isArrayColumn(type: string) {
+function isArrayColumn(type: string) {
   return ARRAY_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const TEXT_TYPES = ['text', 'character varying'];
-function _isTextColumn(type: string) {
+function isTextColumn(type: string) {
   return TEXT_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const TIMESTAMP_TYPES = ['timestamp', 'timestamptz'];
-function _isDateTimeColumn(type: string) {
+function isDateTimeColumn(type: string) {
   return TIMESTAMP_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const DATE_TYPES = ['date'];
-function _isDateColumn(type: string) {
+function isDateColumn(type: string) {
   return DATE_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const TIME_TYPES = ['time', 'timetz'];
-function _isTimeColumn(type: string) {
+function isTimeColumn(type: string) {
   return TIME_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const BOOL_TYPES = ['boolean', 'bool'];
-function _isBoolColumn(type: string) {
+function isBoolColumn(type: string) {
   return BOOL_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
 const ENUM_TYPES = ['user-defined'];
-function _isEnumColumn(type: string) {
+function isEnumColumn(type: string) {
   return ENUM_TYPES.indexOf(type.toLowerCase()) > -1;
 }
 
-function _isForeignKeyColumn(columnDef: SupaColumn) {
+function isForeignKeyColumn(columnDef: SupaColumn) {
   const { targetTableSchema, targetTableName, targetColumnName } = columnDef;
   return !!targetTableSchema && !!targetTableName && !!targetColumnName;
 }
