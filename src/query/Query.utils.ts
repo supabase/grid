@@ -176,18 +176,8 @@ function isFilterSql(filter: Filter) {
   }
 }
 
-/**
- * Filter value can be string | number
- * However the value receive from input is always string.
- * If it's a number, we have to convert it back to number format.
- */
 function filterLiteral(value: string) {
-  const maybeNumber = Number(value);
-  if (isNaN(maybeNumber)) {
-    return literal(value);
-  } else {
-    return literal(maybeNumber);
-  }
+  return literal(value);
 }
 
 //============================================================
