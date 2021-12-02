@@ -1,8 +1,8 @@
 import { IRowService } from '.';
 import { Filter, ServiceError, Sort, SupaRow, SupaTable } from '../../types';
 import { ERROR_PRIMARY_KEY_NOTFOUND, SupabaseGridQueue } from '../../constants';
-import { isNumericalColumn } from '../../utils/gridColumns';
 import Query from '../../query';
+import { isNumericalColumn } from '../../utils';
 
 export class SqlRowService implements IRowService {
   protected query = new Query();
