@@ -83,7 +83,6 @@ export class SqlRowService implements IRowService {
       .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         const value = this.formatFilterValue(x);
-        console.log('value: ', value, '  x.value: ', x.value);
         queryChains = queryChains.filter(x.column, x.operator, value);
       });
     sorts.forEach((x) => {
@@ -146,7 +145,9 @@ export class SqlRowService implements IRowService {
   formatFilterValue(filter: Filter) {
     const column = this.table.columns.find((x) => x.name == filter.column);
     if (column && isNumericalColumn(column.format)) {
-      return Number(filter.value);
+      const numberValue = Number(filter.value);
+      if (Number.isNaN(numberValue)) return filter.value;
+      else return Number(filter.value);
     }
     return filter.value;
   }

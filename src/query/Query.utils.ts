@@ -158,17 +158,19 @@ function applyFilters(query: string, filters: Filter[]) {
 }
 
 function inFilterSql(filter: Filter) {
-  const values = filter.value.split(',').map((x: any) => filterLiteral(x));
+  const filterValueTxt = String(filter.value);
+  const values = filterValueTxt.split(',').map((x: any) => filterLiteral(x));
   return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
 }
 
 function isFilterSql(filter: Filter) {
-  switch (filter.value) {
+  const filterValueTxt = String(filter.value);
+  switch (filterValueTxt) {
     case 'null':
     case 'false':
     case 'true':
     case 'not null':
-      return `${ident(filter.column)} ${filter.operator} ${filter.value}`;
+      return `${ident(filter.column)} ${filter.operator} ${filterValueTxt}`;
     default:
       return `${ident(filter.column)} ${filter.operator} ${filterLiteral(
         filter.value
