@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Column,
+  CalculatedColumn,
   FormatterProps,
   GroupFormatterProps,
   useRowSelection,
@@ -12,14 +12,17 @@ import { SELECT_COLUMN_KEY } from '../../constants';
 import { useFocusRef } from '../../utils';
 import { useTrackedState } from '../../store';
 
-export const SelectColumn: Column<any, any> = {
+export const SelectColumn: CalculatedColumn<any, any> = {
   key: SELECT_COLUMN_KEY,
   name: '',
+  idx: 0,
   width: 65,
   maxWidth: 65,
   resizable: false,
   sortable: false,
   frozen: true,
+  isLastFrozenColumn: false,
+  rowGroup: false,
   headerRenderer: props => {
     return (
       <SelectCellHeader
