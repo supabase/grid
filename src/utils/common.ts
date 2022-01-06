@@ -13,14 +13,14 @@ export function exportRowsToCsv(
   rows: SupaRow[],
   separator: string = ','
 ) {
-  const keys = columns.map((x) => x.name) || [];
+  const keys = columns.map(x => x.name) || [];
   const csv =
     keys.join(separator) +
     '\n' +
     rows
-      .map((row) => {
+      .map(row => {
         return keys
-          .map((k) => {
+          .map(k => {
             let cell = row[k] === null || row[k] === undefined ? '' : row[k];
             cell =
               cell instanceof Date
@@ -46,3 +46,12 @@ export function formatClipboardValue(value: any) {
   }
   return value;
 }
+
+export const copyToClipboard = (str: string, callback = () => {}) => {
+  const focused = window.document.hasFocus();
+  if (focused) {
+    window.navigator?.clipboard?.writeText(str).then(callback);
+  } else {
+    console.warn('Unable to copy to clipboard');
+  }
+};

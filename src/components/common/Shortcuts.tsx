@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTrackedState } from '../../store';
 import { useKeyboardShortcuts } from './Hooks';
 import { DataGridHandle } from '@supabase/react-data-grid';
-import { formatClipboardValue } from '../../utils';
+import { formatClipboardValue, copyToClipboard } from '../../utils';
 
 type ShortcutsProps = {
   gridRef: React.RefObject<DataGridHandle>;
@@ -75,7 +75,7 @@ export function Shortcuts({ gridRef }: ShortcutsProps) {
             const colKey = gridColumns[idx].key;
             const cellValue = rows[rowIdx]?.[colKey] ?? '';
             const value = formatClipboardValue(cellValue);
-            navigator.clipboard.writeText(value);
+            copyToClipboard(value);
           }
         }
       },

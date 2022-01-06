@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Menu, Item, ItemParams, PredicateParams } from 'react-contexify';
 import { IconTrash, IconClipboard, IconEdit } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../store';
-import { formatClipboardValue } from '../../utils';
+import { formatClipboardValue, copyToClipboard } from '../../utils';
 import { showConfirmAlert } from '../common';
 
 export const ROW_CONTEXT_MENU_ID = 'row-context-menu-id';
@@ -65,7 +65,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({}) => {
     const value = row[columnKey];
     const text = formatClipboardValue(value);
 
-    navigator.clipboard.writeText(text);
+    copyToClipboard(text);
   }
 
   return (
