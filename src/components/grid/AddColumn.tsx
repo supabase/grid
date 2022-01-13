@@ -1,17 +1,21 @@
 import * as React from 'react';
-import { Column } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import { Button, IconPlus } from '@supabase/ui';
 import { ADD_COLUMN_KEY } from '../../constants';
 import { useTrackedState } from '../../store';
+import { DefaultFormatter } from '../formatter';
 
-export const AddColumn: Column<any, any> = {
+export const AddColumn: CalculatedColumn<any, any> = {
   key: ADD_COLUMN_KEY,
   name: '',
+  idx: 999,
   width: 100,
   maxWidth: 100,
   resizable: false,
   sortable: false,
   frozen: false,
+  isLastFrozenColumn: false,
+  rowGroup: false,
   headerRenderer(props) {
     return (
       <AddColumnHeader
@@ -21,6 +25,7 @@ export const AddColumn: Column<any, any> = {
       />
     );
   },
+  formatter: DefaultFormatter,
 };
 
 type SharedInputProps = Pick<

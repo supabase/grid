@@ -1,4 +1,4 @@
-import { Column, HeaderRendererProps } from '@supabase/react-data-grid';
+import { CalculatedColumn, HeaderRendererProps } from '@supabase/react-data-grid';
 
 export interface Dictionary<T> {
   [Key: string]: T;
@@ -30,7 +30,7 @@ export interface Filter {
 
 export interface SavedState {
   filters: Filter[];
-  gridColumns: Column<any, any>[];
+  gridColumns: CalculatedColumn<any, any>[];
   sorts: Sort[];
 }
 

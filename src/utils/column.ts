@@ -1,9 +1,9 @@
-import { Column } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import { ADD_COLUMN_KEY, SELECT_COLUMN_KEY } from '../constants';
 import { SavedState } from '../types';
 import { deepClone } from './common';
 
-export function cloneColumn(column: Column<any, any>) {
+export function cloneColumn(column: CalculatedColumn<any, any>) {
   const cloned = deepClone(column);
   // these properties can't be cloned. Need to manual re-set again
   cloned.editor = column.editor;
@@ -13,7 +13,7 @@ export function cloneColumn(column: Column<any, any>) {
 }
 
 export function getInitialGridColumns(
-  gridColumns: Column<any, any>[],
+  gridColumns: CalculatedColumn<any, any>[],
   savedState?: SavedState
 ) {
   let result = gridColumns;

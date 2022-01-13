@@ -1,10 +1,10 @@
 import update from 'immutability-helper';
-import { Column } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import { cloneColumn, getInitialGridColumns } from '../../utils';
 import { INIT_ACTIONTYPE } from './base';
 
 export interface ColumnInitialState {
-  gridColumns: Column<any, any>[];
+  gridColumns: CalculatedColumn <any, any>[];
 }
 
 export const columnInitialState: ColumnInitialState = {
@@ -28,6 +28,10 @@ type COLUMN_ACTIONTYPE =
   | {
       type: 'UNFREEZE_COLUMN';
       payload: { columnKey: string };
+    }
+  | {
+      type: 'UPDATE_COLUMN_IDX';
+      payload: { columnKey: string; columnIdx: number };
     };
 
 const ColumnReducer = (
@@ -96,6 +100,20 @@ const ColumnReducer = (
         gridColumns: update(state.gridColumns, {
           [columnIdx]: { $set: updated },
         }),
+      };
+    }
+    case 'UPDATE_COLUMN_IDX': {
+      const index = state.gridColumns.findIndex(
+        x => x.key === action.payload.columnKey
+      );
+      const updated = cloneColumn(state.gridColumns[index]);
+      updated.idx = action.payload.columnIdx;
+      return {
+        ...state,
+        gridColumns: update(state.gridColumns, {
+          [index]: { $set: updated },
+        })
+        .sort((a, b) => a.idx - b.idx),
       };
     }
     default:

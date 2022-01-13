@@ -1,4 +1,4 @@
-import { Column } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import { GridProps, SavedState, SupaTable } from '../../types';
 import { REFRESH_PAGE_IMMEDIATELY } from '../../constants';
 import { IRowService, SqlRowService } from '../../services/row';
@@ -33,7 +33,7 @@ export type INIT_ACTIONTYPE =
       type: 'INIT_TABLE';
       payload: {
         table: SupaTable;
-        gridColumns: Column<any, any>[];
+        gridColumns: CalculatedColumn<any, any>[];
         gridProps?: GridProps;
         savedState?: SavedState;
         editable?: boolean;

@@ -5,6 +5,7 @@ import { XYCoord } from 'dnd-core';
 import { useDispatch } from '../../store';
 import { ColumnHeaderProps, ColumnType, DragItem } from '../../types';
 import { ColumnMenu } from '../menu';
+import { useTrackedState } from '../../store';
 
 export function ColumnHeader<R>({
   column,
@@ -17,6 +18,15 @@ export function ColumnHeader<R>({
   const columnIdx = column.idx;
   const columnKey = column.key;
   const columnFormat = getColumnFormat(columnType, format);
+  const state = useTrackedState();
+
+  // keep state.gridColumns' order in sync with data grid component
+  if (state.gridColumns[columnIdx].key != columnKey) {
+    dispatch({
+      type: 'UPDATE_COLUMN_IDX',
+      payload: { columnKey, columnIdx },
+    });
+  }
 
   const [{ isDragging }, drag] = useDrag({
     type: 'column-header',

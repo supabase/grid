@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column } from '@supabase/react-data-grid';
+import { CalculatedColumn } from '@supabase/react-data-grid';
 import { ColumnType, SupaColumn, SupaRow, SupaTable } from '../types';
 import {
   isArrayColumn,
@@ -42,15 +42,19 @@ export function getGridColumns(
     onAddColumn?: () => void;
   }
 ): any[] {
-  const columns = table.columns.map((x) => {
+  const columns = table.columns.map((x, idx) => {
     const columnType = getColumnType(x);
-    const columnDefinition: Column<SupaRow> = {
+    const columnDefinition: CalculatedColumn<SupaRow> = {
       key: x.name,
       name: x.name,
+      idx: idx + 1,
       resizable: true,
+      sortable: true,
       width: options?.defaultWidth || getColumnWidth(x),
       minWidth: COLUMN_MIN_WIDTH,
-      frozen: x.isPrimaryKey,
+      frozen: x.isPrimaryKey || false,
+      isLastFrozenColumn: false,
+      rowGroup: false,
       headerRenderer: (props) => (
         <ColumnHeader
           {...props}
