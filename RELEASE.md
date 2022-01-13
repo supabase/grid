@@ -2,6 +2,10 @@
 
 Releases are handled by Semantic release. This document is for forcing and documenting any non-code changes.
 
+## 2.4.0
+
+- fix copy cell bug
+
 ## 2.0.0
 
 - Remove @supabase-js dependency
