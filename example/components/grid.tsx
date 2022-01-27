@@ -4,8 +4,8 @@ import { postAndWait } from './grid.utils';
 
 export default function Grid() {
   const gridRef = React.useRef<SupabaseGridRef>(null);
-  const [tableInput, setTableInput] = React.useState('test_table');
-  const [schemaInput, setSchemaInput] = React.useState('public');
+  const [tableInput, setTableInput] = React.useState('pages');
+  const [schemaInput, setSchemaInput] = React.useState('supabase_app_prod');
   const [table, setTable] = React.useState({
     name: 'test_table',
     schema: 'public',

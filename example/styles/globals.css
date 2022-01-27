@@ -7,7 +7,7 @@ body {
 }
 
 body.dark {
-  background: #181818;
+  @apply bg-scale-100 dark:bg-scale-200;
 }
 
 .main-container {

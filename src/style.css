@@ -664,7 +664,7 @@
 */
 
 .sb-grid-header {
-  @apply flex justify-between h-10 z-10 px-2 dark:bg-gray-700;
+  @apply flex justify-between h-10 z-10 px-2 bg-scale-100 dark:bg-scale-300;
 }
 
 .sb-grid-header__inner {
