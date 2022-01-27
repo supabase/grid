@@ -109,7 +109,7 @@ module.exports = ui({
         */
         'table-body': {
           light: 'var(--colors-scale2)',
-          dark: 'var(--colors-scale1)',
+          dark: 'var(--colors-scale2)',
         },
         'table-header': {
           light: 'var(--colors-scale1)',
