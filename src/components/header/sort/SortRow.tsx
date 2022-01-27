@@ -148,7 +148,8 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
             layout="horizontal"
             label="ascending"
             defaultChecked={sort.ascending}
-            onChange={onToogle}
+            // @ts-ignore
+            onChange={(e: boolean) => onToogle(e)}
           />
           <Typography.Text className="sb-grid-sort-row__item__move">
             <IconMenu size="tiny" />
