@@ -113,7 +113,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
   function renderRows() {
     if (!rows) return null;
     const temp = rows.map((x, i) => {
-      return <RowItem key={`menu-${i}`} item={x} onSelect={onItemSelect} />;
+      return <RowItem key={`menu-${i}`} item={x} onSelect={onItemSelect} columnNames={foreignColumnNames} />;
     });
     return <Menu className="foreign-table-modal__menu">{temp}</Menu>;
   }

@@ -367,7 +367,7 @@
 }
 
 .foreign-table-modal__row-item {
-  @apply border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden;
+  @apply border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden overflow-x-scroll;
 }
 
 .foreign-table-modal__row-item__inner {

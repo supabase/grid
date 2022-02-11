@@ -5,15 +5,15 @@ import { Dictionary } from '../../../types';
 interface RowItemProps {
   item: Dictionary<any>;
   onSelect: (item: Dictionary<any>) => void;
+  columnNames: string[],
 }
 
-export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
-  const keys = Object.keys(item);
+export const RowItem: React.FC<RowItemProps> = ({ item, onSelect, columnNames }) => {
   return (
     <div className="foreign-table-modal__row-item">
-      <Menu.Item onClick={() => onSelect(item)}>
+      <Menu.Item onClick={() => onSelect(item)} style={{minWidth: 'min-content'}}>
         <div className="foreign-table-modal__row-item__inner">
-          {keys.map((key, j) => {
+          {columnNames.map((key, j) => {
             //
             // limit to 5 attributes
             //
@@ -34,7 +34,7 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
                   {key}
                 </Typography.Text>
                 <Typography.Text small strong>
-                  {item[key] || '[null]'}
+                  {item[key] ? (typeof item[key] === 'object') ? JSON.stringify(item[key]) : item[key] : '[null]'}
                 </Typography.Text>
               </div>
             );
