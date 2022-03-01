@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Button,
-  Divider,
-  Modal,
-  Menu,
-  Space,
-  IconExternalLink,
-  IconTrash,
-} from '@supabase/ui';
+import { Button, Modal, Menu, IconExternalLink, IconTrash } from '@supabase/ui';
 import { useTrackedState } from '../../../store';
 import { Dictionary, Filter } from '../../../types';
 import { RowItem } from './RowItem';
@@ -139,29 +131,23 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
         visible={visible}
         onCancel={toggle}
         closable
-        contentStyle={{ padding: 0 }}
         customFooter={
-          <Space style={{ width: '100%' }}>
-            <Button
-              block
-              danger
-              icon={<IconTrash />}
-              onClick={onClearValueClick}
-            >
-              Clear value
-            </Button>
-          </Space>
+          <Button block danger icon={<IconTrash />} onClick={onClearValueClick}>
+            Clear value
+          </Button>
         }
       >
-        <FilterHeader
-          defaultColumnName={columnDefinition?.targetColumnName ?? undefined}
-          defaultValue={defaultValue}
-          foreignColumnNames={foreignColumnNames}
-          onChange={onFilterChange}
-        />
-        <div className="foreign-table-modal__content-container">
-          <Divider light />
-          <div className="foreign-table-modal__content-container__inner">
+        <Modal.Content>
+          <FilterHeader
+            defaultColumnName={columnDefinition?.targetColumnName ?? undefined}
+            defaultValue={defaultValue}
+            foreignColumnNames={foreignColumnNames}
+            onChange={onFilterChange}
+          />
+        </Modal.Content>
+        <Modal.Seperator />
+        <Modal.Content>
+          <div className="foreign-table-modal__content-container">
             <div
               className="foreign-table-modal__content-container__inner__overflow"
               style={{ minHeight: '21rem', maxHeight: '20rem' }}
@@ -169,7 +155,7 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
               {renderRows()}
             </div>
           </div>
-        </div>
+        </Modal.Content>
       </Modal>
     </>
   );

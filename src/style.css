@@ -334,16 +334,16 @@
   @apply w-full;
 }
 
-.foreign-table-modal__content-container__inner {
+/* .foreign-table-modal__content-container__inner {
   @apply px-6;
-}
+} */
 
 .foreign-table-modal__content-container__inner__overflow {
   @apply w-full overflow-scroll;
 }
 
 .foreign-table-modal__filter {
-  @apply flex items-center space-x-2 px-6;
+  @apply flex items-center space-x-2 mt-2;
 }
 
 .foreign-table-modal__filter__trigger-content {
@@ -363,7 +363,7 @@
 }
 
 .foreign-table-modal__menu {
-  @apply space-y-2;
+  @apply flex flex-col space-y-2;
 }
 
 .foreign-table-modal__row-item {
@@ -551,7 +551,7 @@
 */
 
 .sb-grid-grid--loading {
-  @apply flex justify-center bg-scale-100 dark:bg-scale-900;
+  @apply flex justify-center bg-transparent;
 }
 
 .sb-grid-grid--loading__inner {
