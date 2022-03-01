@@ -103,7 +103,7 @@ export class SqlRowService implements IRowService {
     }
   }
 
-  update(row: SupaRow) {
+  update(row: SupaRow, changedColumn?: string) {
     const { primaryKeys, error } = this.getPrimaryKeys();
     if (error) {
       return { error };
@@ -118,7 +118,9 @@ export class SqlRowService implements IRowService {
     });
     const query = this.query
       .from(this.table.name, this.table.schema ?? undefined)
-      .update(value)
+      .update(changedColumn ? {
+        [changedColumn]: value[changedColumn]
+      }: value)
       .match(matchValues)
       .toSql();
     SupabaseGridQueue.add(async () => {
