@@ -1,11 +1,5 @@
 import React, { FC } from 'react';
-import {
-  Button,
-  IconList,
-  IconChevronDown,
-  Popover,
-  Alert,
-} from '@supabase/ui';
+import { Button, IconList, IconChevronDown, Popover } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
