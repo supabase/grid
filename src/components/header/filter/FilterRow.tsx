@@ -63,9 +63,6 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
     });
   }
 
-  const found = FilterOperatorOptions.find((x) => x.value === filter.operator);
-  console.log('found', found);
-
   return (
     <div className="sb-grid-filter-row px-3">
       <DropdownControl
@@ -99,9 +96,8 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
               <IconChevronDown strokeWidth={1.5} size={14} />
             </div>
           }
-          className="w-32"
         >
-          {found?.label}
+          {filter.operator}
         </Button>
       </DropdownControl>
       <Input
