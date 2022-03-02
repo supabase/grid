@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Dropdown, IconX, IconChevronDown } from '@supabase/ui';
+import { Button, Input, IconChevronDown, IconX } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import { FilterOperatorOptions } from './Filter.constants';
@@ -21,7 +21,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
   const column = state.table?.columns.find((x) => x.name === filter.column);
   const columnOptions =
     state.table?.columns?.map((x) => {
-      return { value: x.name, label: x.name };
+      return { value: x.name, label: x.name, postLabel: x.dataType };
     }) || [];
   const [filterValue, setFilterValue] = React.useState(filter.value);
 
@@ -63,42 +63,61 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
     });
   }
 
+  const found = FilterOperatorOptions.find((x) => x.value === filter.operator);
+  console.log('found', found);
+
   return (
-    <Dropdown.Misc>
-      <div className="sb-grid-filter-row">
-        <div className="sb-grid-filter-row__inner">
-          <Button
-            icon={<IconX />}
-            className="sb-grid-filter-row__inner__close"
-            shadow={false}
-            size="tiny"
-            type="text"
-            onClick={onRemoveFilter}
-          />
-          <DropdownControl
-            align="start"
-            options={columnOptions}
-            onSelect={onColumnChange}
-          >
-            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-              {column?.name || ''}
-            </Button>
-          </DropdownControl>
-          <DropdownControl
-            align="start"
-            options={FilterOperatorOptions}
-            onSelect={onOperatorChange}
-          >
-            <Button as="span" type="outline" iconRight={<IconChevronDown />}>
-              {filter.operator}
-            </Button>
-          </DropdownControl>
-        </div>
-        <div>
-          <Input size="tiny" value={filterValue} onChange={onFilterChange} />
-        </div>
-      </div>
-    </Dropdown.Misc>
+    <div className="sb-grid-filter-row px-3">
+      <DropdownControl
+        align="start"
+        options={columnOptions}
+        onSelect={onColumnChange}
+      >
+        <Button
+          as="span"
+          type="outline"
+          icon={
+            <div className="text-scale-900">
+              <IconChevronDown strokeWidth={1.5} size={14} />
+            </div>
+          }
+          className="w-32"
+        >
+          {column?.name || ''}
+        </Button>
+      </DropdownControl>
+      <DropdownControl
+        align="start"
+        options={FilterOperatorOptions}
+        onSelect={onOperatorChange}
+      >
+        <Button
+          as="span"
+          type="outline"
+          icon={
+            <div className="text-scale-900">
+              <IconChevronDown strokeWidth={1.5} size={14} />
+            </div>
+          }
+          className="w-32"
+        >
+          {found?.label}
+        </Button>
+      </DropdownControl>
+      <Input
+        size="tiny"
+        className="w-full"
+        placeholder="Enter a value"
+        value={filterValue}
+        onChange={onFilterChange}
+      />
+      <Button
+        icon={<IconX strokeWidth={1.5} size={14} />}
+        size="tiny"
+        type="text"
+        onClick={onRemoveFilter}
+      />
+    </div>
   );
 };
 export default React.memo(FilterRow);

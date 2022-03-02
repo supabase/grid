@@ -2,7 +2,12 @@ import * as React from 'react';
 import { Dropdown, Typography } from '@supabase/ui';
 
 type DropdownControlProps = {
-  options: { value: string | number; label: string }[];
+  options: {
+    value: string | number;
+    label: string;
+    postLabel?: string;
+    preLabel?: string;
+  }[];
   onSelect: (value: string | number) => void;
   className?: string;
   side?: 'bottom' | 'left' | 'top' | 'right' | undefined;
@@ -39,7 +44,17 @@ const DropdownItems: React.FC<DropdownControlProps> = ({
       {options.map((x) => {
         return (
           <Dropdown.Item key={x.value} onClick={() => onSelect(x.value)}>
-            {x.label}
+            <div className="flex items-center gap-2">
+              {x.preLabel && (
+                <span className="text-xs text-scale-900 grow">
+                  {x.preLabel}
+                </span>
+              )}
+              <span>{x.label}</span>
+              {x.postLabel && (
+                <span className="text-xs text-scale-900">{x.postLabel}</span>
+              )}
+            </div>
           </Dropdown.Item>
         );
       })}

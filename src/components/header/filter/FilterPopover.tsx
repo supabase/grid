@@ -1,13 +1,5 @@
 import React, { FC } from 'react';
-import {
-  Dropdown,
-  Button,
-  IconPlus,
-  Typography,
-  IconFilter,
-  Divider,
-  Popover,
-} from '@supabase/ui';
+import { Button, IconPlus, IconFilter, Popover } from '@supabase/ui';
 import { useDispatch, useTrackedState } from '../../../store';
 import FilterRow from './FilterRow';
 
@@ -22,6 +14,7 @@ const FilterPopover: FC = () => {
 
   return (
     <Popover
+      size="large"
       align="start"
       className="sb-grid-filter-popover"
       overlay={<Filter />}
@@ -55,8 +48,8 @@ const Filter: FC = () => {
   }
 
   return (
-    <div className="">
-      <div>
+    <div className="space-y-2 py-2">
+      <div className="space-y-2">
         {state.filters.map((_, index) => (
           <FilterRow
             key={`filter-${index}`}
@@ -65,26 +58,22 @@ const Filter: FC = () => {
           />
         ))}
         {state.filters.length == 0 && (
-          <Dropdown.Misc>
-            <div className="sb-grid-filter-popover__misc">
-              <Typography.Text>No filters applied to this view</Typography.Text>
-              <Typography.Text
-                small
-                type="secondary"
-                className="sb-grid-filter-popover__misc__text"
-              >
-                Add a column below to filter the view
-              </Typography.Text>
-            </div>
-          </Dropdown.Misc>
+          <div className="space-y-1 px-3">
+            <h5 className="text-sm text-scale-1100">
+              No filters applied to this view
+            </h5>
+            <p className="text-xs text-scale-900">
+              Add a column below to filter the view
+            </p>
+          </div>
         )}
       </div>
-      <Divider light />
-      <Dropdown.Misc>
+      <Popover.Seperator />
+      <div className="px-3">
         <Button icon={<IconPlus />} type="text" onClick={onAddFilter}>
           Add filter
         </Button>
-      </Dropdown.Misc>
+      </div>
     </div>
   );
 };
