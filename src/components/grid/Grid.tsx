@@ -74,10 +74,10 @@ export const Grid = memo(
             style={{ width: width || '100%', height: height || '50vh' }}
           >
             <div className="sb-grid-grid--loading__inner flex items-center gap-2">
-              <div className="anim-spin text-scale-900">
+              <div className="animate-spin text-scale-900">
                 <IconLoader />
               </div>
-              <div className="text-sm text-scale-1100">loading ...</div>
+              <div className="text-sm text-scale-1100">Loading...</div>
             </div>
           </div>
         );
