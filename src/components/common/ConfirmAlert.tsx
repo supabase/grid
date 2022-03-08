@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Modal } from '@supabase/ui';
+import { Button, Modal } from '@supabase/ui';
 import { render, unmountComponentAtNode } from 'react-dom';
 
 type ConfirmModalProps = {
@@ -42,16 +42,34 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     <Modal
       variant={variant}
       visible={true}
-      title={title}
-      description={message}
+      header={title}
       showIcon={false}
       size="small"
       confirmText="OK"
       cancelText="Cancel"
       onCancel={onCancelClick}
-      onConfirm={onConfirmClick}
       loading={loading}
-    />
+      customFooter={
+        <>
+          <div className="flex items-center gap-2">
+            <Button type="default" onClick={() => onCancelClick()}>
+              Cancel
+            </Button>
+            <Button
+              type="primary"
+              loading={loading}
+              onClick={() => onConfirmClick()}
+            >
+              Confirm
+            </Button>
+          </div>
+        </>
+      }
+    >
+      <Modal.Content>
+        <p className="text-sm text-scale-1100">{message}</p>
+      </Modal.Content>
+    </Modal>
   );
 };
 
