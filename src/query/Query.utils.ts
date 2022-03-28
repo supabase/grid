@@ -158,8 +158,13 @@ function applyFilters(query: string, filters: Filter[]) {
 }
 
 function inFilterSql(filter: Filter) {
-  const filterValueTxt = String(filter.value);
-  const values = filterValueTxt.split(',').map((x: any) => filterLiteral(x));
+  let values;
+  if (Array.isArray(filter.value)) {
+    values = filter.value.map((x: any) => filterLiteral(x));
+  } else {
+    const filterValueTxt = String(filter.value);
+    values = filterValueTxt.split(',').map((x: any) => filterLiteral(x));
+  }
   return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
 }
 
