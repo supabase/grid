@@ -20,12 +20,7 @@ const SortPopover: FC = () => {
       className="sb-grid-sort-popover"
       overlay={<Sort />}
     >
-      <Button
-        as={'span'}
-        type="text"
-        icon={<IconList />}
-        style={{ padding: '4px 8px' }}
-      >
+      <Button as="span" type="text" icon={<IconList />}>
         {btnText}
       </Button>
     </Popover>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dropdown, Typography } from '@supabase/ui';
+import { Dropdown } from '@supabase/ui';
 
 type DropdownControlProps = {
   options: {
@@ -37,9 +37,7 @@ const DropdownItems: React.FC<DropdownControlProps> = ({
   return (
     <div className="dropdown-control" style={{ maxHeight: '30vh' }}>
       {options.length == 0 && (
-        <Typography.Text className="dropdown-control__empty-text">
-          No more items
-        </Typography.Text>
+        <p className="dropdown-control__empty-text">No more items</p>
       )}
       {options.map((x) => {
         return (

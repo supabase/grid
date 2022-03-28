@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { SupabaseGridQueue } from '../../constants';
-import { Typography } from '@supabase/ui';
 
 type StatusLabelProps = {};
 
@@ -31,7 +30,7 @@ const StatusLabel: React.FC<StatusLabelProps> = ({}) => {
 
   return (
     <div className="sb-grid-status-label">
-      {msg && <Typography.Text>{msg}</Typography.Text>}
+      {msg && <p>{msg}</p>}
       {!msg && (
         <div className="sb-grid-status-label__no-msg">
           <div></div>

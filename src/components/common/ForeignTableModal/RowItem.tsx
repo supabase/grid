@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Menu, Typography } from '@supabase/ui';
+import { Menu } from '@supabase/ui';
 import { Dictionary } from '../../../types';
 
 interface RowItemProps {
@@ -26,16 +26,10 @@ export const RowItem: React.FC<RowItemProps> = ({ item, onSelect }) => {
                 className="foreign-table-modal__row-item__inner__key-item"
                 key={`item-${j}`}
               >
-                <Typography.Text
-                  small
-                  type="secondary"
-                  className="foreign-table-modal__row-item__inner__key-item__key"
-                >
+                <p className="text-sm foreign-table-modal__row-item__inner__key-item__key">
                   {key}
-                </Typography.Text>
-                <Typography.Text small strong>
-                  {item[key] || '[null]'}
-                </Typography.Text>
+                </p>
+                <p className="text-sm font-bold">{item[key] || '[null]'}</p>
               </div>
             );
           })}

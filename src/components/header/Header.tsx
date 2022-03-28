@@ -7,7 +7,6 @@ import {
   IconPlus,
   IconX,
   IconTrash,
-  Typography,
 } from '@supabase/ui';
 import FileSaver from 'file-saver';
 import FilterDropdown from './filter';
@@ -147,15 +146,11 @@ const RowHeader: React.FC<RowHeaderProps> = ({}) => {
         onClick={deselectRows}
       />
       <div>
-        <Typography.Text
-          small
-          type="secondary"
-          className="row_header__selected-rows"
-        >
+        <p className="text-sm row_header__selected-rows">
           {selectedRows.size > 1
             ? `${selectedRows.size} rows selected`
             : `${selectedRows.size} row selected`}
-        </Typography.Text>
+        </p>
       </div>
       <Button
         type="primary"

@@ -19,12 +19,7 @@ const FilterPopover: FC = () => {
       className="sb-grid-filter-popover"
       overlay={<Filter />}
     >
-      <Button
-        as={'span'}
-        type="text"
-        icon={<IconFilter />}
-        style={{ padding: '4px 8px' }}
-      >
+      <Button as="span" type="text" icon={<IconFilter />}>
         {btnText}
       </Button>
     </Popover>

@@ -3,7 +3,6 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import {
   Button,
   InputNumber,
-  Typography,
   IconArrowRight,
   IconArrowLeft,
 } from '@supabase/ui';
@@ -67,7 +66,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   return (
     <div className="sb-grid-pagination">
       {state.totalRows < 0 ? (
-        <Typography.Text>... loading total records</Typography.Text>
+        <p>... loading total records</p>
       ) : (
         <>
           <Button
@@ -77,7 +76,7 @@ const Pagination: React.FC<PaginationProps> = () => {
             onClick={onPreviousPage}
             style={{ padding: '3px 10px' }}
           />
-          <Typography.Text>Page</Typography.Text>
+          <p>Page</p>
           <div className="sb-grid-pagination-input-container">
             <InputNumber
               value={page}
@@ -91,7 +90,7 @@ const Pagination: React.FC<PaginationProps> = () => {
               min={1}
             />
           </div>
-          <Typography.Text>{`of ${totalPages}`}</Typography.Text>
+          <p>{`of ${totalPages}`}</p>
           <Button
             icon={<IconArrowRight />}
             type="outline"
@@ -112,9 +111,7 @@ const Pagination: React.FC<PaginationProps> = () => {
               style={{ padding: '3px 10px' }}
             >{`${state.rowsPerPage} rows`}</Button>
           </DropdownControl>
-          <Typography.Text>
-            {`${state.totalRows.toLocaleString()} records`}
-          </Typography.Text>
+          <p>{`${state.totalRows.toLocaleString()} records`}</p>
         </>
       )}
     </div>
