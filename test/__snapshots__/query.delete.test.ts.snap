@@ -4,4 +4,6 @@ exports[`basic delete on table 1`] = `"delete from public.users where name = 'he
 
 exports[`delete should ignore order 1`] = `"delete from public.users where name = 'hello world' returning *;"`;
 
+exports[`delete with comma symbol on filter value 1`] = `"delete from public.users where name in ('John, Bob and Billy','Marry, Jane and Fill');"`;
+
 exports[`delete with returning record on table 1`] = `"delete from public.users where name = 'hello world' returning *;"`;

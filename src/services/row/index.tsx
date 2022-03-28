@@ -27,7 +27,7 @@ export interface IRowService {
    */
   delete: (rows: SupaRow[]) => { error?: ServiceError };
 
-  update: (row: SupaRow) => { error?: ServiceError };
+  update: (row: SupaRow, changedColumn?: string) => { error?: ServiceError };
 }
 
 export * from './SqlRowService';

@@ -32,3 +32,11 @@ test('delete should ignore order', async () => {
     .toSql();
   expect(res).toMatchSnapshot();
 });
+test('delete with comma symbol on filter value', async () => {
+  const res = query
+    .from('users')
+    .delete()
+    .filter('name', 'in', ['John, Bob and Billy', 'Marry, Jane and Fill'])
+    .toSql();
+  expect(res).toMatchSnapshot();
+});
