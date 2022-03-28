@@ -52,9 +52,8 @@ const coolGray = {
 };
 
 module.exports = ui({
-  mode: 'jit',
   darkMode: 'class',
-  // purge: ['./src/**/*.tsx'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,vue}'],
   theme: {
     borderColor: (theme) => ({
       ...theme('colors'),

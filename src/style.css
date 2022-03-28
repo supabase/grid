@@ -1,4 +1,5 @@
 /* ./styles/globals.css */
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -423,7 +424,7 @@
 */
 
 .sb-grid-json-editor__trigger {
-  @apply px-2 text-sm overflow-hidden overflow-ellipsis;
+  @apply px-2 text-sm overflow-hidden text-ellipsis;
 }
 
 /*
@@ -447,7 +448,7 @@
 */
 
 .sb-grid-text-editor__trigger {
-  @apply px-2 text-sm overflow-hidden overflow-ellipsis;
+  @apply px-2 text-sm overflow-hidden text-ellipsis;
 }
 
 /*
@@ -499,7 +500,7 @@
 }
 
 .sb-grid-foreign-key-formatter__text {
-  @apply m-0 flex-grow text-sm overflow-hidden overflow-ellipsis;
+  @apply m-0 flex-grow text-sm overflow-hidden text-ellipsis;
 }
 
 /*
@@ -523,17 +524,17 @@
 }
 
 .sb-grid-column-header__inner {
-  @apply flex items-center space-x-2 overflow-hidden overflow-ellipsis;
+  @apply flex items-center space-x-2 overflow-hidden text-ellipsis;
 }
 
 .sb-grid-column-header__inner__name {
-  @apply overflow-hidden overflow-ellipsis text-sm;
+  @apply overflow-hidden text-ellipsis text-sm;
   @apply text-typography-body-light dark:text-typography-body-dark;
 }
 
 .sb-grid-column-header__inner__format {
   @apply text-xs;
-  @apply font-normal overflow-hidden overflow-ellipsis;
+  @apply font-normal overflow-hidden text-ellipsis;
   @apply text-typography-body-secondary-light dark:text-typography-body-secondary-dark;
 }
 
