@@ -22,6 +22,8 @@ export type FilterOperator =
   | '<='
   | '~~'
   | '~~*'
+  | '!~~'
+  | '!~~*'
   | 'in'
   | 'is';
 

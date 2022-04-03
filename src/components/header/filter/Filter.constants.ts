@@ -7,6 +7,8 @@ export const FilterOperatorOptions = [
   { value: '<=', label: '[<=] less than or equal' },
   { value: '~~', label: '[~~] like operator' },
   { value: '~~*', label: '[~~*] ilike operator' },
+  { value: '!~~', label: '[!~~] not like operator' },
+  { value: '!~~*', label: '[!~~*] not ilike operator' },
   { value: 'in', label: '[ in ] one of a list of values' },
   { value: 'is', label: '[ is ] checking for (null,not null,true,false)' },
 ];
