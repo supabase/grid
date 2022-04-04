@@ -81,8 +81,8 @@ export const ForeignTableModal: React.FC<ForeignTableModalProps> = ({
       .select();
 
     if (filter && filter.value && filter.value != '') {
-      const { column, operator, value } = filter;
-      queryChains = queryChains.filter(column, operator, value);
+      const { column, operator, value, func } = filter;
+      queryChains = queryChains.filter(column, operator, value, func);
     }
 
     // TODO: How to let users know that filter result limit at 20 results

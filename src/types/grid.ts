@@ -34,6 +34,10 @@ export interface SupabaseGridProps {
    */
   gridProps?: GridProps;
   /**
+   * functions names allowed to be used in filters
+   */
+  allowedFunctions?: string[];
+  /**
    * table schema. Default set to 'public' if not provided
    */
   schema?: string;

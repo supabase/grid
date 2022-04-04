@@ -23,7 +23,7 @@ export class SqlRowService implements IRowService {
       .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         const value = this.formatFilterValue(x);
-        queryChains = queryChains.filter(x.column, x.operator, value);
+        queryChains = queryChains.filter(x.column, x.operator, value, x.func);
       });
 
     const query = queryChains.toSql();
@@ -84,7 +84,7 @@ export class SqlRowService implements IRowService {
       .filter((x) => x.value && x.value != '')
       .forEach((x) => {
         const value = this.formatFilterValue(x);
-        queryChains = queryChains.filter(x.column, x.operator, value);
+        queryChains = queryChains.filter(x.column, x.operator, value, x.func);
       });
     sorts.forEach((x) => {
       queryChains = queryChains.order(x.column, x.ascending, x.nullsFirst);

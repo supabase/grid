@@ -159,13 +159,17 @@ function applyFilters(query: string, filters: Filter[]) {
 
 function inFilterSql(filter: Filter) {
   let values;
+  const withFunction = (values: string) =>
+    filter.func ? `select * from ${ident(filter.func)}(${values})` : values;
   if (Array.isArray(filter.value)) {
     values = filter.value.map((x: any) => filterLiteral(x));
   } else {
     const filterValueTxt = String(filter.value);
     values = filterValueTxt.split(',').map((x: any) => filterLiteral(x));
   }
-  return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
+  return `${ident(filter.column)} ${filter.operator} (${withFunction(
+    values.join(',')
+  )})`;
 }
 
 function isFilterSql(filter: Filter) {

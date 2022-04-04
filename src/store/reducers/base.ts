@@ -24,23 +24,24 @@ export const baseInitialState: BaseInitialState = {
 
 export type INIT_ACTIONTYPE =
   | {
-      type: 'INIT_CLIENT';
-      payload: {
-        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
-      };
-    }
-  | {
-      type: 'INIT_TABLE';
-      payload: {
-        table: SupaTable;
-        gridColumns: CalculatedColumn<any, any>[];
-        gridProps?: GridProps;
-        savedState?: SavedState;
-        editable?: boolean;
-        onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
-        onError: (error: any) => void;
-      };
+    type: 'INIT_CLIENT';
+    payload: {
+      onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
     };
+  }
+  | {
+    type: 'INIT_TABLE';
+    payload: {
+      table: SupaTable;
+      gridColumns: CalculatedColumn<any, any>[];
+      gridProps?: GridProps;
+      allowedFunctions?: string[];
+      savedState?: SavedState;
+      editable?: boolean;
+      onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
+      onError: (error: any) => void;
+    };
+  };
 
 type BASE_ACTIONTYPE = INIT_ACTIONTYPE;
 
