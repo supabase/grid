@@ -34,7 +34,7 @@ export interface SupabaseGridProps {
    */
   gridProps?: GridProps;
   /**
-   * functions names allowed to be used in filters
+   * db function names allowed to be used in filters
    */
   allowedFunctions?: string[];
   /**

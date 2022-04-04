@@ -42,6 +42,7 @@ npm i react react-dom @supabase/react-data-grid @supabase/ui
 - `editable` enable table editor.
 - `headerActions` react node to display in grid header.
 - `gridProps` props to config grid view.
+- `allowedFunctions` db function names allowed to be used in filters.
 - `schema` table/view schema. Defaults to 'public'.
 - `storageRef` storageRef is used to save state on localstorage.
 - `theme` grid theme.
