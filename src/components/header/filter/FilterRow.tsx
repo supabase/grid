@@ -25,7 +25,7 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
     }) || [];
   const functionsOptions = [
     { value: '', label: 'none' },
-    ...state.allowedFunctions.map((f) => ({
+    ...state.dbFunctions.map((f) => ({
       value: f,
       label: f,
     })),

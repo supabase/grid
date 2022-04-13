@@ -35,7 +35,7 @@ export type INIT_ACTIONTYPE =
       table: SupaTable;
       gridColumns: CalculatedColumn<any, any>[];
       gridProps?: GridProps;
-      allowedFunctions?: string[];
+      dbFunctions?: string[];
       savedState?: SavedState;
       editable?: boolean;
       onSqlQuery: (query: string) => Promise<{ data?: any; error?: any }>;
