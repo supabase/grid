@@ -17,24 +17,24 @@ export const filterInitialState: FilterInitialState = {
 type FILTER_ACTIONTYPE =
   | INIT_ACTIONTYPE
   | {
-    type: 'SET_FILTERS';
-    payload: Filter[];
-  }
+      type: 'SET_FILTERS';
+      payload: Filter[];
+    }
   | {
-    type: 'ADD_FILTER';
-    payload: Filter;
-  }
+      type: 'ADD_FILTER';
+      payload: Filter;
+    }
   | {
-    type: 'REMOVE_FILTER';
-    payload: { index: number };
-  }
+      type: 'REMOVE_FILTER';
+      payload: { index: number };
+    }
   | {
-    type: 'UPDATE_FILTER';
-    payload: {
-      filterIdx: number;
-      value: Filter;
+      type: 'UPDATE_FILTER';
+      payload: {
+        filterIdx: number;
+        value: Filter;
+      };
     };
-  };
 
 const FilterReducer = (
   state: FilterInitialState,
