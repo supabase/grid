@@ -148,13 +148,27 @@ function applyFilters(query: string, filters: Filter[]) {
         case 'is':
           return isFilterSql(filter);
         default:
-          return `${ident(filter.column)} ${filter.operator} ${filterLiteral(
-            filter.value
-          )}`;
+          return otherFiltersSql(filter);
       }
     })
     .join(' and ')}`;
   return query;
+}
+
+const withFunction = (filter: Filter, values: string, parenthesis: boolean) =>
+  filter.func
+    ? `(select * from ${ident(filter.func)}(${values}))`
+    : parenthesis
+      ? `(${values})`
+      : values;
+
+function otherFiltersSql(filter: Filter) {
+  const values = filter.func
+    ? String(filter.value).split(',').map((x: any) => filterLiteral(x)).join(',')
+    : filterLiteral(filter.value);
+
+  const condition = withFunction(filter, values, false);
+  return `${ident(filter.column)} ${filter.operator} ${condition}`;
 }
 
 function inFilterSql(filter: Filter) {
@@ -165,7 +179,8 @@ function inFilterSql(filter: Filter) {
     const filterValueTxt = String(filter.value);
     values = filterValueTxt.split(',').map((x: any) => filterLiteral(x));
   }
-  return `${ident(filter.column)} ${filter.operator} (${values.join(',')})`;
+  const condition = withFunction(filter, values.join(','), true);
+  return `${ident(filter.column)} ${filter.operator} (${condition})`;
 }
 
 function isFilterSql(filter: Filter) {

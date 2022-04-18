@@ -51,6 +51,7 @@ export function initTable(
       payload: {
         table,
         gridProps: props.gridProps,
+        dbFunctions: props.dbFunctions,
         gridColumns,
         savedState,
         editable: props.editable,

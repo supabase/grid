@@ -23,6 +23,13 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
     state.table?.columns?.map((x) => {
       return { value: x.name, label: x.name };
     }) || [];
+  const functionsOptions = [
+    { value: '', label: 'none' },
+    ...state.dbFunctions.map((f) => ({
+      value: f,
+      label: f,
+    })),
+  ];
   const [filterValue, setFilterValue] = React.useState(filter.value);
 
   React.useEffect(() => {
@@ -41,6 +48,13 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
     dispatch({
       type: 'UPDATE_FILTER',
       payload: { filterIdx, value: { ...filter, operator } },
+    });
+  }
+
+  function onFunctionChange(func: string | number) {
+    dispatch({
+      type: 'UPDATE_FILTER',
+      payload: { filterIdx, value: { ...filter, func } },
     });
   }
 
@@ -93,6 +107,17 @@ const FilterRow: React.FC<FilterRowProps> = ({ filterIdx, now }) => {
               {filter.operator}
             </Button>
           </DropdownControl>
+          {functionsOptions.length > 1 && (
+            <DropdownControl
+              align="start"
+              options={functionsOptions}
+              onSelect={onFunctionChange}
+            >
+              <Button as="span" type="outline" iconRight={<IconChevronDown />}>
+                {filter.func || ''}
+              </Button>
+            </DropdownControl>
+          )}
         </div>
         <div>
           <Input size="tiny" value={filterValue} onChange={onFilterChange} />

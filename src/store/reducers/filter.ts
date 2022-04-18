@@ -6,9 +6,13 @@ import { INIT_ACTIONTYPE } from './base';
 
 export interface FilterInitialState {
   filters: Filter[];
+  dbFunctions: string[];
 }
 
-export const filterInitialState: FilterInitialState = { filters: [] };
+export const filterInitialState: FilterInitialState = {
+  filters: [],
+  dbFunctions: []
+};
 
 type FILTER_ACTIONTYPE =
   | INIT_ACTIONTYPE
@@ -44,6 +48,7 @@ const FilterReducer = (
           action.payload.table,
           action.payload.savedState
         ),
+        dbFunctions: action.payload.dbFunctions ?? []
       };
     }
     case 'SET_FILTERS':

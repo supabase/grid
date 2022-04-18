@@ -30,6 +30,7 @@ export type FilterOperator =
 export interface Filter {
   column: string;
   operator: FilterOperator;
+  func?: string;
   value: any;
 }
 
