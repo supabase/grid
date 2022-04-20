@@ -13,7 +13,7 @@
 }
 
 .rdg-cell {
-  @apply border-r border-b border-gray-100 dark:border-dark text-sm;
+  @apply border-r border-b border-scale-400 dark:border-scale-500 text-sm;
   @apply text-typography-body-light dark:text-typography-body-dark;
   white-space: nowrap;
   overflow: hidden;
@@ -21,7 +21,7 @@
 }
 
 .rdg-cell-frozen-last {
-  @apply border-r-4 dark:border-dark shadow-none;
+  @apply border-r-4 border-scale-400 dark:border-scale-500 shadow-none;
 }
 
 .rdg-cell-selected {
@@ -30,7 +30,7 @@
 
 .rdg {
   @apply bg-transparent box-border overflow-x-auto overflow-y-scroll select-none;
-  @apply border-t border-b border-r-0 border-l-0 border-gray-100 dark:border-dark;
+  @apply border-t border-b border-r-0 border-l-0 border-scale-400 dark:border-scale-500;
   contain: strict;
   -webkit-user-select: none;
   font-size: 14px;
@@ -73,7 +73,7 @@
 }
 
 .rdg-header-row .rdg-cell {
-  @apply bg-table-header-light dark:bg-table-header-dark border-b dark:border-dark;
+  @apply bg-table-header-light dark:bg-table-header-dark border-b border-scale-400 dark:border-scale-500;
   /* @apply text-typography-body-light dark:text-typography-body-dark; */
 }
 .rdg-header-row .rdg-cell p,
@@ -84,13 +84,13 @@
   @apply h-full flex items-center px-2 transition ease-in-out duration-100;
 }
 .rdg-header-row .rdg-cell .react-contextmenu-wrapper:hover {
-  @apply bg-gray-400;
+  @apply bg-scale-400;
 }
 .rdg-header-row .rdg-checkbox {
-  @apply border bg-table-header-light dark:bg-table-header-dark rounded-sm dark:border-dark;
+  @apply border bg-table-header-light dark:bg-table-header-dark rounded-sm border-scale-400 dark:border-scale-500;
 }
 .rdg-header-row .rdg-checkbox-input:checked + .rdg-checkbox {
-  @apply border-4 bg-green-500 border-gray-400;
+  @apply border-4 bg-green-900 border-scale-400 dark:border-scale-500;
 }
 .rdg-header-row .rdg-checkbox-input:focus + .rdg-checkbox {
   box-shadow: none;
@@ -172,8 +172,8 @@
 }
 
 [type='checkbox']:checked {
-  @apply dark:bg-green-600;
-  @apply bg-green-600;
+  @apply dark:bg-brand-900;
+  @apply bg-brand-900;
   border-color: transparent;
   background-size: 100% 100%;
   background-position: center;
@@ -183,11 +183,11 @@
 [type='checkbox'] {
   @apply border border-solid rounded cursor-pointer;
 
-  @apply text-green-600 border-gray-300 transition-all;
-  @apply hover:border-green-500 focus:ring-green-500 focus:outline-none;
+  @apply text-brand-600 border-scale-400 transition-all;
+  @apply hover:border-brand-900 focus:ring-brand-500 focus:outline-none;
 
-  @apply dark:bg-transparent dark:border-gray-400 dark:text-white;
-  @apply dark:hover:border-green-500;
+  @apply dark:bg-transparent dark:border-scale-500 dark:text-white;
+  @apply dark:hover:border-green-900;
 
   margin-top: 2px;
 }
@@ -272,21 +272,21 @@
 }
 
 .rdg__segmented-control {
-  @apply relative mx-2 border rounded-md h-8 border-gray-600;
+  @apply relative mx-2 border rounded-md h-8 border-scale-400 dark:border-scale-500;
 }
 
 .rdg__segmented-control__button {
   @apply absolute inline-flex h-full items-center justify-center top-0;
   @apply text-xs font-medium;
-  @apply text-gray-400;
-  @apply hover:text-white focus:z-10 focus:outline-none active:bg-gray-100;
+  @apply text-scale-400;
+  @apply hover:text-white focus:z-10 focus:outline-none active:bg-scale-100;
   @apply transition ease-in-out duration-150;
   @apply cursor-pointer;
   z-index: 1;
 }
 
 .rdg__segmented-control__button--option {
-  @apply text-gray-200;
+  @apply text-scale-200;
 }
 
 .rdg__segmented-control__button--right {
@@ -298,7 +298,7 @@
 }
 
 .rdg__segmented-control__label {
-  @apply z-0 inline-block rounded h-full bg-gray-600 shadow transform transition ease-in-out duration-200 border border-gray-600;
+  @apply z-0 inline-block rounded h-full bg-scale-600 shadow transform transition ease-in-out duration-200 border border-scale-600;
 }
 
 .rdg__segmented-control__label--left {
@@ -334,16 +334,16 @@
   @apply w-full;
 }
 
-.foreign-table-modal__content-container__inner {
+/* .foreign-table-modal__content-container__inner {
   @apply px-6;
-}
+} */
 
 .foreign-table-modal__content-container__inner__overflow {
   @apply w-full overflow-scroll;
 }
 
 .foreign-table-modal__filter {
-  @apply flex items-center space-x-2 px-6;
+  @apply flex items-center space-x-2 mt-2;
 }
 
 .foreign-table-modal__filter__trigger-content {
@@ -363,11 +363,11 @@
 }
 
 .foreign-table-modal__menu {
-  @apply space-y-2;
+  @apply flex flex-col space-y-2;
 }
 
 .foreign-table-modal__row-item {
-  @apply border border-solid dark:border-dark rounded shadow-sm first:mt-2 overflow-hidden overflow-x-scroll;
+  @apply border border-solid border-scale-400 dark:border-scale-500 rounded shadow-sm first:mt-2 overflow-hidden;
 }
 
 .foreign-table-modal__row-item__inner {
@@ -483,7 +483,7 @@
 */
 
 .sb-grid-footer {
-  @apply flex justify-between h-10 z-10 px-2 dark:bg-gray-700 items-center;
+  @apply flex justify-between h-10 px-2 bg-scale-100 dark:bg-scale-300 items-center;
 }
 
 .sb-grid-footer__inner {
@@ -543,7 +543,7 @@
 
 .sb-grid-column-header__inner svg {
   @apply mr-1;
-  @apply text-green-500 border-green-500 dark:text-green-500 dark:border-green-500;
+  @apply text-green-900 border-green-900 dark:text-green-900 dark:border-green-900;
 }
 
 /*
@@ -551,7 +551,7 @@
 */
 
 .sb-grid-grid--loading {
-  @apply flex justify-center bg-gray-100 dark:bg-gray-900;
+  @apply flex justify-center bg-transparent;
 }
 
 .sb-grid-grid--loading__inner {
@@ -576,7 +576,7 @@
 
 .sb-grid-select-cell__header__input {
   /* @apply focus:ring-brand-500; */
-  @apply border-gray-300;
+  @apply border-scale-300;
 }
 
 /*
@@ -600,16 +600,12 @@
 */
 
 .sb-grid-filter-row {
-  @apply flex items-center justify-between w-full space-x-3;
+  @apply flex items-center justify-between w-full space-x-1;
 }
 
-.sb-grid-filter-row__inner {
-  @apply flex items-center space-x-3;
-}
-
-.sb-grid-filter-row__inner__close {
+/* .sb-grid-filter-row__inner__close {
   @apply p-0 bg-transparent hover:bg-transparent;
-}
+} */
 
 /*
   header/sort/SortDropdown
@@ -664,7 +660,7 @@
 */
 
 .sb-grid-header {
-  @apply flex justify-between h-10 z-10 px-2 dark:bg-gray-700;
+  @apply flex justify-between h-10 px-2 bg-scale-100 dark:bg-scale-300;
 }
 
 .sb-grid-header__inner {
@@ -692,7 +688,7 @@
 }
 
 .sb-grid-status-label__no-msg > div {
-  @apply m-auto w-2 h-2 rounded-full bg-green-500;
+  @apply m-auto w-2 h-2 rounded-full bg-green-900;
 }
 
 /*

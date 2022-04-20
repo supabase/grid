@@ -1,9 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
 }
 
-body.dark {
-  background: #181818;
+body {
+  @apply bg-scale-100 dark:bg-scale-200;
 }
 
 .main-container {

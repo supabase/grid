@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Typography,
-  Button,
-  IconMenu,
-  IconX,
-  Dropdown,
-  Toggle,
-} from '@supabase/ui';
+import { Button, IconMenu, Toggle, IconX } from '@supabase/ui';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { useDispatch, useTrackedState } from '../../../store';
@@ -119,43 +112,40 @@ const SortRow: React.FC<SortRowProps> = ({ columnName, index }) => {
   drag(drop(ref));
 
   return (
-    <Dropdown.Misc>
-      <div
-        className="sb-grid-sort-row"
-        ref={ref}
-        style={{ opacity }}
-        data-handler-id={handlerId}
-      >
-        <div className="sb-grid-sort-row__item">
-          <Button
-            icon={<IconX />}
-            className="sb-grid-sort-row__item__remove"
-            shadow={false}
-            size="tiny"
-            type="text"
-            onClick={onDeleteClick}
-          />
-          <div className="sb-grid-sort-row__item__label">
-            <Typography.Text type="secondary" small>
-              {index > 0 ? 'then by' : 'sort by'}
-            </Typography.Text>
-            <Typography.Text>{column.name}</Typography.Text>
-          </div>
-        </div>
-        <div className="sb-grid-sort-row__item">
-          <Toggle
-            className="sb-grid-sort-row__item_toogle"
-            layout="horizontal"
-            label="ascending"
-            defaultChecked={sort.ascending}
-            onChange={onToogle}
-          />
-          <Typography.Text className="sb-grid-sort-row__item__move">
-            <IconMenu size="tiny" />
-          </Typography.Text>
-        </div>
+    <div
+      className="flex items-center gap-3 px-3"
+      ref={ref}
+      style={{ opacity }}
+      data-handler-id={handlerId}
+    >
+      <Button
+        icon={<IconX strokeWidth={1.5} size={14} />}
+        size="tiny"
+        type="text"
+        onClick={onDeleteClick}
+      />
+      <div className="grow">
+        <span className="flex items-center gap-1 grow text-sm text-scale-1200 truncate">
+          <span className="text-xs text-scale-900">
+            {index > 0 ? 'then by' : 'sort by'}
+          </span>
+          {column.name}
+        </span>
       </div>
-    </Dropdown.Misc>
+      <div className="flex items-center gap-1">
+        <label className="text-xs text-scale-900">ascending:</label>
+        <Toggle
+          size="tiny"
+          layout="flex"
+          defaultChecked={sort.ascending}
+          // @ts-ignore
+          onChange={(e: boolean) => onToogle(e)}
+        />
+      </div>
+      <span className="transition-color text-scale-900 hover:text-scale-1100">
+        <IconMenu strokeWidth={2} size={16} />
+      </span>
+    </div>
   );
 };
 export default React.memo(SortRow);

@@ -1,13 +1,5 @@
 import React, { FC } from 'react';
-import {
-  Dropdown,
-  Button,
-  Typography,
-  IconList,
-  IconChevronDown,
-  Divider,
-  Popover,
-} from '@supabase/ui';
+import { Button, IconList, IconChevronDown, Popover } from '@supabase/ui';
 import { DropdownControl } from '../../common';
 import { useDispatch, useTrackedState } from '../../../store';
 import SortRow from './SortRow';
@@ -22,7 +14,12 @@ const SortPopover: FC = () => {
       : 'Sort';
 
   return (
-    <Popover align="start" className="sb-grid-sort-popover" overlay={<Sort />}>
+    <Popover
+      size="large"
+      align="start"
+      className="sb-grid-sort-popover"
+      overlay={<Sort />}
+    >
       <Button
         as={'span'}
         type="text"
@@ -56,27 +53,23 @@ const Sort: FC = () => {
   }
 
   return (
-    <div>
+    <div className="py-2 space-y-2">
       {state.sorts.map((x, index) => (
         <SortRow key={x.column} columnName={x.column} index={index} />
       ))}
       {state.sorts.length == 0 && (
-        <Dropdown.Misc>
-          <div className="sb-grid-dropdown__empty">
-            <Typography.Text>No sorts applied to this view</Typography.Text>
-            <Typography.Text
-              small
-              type="secondary"
-              className="sb-grid-dropdown__empty__text"
-            >
-              Add a column below to sort the view
-            </Typography.Text>
-          </div>
-        </Dropdown.Misc>
+        <div className="space-y-1 px-3">
+          <h5 className="text-sm text-scale-1100">
+            No sorts applied to this view
+          </h5>
+          <p className="text-xs text-scale-900">
+            Add a column below to sort the view
+          </p>
+        </div>
       )}
 
-      <Divider light />
-      <Dropdown.Misc>
+      <Popover.Seperator />
+      <div className="px-3">
         {columns && columns.length > 0 ? (
           <DropdownControl
             options={dropdownOptions}
@@ -96,11 +89,9 @@ const Sort: FC = () => {
             </Button>
           </DropdownControl>
         ) : (
-          <Typography.Text small type="secondary">
-            All columns have been added
-          </Typography.Text>
+          <p className="text-sm text-scale-1100">All columns have been added</p>
         )}
-      </Dropdown.Misc>
+      </div>
     </div>
   );
 };

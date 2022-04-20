@@ -11,18 +11,21 @@
   "dependencies": {
     "@supabase/grid": "file:../",
     "@supabase/react-data-grid": "^7.1.0-beta.5",
-    "@supabase/ui": "^0.35.0",
-    "next": "^12.1.0",
-    "pg": "^8.7.1",
+    "@supabase/ui": "v0.37.0-alpha.42",
+    "next": "^12.1.1",
+    "pg": "^8.7.3",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom"
   },
   "devDependencies": {
     "@types/pg": "^8.6.1",
     "@types/react": "17.0.20",
+    "autoprefixer": "^10.4.2",
     "encoding": "^0.1.13",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.17",
     "typescript": "4.4.2"
   }
 }

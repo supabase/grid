@@ -4,7 +4,7 @@ import DataGrid, {
   DataGridHandle,
   RowsChangeData,
 } from '@supabase/react-data-grid';
-import { Typography, Loading } from '@supabase/ui';
+import { IconLoader } from '@supabase/ui';
 import { GridProps, SupaRow } from '../../types';
 import { useDispatch, useTrackedState } from '../../store';
 import RowRenderer from './RowRenderer';
@@ -72,13 +72,11 @@ export const Grid = memo(
             className="sb-grid-grid--loading"
             style={{ width: width || '100%', height: height || '50vh' }}
           >
-            <div className="sb-grid-grid--loading__inner">
-              <Loading active>
-                <div />
-              </Loading>
-              <Typography.Text className="sb-grid-grid--loading__inner__text">
-                loading ...
-              </Typography.Text>
+            <div className="sb-grid-grid--loading__inner flex items-center gap-2">
+              <div className="animate-spin text-scale-900">
+                <IconLoader />
+              </div>
+              <div className="text-sm text-scale-1100">Loading...</div>
             </div>
           </div>
         );
