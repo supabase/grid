@@ -15,5 +15,5 @@ const updateFilterValue = (
 };
 export const updateFilterValueDebounced = AwesomeDebouncePromise(
   updateFilterValue,
-  550
+  2000
 );
