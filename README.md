@@ -1,4 +1,9 @@
-# Supabase Grid
+# Deprecated
+🚨 **This repo has been deprecated.** 🚨
+
+We've moved the grid component into the main [Supabase studio repo](https://github.com/supabase/supabase/tree/master/studio/components/grid) to make it easier to work on and to help us roll out bug fixes much quicker. We have [transfered all existing issues](https://github.com/supabase/supabase/issues?q=is%3Aissue+is%3Aopen+label%3Adashboard) in this repo, and we continue to welcome contributors over at [supabase/supabase](https://github.com/supabase/supabase/).
+
+## Supabase Grid
 
 A react component to display your Postgresql table data.
 
